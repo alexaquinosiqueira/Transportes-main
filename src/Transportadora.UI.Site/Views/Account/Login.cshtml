@@ -1,0 +1,125 @@
+﻿@model Transportadora.UI.Site.ViewModels.LoginViewModel
+@using Transportadora.UI.Site.ViewModels
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Sistema de Gestão de Transportadora - Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <script type="text/javascript" src="@Url.Content("~/")assets/js/jquery/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="@Url.Content("~/")assets/js/bootstrap/js/bootstrap.min.js"></script>
+    <link href="@Url.Content("~/")assets/js/bootstrap/less/bootstrap.less" rel="stylesheet/less" />
+    <script src="@Url.Content("~/")assets/js/bootstrap/less-1.7.4.min.js"></script>
+    <link href="@Url.Content("~/")assets/js/font-awesome/css/font-awesome.min.css" type="text/css" rel="stylesheet" />
+    <link href="@Url.Content("~/")assets/js/summernote/summernote.css" rel="stylesheet" />
+    <script type="text/javascript" src="@Url.Content("~/")assets/js/summernote/summernote.js"></script>
+    <script src="@Url.Content("~/")assets/js/jquery/datetimepicker/moment.js" type="text/javascript"></script>
+    <script src="@Url.Content("~/")assets/js/jquery/datetimepicker/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+    <link href="@Url.Content("~/")assets/js/jquery/datetimepicker/bootstrap-datetimepicker.min.css" type="text/css" rel="stylesheet" media="screen" />
+    <link type="text/css" href="@Url.Content("~/")assets/css/stylesheet.css" rel="stylesheet" media="screen" />
+    <link type="text/css" href="@Url.Content("~/")assets/css/select2.css" rel="stylesheet" media="screen" />
+    <link type="text/css" href="@Url.Content("~/")assets/css/select2-bootstrap.css" rel="stylesheet" media="screen" />
+    <link type="text/css" href="@Url.Content("~/")assets/css/login.css" rel="stylesheet" media="screen" />
+    <script src="@Url.Content("~/")assets/js/jquery/select2.js" type="text/javascript"></script>
+    <script src="@Url.Content("~/")assets/js/common.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('select').select2();
+        });
+        function getCompanies(string) {
+            var userLogin = document.getElementById("Login");
+            $.ajax({
+                url: "@Url.Content("~/")" + "Account/GetCompaniesByUserLogin?userLogin=" + userLogin.value,
+                context: document.body
+            }).done(function (data) {
+                let dropdown = $('#Company_Id');
+
+                dropdown.empty();
+
+                dropdown.append('<option selected="true" disabled>Selecione a empresa...</option>');
+                dropdown.prop('selectedIndex', 0);
+                $.each(data, function (key, entry) {
+                    dropdown.append($('<option></option>').attr('value', entry.id).text(entry.razaoSocial));
+                })
+            });
+        }
+    </script>
+</head>
+<body>
+    <div id="container">
+        <header id="header" class="navbar navbar-static-top">
+            <div class="navbar-header">
+                <a href="#" class="navbar-brand"></a>
+            </div>
+        </header>
+        <div id="content">
+            <div class="container-fluid">
+                <br />
+                <br />
+                <div class="row">
+                    <div class="col-sm-offset-4 col-sm-4 ">
+                        <div class="panel">
+                            <div class="panel-heading" style="text-align: center !important;">
+
+                                <img id="logo" src="~/assets/image/truck.png" style="height: 280px;margin-bottom:15px;" />
+                                <h1 class="panel-title" style="font-size: 40px;color: #485069;">Sistema de Gestão de Transportadora</h1>
+                            </div>
+                            <div class="panel-body">
+                                @if (TempData.ContainsKey("failed"))
+                                {
+                                    <div class="alert alert-danger">
+                                        <i class="fa fa-exclamation-circle"></i><small> Não foi possível validar o seu acesso. Verifique os dados digitados. !!</small>
+                                        <button type="button" class="close" data-dismiss="alert">
+                                            ×
+                                        </button>
+                                    </div>
+                                    TempData.Remove("failed");
+                                }
+                                @using (Html.BeginForm())
+                                {
+                                    <div class="form-group">
+                                        <label for="input-username">Login</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                            @Html.TextBoxFor(model => model.Login, new { @class = "form-control", placeholder = "Login", required = "required", onblur = "getCompanies(this)" })
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-password">Senha</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                            @Html.PasswordFor(model => model.Password, new { @class = "form-control", placeholder = "Senha", required = "required" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Empresa</label>
+
+                                        <select name="Company_Id" id="Company_Id" class="form-control">
+                                            <option selected="true" disabled>Selecione a empresa...</option>
+                                        </select>
+                                    </div>
+                                    <div >
+                                        <button type="submit" name="submit" value="login" class="btn btn-primary" style="width:100%; height: 45px;">
+                                            <i class="fa fa-sign-in"></i> Entrar
+                                        </button>
+                                    </div>
+
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+            <a href="#">Sistema de Gestão de Transportadora</a> &copy; @DateTime.Now.Year Todos os direitos reservados.
+            <br />
+            Versão 1.0.0
+        </footer>
+    </div>
+</body>
+</html>

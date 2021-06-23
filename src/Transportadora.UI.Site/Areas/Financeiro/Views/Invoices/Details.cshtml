@@ -1,0 +1,184 @@
+﻿@model Transportadora.UI.Site.ViewModels.InvoiceViewModel
+@using Transportadora.UI.Site.ViewModels
+
+@{
+    ViewData["Title"] = "Visualizar  Receita";
+}
+
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                <div class="pull-right">
+                    <a asp-action="Index" data-toggle="tooltip" title="Voltar Para lista" class="btn btn-primary"><i class="fa fa-arrow-left "></i> Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Visualizar  Receita</h3>
+            </div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Customer_Id)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Customer.Name)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Description)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Amount)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Amount)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Date)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Date)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Status)
+                    </dt>
+                    <dd>
+                        @if (Model.Status == Transportadora.UI.Site.ViewModels.StatusViewModel.closed)
+                        {
+                            <span class="label label-success">Fechado</span>
+                        }
+                        @if (Model.Status == Transportadora.UI.Site.ViewModels.StatusViewModel.inProgress)
+                        {
+                            <span class="label label-warning">Em Andamento</span>
+                        }
+                        @if (Model.Status == Transportadora.UI.Site.ViewModels.StatusViewModel.opened)
+                        {
+                            <span class="label label-danger">Aberto</span>
+                        }
+
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.DueDate)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.DueDate)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.SettlementDate)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.SettlementDate)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.CostCenter_Id)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.CostCenter.Description)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.BankAccount_Id)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.BankAccount.Description)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.DocumentType_Id)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.DocumentType.Description)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.DocumentNumber)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.DocumentNumber)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.PaymentForm_Id)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.PaymentForm.Description)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Observation)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Observation)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.LastSettlementDate)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.LastSettlementDate)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.PaidAmount)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.PaidAmount)
+                    </dd>
+                </dl>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" id="TData">
+                        <thead>
+                            <tr>
+                                <td colspan="6">
+                                    <label>Nº Parcelas</label>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Número</th>
+                                <th>Valor Original</th>
+                                <th>Vencimento</th>
+                                <th>Status</th>
+                                @*<th>Data Pagamento</th>*@
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                List<InvoicePaymentViewModel> InvoicePaymentViewModels = Model.InvoicePayments.ToList();
+                            }
+                            @for (int i = 0; i < InvoicePaymentViewModels.Count; i++)
+                            {
+                                <tr id="@i" class="index">
+
+                                    <td class='number'>
+                                        @Html.Raw(i + 1)
+                                    </td>
+                                    <td>
+                                        @InvoicePaymentViewModels[@i].AmountInvoicePayment
+
+                                    </td>
+                                    <td>
+                                        @InvoicePaymentViewModels[@i].DueDateInvoicePayment
+
+                                    </td>
+                                    <td>
+                                        @if (InvoicePaymentViewModels[@i].StatusInvoicePayment == Transportadora.UI.Site.ViewModels.StatusViewModel.closed)
+                                        {
+                                            <span class="label label-success">Fechado</span>
+                                        }
+                                        @if (InvoicePaymentViewModels[@i].StatusInvoicePayment == Transportadora.UI.Site.ViewModels.StatusViewModel.opened)
+                                        {
+                                            <span class="label label-danger">Aberto</span>
+                                        }
+                                    </td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

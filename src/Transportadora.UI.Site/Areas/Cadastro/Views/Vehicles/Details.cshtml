@@ -1,0 +1,71 @@
+﻿@model Transportadora.UI.Site.ViewModels.VehicleViewModel
+
+@{
+    ViewData["Title"] = "Visualizar Veículo";
+}
+
+
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                <div class="pull-right">
+                    <a asp-action="Index" data-toggle="tooltip" title="Voltar Para lista" class="btn btn-primary"><i class="fa fa-arrow-left "></i> Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Visualizar Cargo</h3>
+            </div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.VehicleType)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.VehicleType.Description)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Description)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.VehicleLicensePlate)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.VehicleLicensePlate)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Year)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Year)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Color)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Color)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Brand)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Brand)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Model)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Model)
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>

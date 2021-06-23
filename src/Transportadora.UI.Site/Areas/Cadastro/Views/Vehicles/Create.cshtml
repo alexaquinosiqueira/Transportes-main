@@ -1,0 +1,196 @@
+﻿@model Transportadora.UI.Site.ViewModels.VehicleViewModel
+@using Transportadora.UI.Site.ViewModels
+@{
+    ViewData["Title"] = "Cadastrar Veículo";
+}
+
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                <div class="pull-right">
+                    <a asp-action="Index" data-toggle="tooltip" title="Voltar Para lista" class="btn btn-primary"><i class="fa fa-arrow-left "></i> Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Cadastrar Veículo</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label class="control-label">Tipo do Veículo</label>
+
+                        <select name="VehicleType_Id" id="VehicleType_Id" class="form-control">
+                            <option></option>
+                            @foreach (var vehicleType in (ViewData["VehicleTypes"] as List<VehicleTypeViewModel>))
+                            {
+                                <option value="@vehicleType.Id">@vehicleType.Description</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Frota</label>
+
+                        <select name="Fleet_Id" id="Fleet_Id" class="form-control">
+                            <option></option>
+                            @foreach (var fleet in (ViewData["Fleets"] as List<FleetViewModel>))
+                            {
+                                <option value="@fleet.Id">@fleet.Description</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Motorista</label>
+
+                        <select name="Employee_Id" id="Employee_Id" class="form-control">
+                            <option></option>
+                            @foreach (var employee in (ViewData["Employees"] as List<EmployeeViewModel>))
+                            {
+                                <option value="@employee.Id">@employee.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+ 
+                            <div class="form-group col-md-4 col-sm-4" style="margin-left:-16px;">
+                                <label class="control-label">UF</label>
+                                <select name="state" id="state" class="form-control">
+                                    <option></option>
+                                    @foreach (var state in (ViewData["States"] as List<StateViewModel>))
+                                    {
+                                <option value="@state.Id">@state.Uf - @state.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group col-md-8 col-sm-8">
+                                <label class="control-label">Cidade</label>
+                                <input id="City_Id" class="form-control" name="City_Id" />
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="VehicleLicensePlate" class="control-label"></label>
+                        <input asp-for="VehicleLicensePlate" class="form-control" />
+                        <span asp-validation-for="VehicleLicensePlate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Year" class="control-label"></label>
+                        <input asp-for="Year" class="form-control" />
+                        <span asp-validation-for="Year" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Color" class="control-label"></label>
+                        <input asp-for="Color" class="form-control" />
+                        <span asp-validation-for="Color" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Brand" class="control-label"></label>
+                        <input asp-for="Brand" class="form-control" />
+                        <span asp-validation-for="Brand" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Model" class="control-label"></label>
+                        <input asp-for="Model" class="form-control" />
+                        <span asp-validation-for="Model" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="chassi" class="control-label"></label>
+                        <input asp-for="chassi" class="form-control" />
+                        <span asp-validation-for="chassi" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="renavam" class="control-label"></label>
+                        <input asp-for="renavam" class="form-control" />
+                        <span asp-validation-for="renavam" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="km" class="control-label"></label>
+                        <input asp-for="km" class="form-control" />
+                        <span asp-validation-for="km" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="tank" class="control-label"></label>
+                        <input asp-for="tank" class="form-control" />
+                        <span asp-validation-for="tank" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="average" class="control-label"></label>
+                        <input asp-for="average" class="form-control" />
+                        <span asp-validation-for="average" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="litragem" class="control-label"></label>
+                        <input asp-for="litragem" class="form-control" />
+                        <span asp-validation-for="litragem" class="text-danger"></span>
+                    </div>
+
+                    <div class="pull-right">
+                        <button type="reset" data-toggle="tooltip" title="Limpar Formulário" class="btn btn-warning">
+                            <i class="fa fa-eraser "></i> Limpar
+                        </button>
+                        <button type="submit" data-toggle="tooltip" title="Salvar" class="btn btn-primary">
+                            <i class="fa fa-save"></i> Salvar
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#state').change(function () {
+            $('#City_Id').select2({
+                ajax: {
+                    placeholder: 'Selecione a cidade',
+                    url: '@Url.Content("~/Financeiro")/FinancialSettlements/GetCityByStateId/?StateId=' + $('#state').val(),
+                    dataType: 'json',
+                    quietMillis: 100,
+                    data: function (term) {
+                        return {
+                            q: term, // search term
+                        };
+                    },
+                    results: function (data) {
+                        var myResults = [];
+                        $.each(data, function (index, item) {
+                            myResults.push({
+                                'id': item.id,
+                                'text': item.text
+                            });
+                        });
+                        return {
+                            results: myResults
+                        };
+                    },
+                    minimumInputLength: 3
+                }
+            });
+        })
+        $('select').select2();
+        $('.dates').datetimepicker({
+            pickTime: false,
+            format: 'DD/MM/YYYY'
+        });
+
+    });
+</script>
+

@@ -1,0 +1,276 @@
+﻿@model Transportadora.UI.Site.ViewModels.InvoiceViewModel
+@using Transportadora.UI.Site.ViewModels
+
+
+@{
+    ViewData["Title"] = "Editar Receita";
+}
+
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                <div class="pull-right">
+                    <a asp-action="Index" data-toggle="tooltip" title="Voltar Para lista" class="btn btn-primary"><i class="fa fa-arrow-left "></i> Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Editar Receita</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="CostCenter_Id" class="control-label"></label>
+                        <select name="CostCenter_Id" id="CostCenter_Id" class="form-control">
+                            <option></option>
+                            @foreach (var costCenter in (ViewData["CostCenters"] as List<CostCenterViewModel>))
+                            {
+
+                                if (costCenter.Id == Model.CostCenter_Id)
+                                {
+                                    <option value="@costCenter.Id" selected>@costCenter.Description</option>
+                                }
+                                else
+                                {
+                                    <option value="@costCenter.Id">@costCenter.Description</option>
+                                }
+
+                            }
+                        </select>
+                        <span asp-validation-for="CostCenter_Id" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="BankAccount_Id" class="control-label"></label>
+                        <select name="BankAccount_Id" id="BankAccount_Id" class="form-control">
+                            <option></option>
+
+                            @foreach (var bankAccount in (ViewData["BankAccounts"] as List<BankAccountViewModel>))
+                            {
+
+                                if (bankAccount.Id == Model.BankAccount_Id)
+                                {
+                                    <option value="@bankAccount.Id" selected>@bankAccount.Description</option>
+                                }
+                                else
+                                {
+                                    <option value="@bankAccount.Id">@bankAccount.Description</option>
+                                }
+
+                            }
+                        </select>
+                        <span asp-validation-for="BankAccount_Id" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Customer_Id" class="control-label"></label>
+                        <select name="Customer_Id" id="Customer_Id" class="form-control">
+                            <option></option>
+                            @foreach (var Customer in (ViewData["Customers"] as List<CustomerViewModel>))
+                            {
+
+                                if (Customer.Id == Model.Customer_Id)
+                                {
+                                    <option value="@Customer.Id" selected>@Customer.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@Customer.Id">@Customer.Name</option>
+                                }
+
+                            }
+                        </select>
+                        <span asp-validation-for="Customer_Id" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DocumentType_Id" class="control-label"></label>
+                        <select name="DocumentType_Id" id="DocumentType_Id" class="form-control">
+                            <option></option>
+                            @foreach (var documentType in (ViewData["DocumentTypes"] as List<DocumentTypeViewModel>))
+                            {
+
+                                if (documentType.Id == Model.DocumentType_Id)
+                                {
+                                    <option value="@documentType.Id" selected>@documentType.Description</option>
+                                }
+                                else
+                                {
+                                    <option value="@documentType.Id">@documentType.Description</option>
+                                }
+
+                            }
+                        </select>
+                        <span asp-validation-for="DocumentType_Id" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DocumentNumber" class="control-label"></label>
+                        <input asp-for="DocumentNumber" class="form-control" onkeyup="formatarMoeda(this);" />
+                        <span asp-validation-for="DocumentNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Amount" class="control-label"></label>
+                        <input asp-for="Amount" class="form-control" id="Amount" />
+                        <span asp-validation-for="Amount" class="text-danger"></span>
+                    </div>
+                    @*<div class="form-group">
+                            <label asp-for="Date" class="control-label"></label>
+                            <input type="text" asp-for="Date" class="form-control dates" />
+                            <span asp-validation-for="Date" class="text-danger"></span>
+                        </div>*@
+                    @*<div class="form-group">
+                            <label asp-for="Status" class="control-label"></label>
+                            <select name="Status" id="Status" class="form-control">
+                                <option></option>
+                                <option value="0">Aberto</option>
+                                <option value="1">Em Andamento</option>
+                                <option value="2">Fechado</option>
+                            </select>
+                            <span asp-validation-for="Status" class="text-danger"></span>
+                        </div>*@
+                    <div class="form-group">
+                        <label asp-for="DueDate" class="control-label"></label>
+                        <input type="text" asp-for="DueDate" class="form-control dates" id="DueDate" />
+                        <span asp-validation-for="DueDate" class="text-danger"></span>
+                    </div>
+                    @*<div class="form-group">
+                            <label asp-for="SettlementDate" class="control-label"></label>
+                            <input type="text" asp-for="SettlementDate" class="form-control dates" />
+                            <span asp-validation-for="SettlementDate" class="text-danger"></span>
+                        </div>*@
+
+
+                    <div class="form-group">
+                        <label asp-for="PaymentForm_Id" class="control-label"></label>
+                        <select name="PaymentForm_Id" id="PaymentForm_Id" class="form-control">
+                            <option></option>
+                            @foreach (var paymentForm in (ViewData["PaymentForms"] as List<PaymentFormViewModel>))
+                            {
+
+                                if (paymentForm.Id == Model.PaymentForm_Id)
+                                {
+                                    <option value="@paymentForm.Id" selected>@paymentForm.Description</option>
+                                }
+                                else
+                                {
+                                    <option value="@paymentForm.Id">@paymentForm.Description</option>
+                                }
+
+                            }
+                        </select>
+                        <span asp-validation-for="PaymentForm_Id" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Observation" class="control-label"></label>
+                        <input asp-for="Observation" class="form-control" />
+                        <span asp-validation-for="Observation" class="text-danger"></span>
+                    </div>
+                    @*<div class="form-group">
+                            <label asp-for="LastSettlementDate" class="control-label"></label>
+                            <input type="text" asp-for="LastSettlementDate" class="form-control dates" />
+                            <span asp-validation-for="LastSettlementDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="PaidAmount" class="control-label"></label>
+                            <input asp-for="PaidAmount" class="form-control" />
+                            <span asp-validation-for="PaidAmount" class="text-danger"></span>
+                        </div>*@
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" id="TData">
+                            <thead>
+                                <tr>
+                                    <td colspan="6">
+                                        <label>Nº Parcelas</label>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Número</th>
+                                    <th>Valor Original</th>
+                                    <th>Vencimento</th>
+                                    <th>Status</th>
+                                    @*<th>Data Pagamento</th>*@
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    List<InvoicePaymentViewModel> InvoicePaymentViewModels = Model.InvoicePayments.ToList();
+                                }
+                                @for (int i = 0; i < InvoicePaymentViewModels.Count; i++)
+                                {
+                                    <tr id="@i" class="index">
+
+                                        <td class='number'>
+                                            @Html.Raw(i + 1)
+                                            <input type="hidden" value="@InvoicePaymentViewModels[@i].Id" name="InvoicePayments[@i].Id" id="InvoicePayments[@i].Id" class="form-control" readonly required />
+                                        </td>
+                                        <td>
+                                            <input type="text" value="@InvoicePaymentViewModels[@i].AmountInvoicePayment" name="InvoicePayments[@i].AmountInvoicePayment" id="InvoicePayments[@i].AmountInvoicePayment" class="form-control" readonly required />
+                                        </td>
+                                        <td>
+                                            <input type="text" value="@InvoicePaymentViewModels[@i].DueDateInvoicePayment" name="InvoicePayments[@i].DueDateInvoicePayment" id="InvoicePayments[@i].DueDateInvoicePayment" class="form-control dates" required />
+                                        </td>
+                                        <td>
+                                            <select name="InvoicePayments[@i].StatusInvoicePayment" id="InvoicePayments[@i].StatusInvoicePayment" class="form-control">
+
+                                                <option value="0" selected="@(InvoicePaymentViewModels[@i].StatusInvoicePayment == StatusViewModel.opened)">Aberto</option>
+
+                                                <option value="2" selected="@(InvoicePaymentViewModels[@i].StatusInvoicePayment == StatusViewModel.closed)">Fechado</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="Date" />
+                    <div class="pull-right">
+                        <button type="reset" data-toggle="tooltip" title="Limpar Formulário" class="btn btn-warning">
+                            <i class="fa fa-eraser "></i> Limpar
+                        </button>
+                        <button type="submit" data-toggle="tooltip" title="Salvar" class="btn btn-primary">
+                            <i class="fa fa-save"></i> Salvar
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script type="text/javascript">
+    function EnableDisableNumParcel() {
+        var $dueDate = $('#DueDate').val();
+        var $amount = $('#Amount').val();
+        if ($dueDate === "" || $amount === "")
+            $('#NumParcel').prop('disabled', true);
+
+        else
+            $('#NumParcel').prop('disabled', false);
+    }
+    $(document).ready(function () {
+        $('#DueDate').change(function () {
+            EnableDisableNumParcel()
+        });
+        $('#Amount').change(function () {
+            EnableDisableNumParcel()
+        });
+        $('select').select2();
+        $('.dates').datetimepicker({
+            pickTime: false,
+            format: 'DD/MM/YYYY'
+        });
+    });</script>

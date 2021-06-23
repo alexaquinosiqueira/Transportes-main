@@ -1,0 +1,496 @@
+﻿@model Transportadora.UI.Site.ViewModels.ExpenseViewModel
+@using Transportadora.UI.Site.ViewModels
+
+@{ ViewData["Title"] = "Nova Despesa"; }
+
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                <div class="pull-right">
+                    <a asp-action="Index" data-toggle="tooltip" title="Voltar Para lista" class="btn btn-primary"><i class="fa fa-arrow-left "></i> Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div> 
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Cadastrar Despesa</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="row">
+                        <div class="form-group  col-md-12">
+                            <div class="form-group col-md-12 col-sm-12">
+
+                                <div id="div_opcoes">
+                                    <fieldset>
+                                        <legend>Tipos de importação</legend>
+                                        <label class="radio-inline">
+                                            <input type="radio" onclick="opcao_tipo_pesquisa()" name="opttipo" value="xml" id="optxml">Arquivo XML
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" onclick="opcao_tipo_pesquisa()" name="opttipo" value="barras" id="optbarras">Código Barras
+                                        </label>
+                                    </fieldset>
+                                </div>
+
+
+                                <div id="divopcao_barras" style="display:none">
+
+                                    <div class="col-md-6">
+                                        <label class="control-label">Ler Código de Barras</label>
+                                        <input name="txtbarras" id="txtbarras" placeholder="Códgo de barras" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <a id="btnaddp" href="javascript:void(0)" style="margin: 0 16px 16px 0; margin-top:30px; margin-right:0px;" onclick="volta_opcoes()" title="voltar" class="btn btn-default btn-xs"><i class="fa fa-arrow-left "></i> VOLTAR</a>
+                                    </div>
+
+                                </div>
+
+                                <div id="divopcao_xml" style="display:none">
+                                    <div class="col-md-4">
+                                        <label class="control-label">Selecione arquivo XML</label>
+                                        <input style="margin-top:10px;" onchange="validarArquivo_xml()" type="file" id="arquivos_xml" name="arquivos_xml" multiple />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div id="btnxml" style="display:none;" class="form-group col-md-1 col-sm-1">
+                                            <a id="btnxml" href="javascript:void(0)" style="margin: 0 16px 0px 0; margin-top:31px; margin-left:-24px;" onclick="validarArquivo_xml()" title="Carregar informações xml" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Carregar XML</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <a id="btnaddp" href="javascript:void(0)" style="margin: 0 16px 16px 0; margin-top:30px; margin-right:0px;" onclick="volta_opcoes()" title="voltar" class="btn btn-default btn-xs"><i class="fa fa-arrow-left "></i> VOLTAR</a>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group  col-md-3">
+                            <label  class="control-label">Centro de Custo</label>
+                            <select name="CostCenter_Id" id="CostCenter_Id" class="form-control">
+                                <option></option>
+                                @foreach (var costCenter in (ViewData["CostCenters"] as List<CostCenterViewModel>))
+                                {
+
+                                    <option value="@costCenter.Id">@costCenter.Description</option>
+}
+                            </select>
+                            <span asp-validation-for="CostCenter_Id" class="text-danger"></span>
+                        </div>
+
+
+                        <div class="form-group  col-md-3" style="display:none" id="divplaca">
+                            <label class="control-label">Placa Veículo</label>
+                            <select name="Vehicle_Id" id="Vehicle_Id" class="form-control">
+                                <option></option>
+                                @foreach (var Vehicle in (ViewData["Vehicle"] as List<VehicleViewModel>))
+                                {
+
+                                    <option value="@Vehicle.Id">@Vehicle.VehicleLicensePlate - @Vehicle.Description</option>
+}
+                            </select>
+                            <span asp-validation-for="Vehicle_Id" class="text-danger"></span>
+                        </div>
+
+
+
+
+                        <div class="form-group col-md-3">
+                            <label class="control-label">Conta</label>
+                            <select name="BankAccount_Id" id="BankAccount_Id" class="form-control">
+                                <option></option>
+                                @foreach (var bankAccount in (ViewData["BankAccounts"] as List<BankAccountViewModel>))
+                                {
+                                    <option value="@bankAccount.Id">@bankAccount.Description</option>
+}
+                            </select>
+                            <span asp-validation-for="BankAccount_Id" class="text-danger"></span>
+                        </div>
+
+                        <div id="divfornecedor" class="form-group col-md-6">
+                            <label  class="control-label">Fornecedor</label>
+                            <select name="Supplier_Id" id="Supplier_Id" class="form-control">
+                                <option></option>
+                                @foreach (var supplier in (ViewData["Suppliers"] as List<SupplierViewModel>))
+                                {
+                                    <option value="@supplier.Id">@supplier.Name</option>
+}
+                            </select>
+                            <span asp-validation-for="Supplier_Id" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group  col-md-8">
+                            <label asp-for="Description" class="control-label"></label><b style="color:red"> *</b>
+                            <input asp-for="Description" class="form-control" />
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label asp-for="DocumentType_Id" class="control-label"></label>
+                            <select name="DocumentType_Id" id="DocumentType_Id" class="form-control">
+                                <option></option>
+                                @foreach (var documentType in (ViewData["DocumentTypes"] as List<DocumentTypeViewModel>))
+                                {
+                                    <option value="@documentType.Id">@documentType.Description</option>
+}
+                            </select>
+                            <span asp-validation-for="DocumentType_Id" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label asp-for="DocumentNumber" class="control-label"></label>
+                            <input asp-for="DocumentNumber" class="form-control" />
+                            <span asp-validation-for="DocumentNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label asp-for="Amount" class="control-label"></label>
+                            <input asp-for="Amount" onchange="ChangeParcel()" class="form-control" onkeyup="formatarMoeda(this);" id="Amount" />
+                            <span asp-validation-for="Amount" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label asp-for="DueDate" class="control-label"></label>
+                            <input type="text" asp-for="DueDate" class="form-control dates" id="DueDate"  />
+                            <span asp-validation-for="DueDate" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label asp-for="PaymentForm_Id" class="control-label"></label><b style="color:red"> *</b>
+                            <select name="PaymentForm_Id" id="PaymentForm_Id" class="form-control">
+                                <option></option>
+                                @foreach (var paymentForm in (ViewData["PaymentForms"] as List<PaymentFormViewModel>))
+                                {
+                                    <option value="@paymentForm.Id">@paymentForm.Description</option>
+}
+                            </select>
+                            <span asp-validation-for="PaymentForm_Id" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label asp-for="Observation" class="control-label"></label><b style="color:red"> *</b>
+                            <input required asp-for="Observation" class="form-control" />
+                            <span asp-validation-for="Observation" class="text-danger"></span>
+                        </div>
+                    </div>
+
+
+                    @*<div class="form-group">
+                            <label asp-for="LastSettlementDate" class="control-label"></label>
+                            <input type="text" asp-for="LastSettlementDate" class="form-control dates" />
+                            <span asp-validation-for="LastSettlementDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="PaidAmount" class="control-label"></label>
+                            <input asp-for="PaidAmount" class="form-control" />
+                            <span asp-validation-for="PaidAmount" class="text-danger"></span>
+                        </div>*@
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" id="TData">
+                            <thead>
+                                <tr>
+                                    <td colspan="6">
+                                        <label>Nº Parcelas</label> <b style="color:red"> *</b>
+                                        @*<a href="javascript:void(0)" onclick="AddItems()" title="Adicionar Parcela" class="btn pull-right btn-sm btn-success"><i class="fa fa-plus"></i> Adicionar Parcela</a>*@
+                                        <div class="form-group">
+
+                                            <select name="NumParcel" onchange="ChangeParcel()" id="NumParcel" class="form-control" disabled="disabled">
+                                                <option></option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="9">9</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
+                                            </select>
+                                        </div>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Número</th>
+                                    <th>Valor Original</th>
+                                    <th>Vencimento</th>
+                                    <th>Status</th>
+                                    @*<th>Data Pagamento</th>*@
+
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="pull-right">
+                        <button type="reset" data-toggle="tooltip" title="Limpar Formulário" class="btn btn-warning">
+                            <i class="fa fa-eraser "></i> Limpar
+                        </button>
+                        <button type="submit" data-toggle="tooltip" title="Salvar" class="btn btn-primary">
+                            <i class="fa fa-save"></i> Salvar
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script type="text/javascript">
+
+
+    function ChangeParcel() {
+
+        if ($("#NumParcel").val() != "") {
+
+            $('#TData tbody tr').remove();
+
+            var num = parseInt($("#NumParcel").val())
+            var vv = $("#Amount").val().replace('.', '').replace(',', '.');
+
+            //var num = parseInt($("#NumParcel").val())
+            var value = vv / num;
+            var from = $("#DueDate").val().split("/")
+            var d = new Date(from[2], from[1] - 1, from[0]);
+            for (var i = 0; i < num; i++) {
+
+                AddItems(value, d.toLocaleDateString());
+                d.setMonth(d.getMonth() + 1)
+            }
+        }
+    }
+
+
+    function AddItems(value, date) {
+        var row = $('#TData tbody tr').length;
+        if (row > 0) {
+            var index = $('.index').last().attr('id');
+            index = parseInt(index);
+            row = parseInt(row);
+            row = index + 1;
+        }
+        var html = '<tr id="' + row + '" class="index">';
+        html += "<td class='number'>" + (row + 1) + "</td>";
+
+        var val_formatado = numberToReal(value)
+
+
+        html += '<td><input type="text" value="' + val_formatado + '" name="ExpensePayment[' + row + '].AmountExpensePayment" id="ExpensePayment[' + row + '].AmountExpensePayment" class="form-control" readonly="true" required/></td>';
+        html += '<td><input type="text" value="' + date + '" name="ExpensePayment[' + row + '].DueDateExpensePayment" id="ExpensePayment[' + row + '].DueDateExpensePayment" class="form-control dates" required/></td>';
+        //html += '<td><input type="text" value="2" name="ExpensePayment[' + row + '].StatusExpensePayment" id="ExpensePayment[' + row + '].StatusExpensePayment" class="form-control" readonly="true" required/></td>';
+        html += '<td><select name="ExpensePayment[' + row + '].StatusExpensePayment" id="ExpensePayment[' + row + '].StatusExpensePayment" class="form-control">';
+        html += '    <option value="0">Aberto</option>';
+        html += '    <option value="2">Fechado</option>';
+        html += '</select></td>';
+        //html += '<td><input type="text" value="" name="ExpensePayment[' + row + '].ConcludedDate" id="ExpensePayment[' + row + '].ConcludedDate" class="form-control" /></td>';
+        html += '</tr>';
+        $('#TData tbody').append(html);
+
+
+        $('#qty' + row).on('propertychange change', function () {
+            var price = parseInt($("#price" + row).val()) || 0;
+            var qty = parseInt($(this).val()) || 0;
+            var total = parseInt(price * qty) || 0;
+            $("#total" + row).val(total);
+        });
+
+        $('.dates').datetimepicker({
+            pickTime: false,
+            format: 'DD/MM/YYYY'
+        });
+
+    }
+
+    function numberToReal(numero) {
+        var numero = numero.toFixed(2).split('.');
+        numero[0] = numero[0].split(/(?=(?:...)*$)/).join('.');
+        return numero.join(',');
+    }
+
+
+    function opcao_tipo_pesquisa() {
+        var tipos = document.getElementsByName("opttipo");
+
+        for (var i = 0 in tipos)
+            if (tipos[i].checked) {
+                //alert("Escolheu: " + tipos[i].value);
+
+                if (tipos[i].value == "barras") {
+                    $('#divopcao_barras').show();
+                    $('#div_opcoes').hide();
+                    $('#divopcao_xml').hide();
+                    $('#btnxml').hide();
+                }
+                if (tipos[i].value == "xml") {
+                    $('#div_opcoes').hide();
+                    $('#divopcao_barras').hide();
+                    $('#divopcao_xml').show();
+                    $('#btnxml').show();
+                }
+
+            }
+    }
+
+    function volta_opcoes() {
+        $('#div_opcoes').show();
+        $('#divopcao_barras').hide();
+        $('#divopcao_xml').hide();
+        $('#btnxml').hide();
+
+    }
+
+    function validarArquivo_xml() {
+
+        var arquivoInput = document.getElementById('arquivos_xml');
+        var caminhoArquivo = arquivoInput.value;
+
+        if (arquivoInput.value == '') {
+            return false;
+        }
+
+        var extensoesPermitidas = /(.XML)$/i;
+        if (!extensoesPermitidas.exec(caminhoArquivo)) {
+            alert('AVISO: Somente arquivos permitidos com as extensões.XML');
+            return false;
+        } else {
+
+            if (arquivoInput.files && arquivoInput.files[0]) {
+
+                var reader = new FileReader();
+                var fileUpload = document.getElementById("arquivos_xml");
+                var file = fileUpload.files[0];
+
+                var cnpjNF = "";
+                var natNF = "";
+                var numeroNF = "";
+                var serieNF = "";
+                var valorNF = "";
+
+                if (file.type.indexOf("xml") == -1)
+                    return;
+
+                if (arquivoInput.files[0].size > 2097152) {
+                    alert("Tamanho do arquivo deve ser 2 MB!");
+                    return false;
+                }
+
+                var url = URL.createObjectURL(file);
+                var httpRequest = new XMLHttpRequest();
+                httpRequest.open("GET", url, true)
+
+                httpRequest.addEventListener("readystatechange", function () {
+                    if (httpRequest.readyState == 4) {
+
+                        var catalog = (httpRequest.responseText);
+
+                        cnpjNF = catalog.substring(catalog.indexOf('<CNPJ>') + 6, catalog.indexOf('</CNPJ>'));
+
+                        natNF = catalog.substring(catalog.indexOf('<natOp>') + 7, catalog.indexOf('</natOp>'));
+                        numeroNF = catalog.substring(catalog.indexOf('<cNF>') + 5, catalog.indexOf('</cNF>'));
+                        serieNF = catalog.substring(catalog.indexOf('<serie>') + 7, catalog.indexOf('</serie>'));
+                        valorNF = catalog.substring(catalog.indexOf('<vNF>') + 5, catalog.indexOf('</vNF>'));
+
+                        document.getElementById('Observation').value = "Arquivo XML da nota fiscal N.º " + numeroNF + " Serie: " + serieNF + "CNPJ N.º " + cnpjNF;
+                        document.getElementById('DocumentNumber').value = numeroNF;
+                        document.getElementById('Description').value = natNF;
+                        document.getElementById('Amount').value = valorNF;
+
+                        //carrego centro de custo - Financeiro -
+                        document.getElementById("CostCenter_Id").text = "Financeiro";
+                        document.getElementById("CostCenter_Id").value = "9C2EA8D6-1A97-4A23-09B7-08D822120CD9";
+                        document.getElementById("CostCenter_Id").selectedIndex = 2;
+
+                        $("#CostCenter_Id").select2({
+                            text: "Financeiro"
+                        })
+
+                        // carrego conta - caixa geral -
+                        document.getElementById("BankAccount_Id").text = "Caixa Geral";
+                        document.getElementById("BankAccount_Id").value = "C04A2727-337C-4233-CAE5-08D82029432F";
+                        document.getElementById("BankAccount_Id").selectedIndex = 1;
+
+                        $("#BankAccount_Id").select2({
+                            text: "Caixa Geral"
+                        })
+
+                        // carrego tipo de documento - nota fiscal -
+                        document.getElementById("DocumentType_Id").text = "Nota Fiscal";
+                        document.getElementById("DocumentType_Id").value = "75DE33D2-FDED-4713-15EC-08D822146C10";
+                        document.getElementById("DocumentType_Id").selectedIndex = 2;
+
+                        $("#DocumentType_Id").select2({
+                            text: "Nota Fiscal"
+                        })
+
+                        // carrego forma de pagamento - dinheiro -
+                        document.getElementById("PaymentForm_Id").text = "Dinheiro";
+                        document.getElementById("PaymentForm_Id").value = "DBA384FD-61D8-478E-E492-08D822158BEE";
+                        document.getElementById("PaymentForm_Id").selectedIndex = 1;
+
+                        $("#PaymentForm_Id").select2({
+                            text: "Dinheiro"
+                        })
+                    }
+                });
+                httpRequest.send();
+            }
+        }
+    }
+
+
+    function EnableDisableNumParcel() {
+        var $dueDate = $('#DueDate').val();
+        var $amount = $('#Amount').val();
+        if ($dueDate === "" || $amount === "")
+            $('#NumParcel').prop('disabled', true);
+
+        else
+            $('#NumParcel').prop('disabled', false);
+    }
+
+    $(document).ready(function () {
+        $('#DueDate').change(function () {
+            EnableDisableNumParcel()
+        });
+        $('#Amount').change(function () {
+            EnableDisableNumParcel()
+        });
+        $('select').select2();
+        $('.dates').datetimepicker({
+            pickTime: false,
+            format: 'DD/MM/YYYY'
+        });
+
+        $('#CostCenter_Id').change(function () {
+
+            if ($('#CostCenter_Id option:selected').text().trim() == "Manutenção") {
+                document.getElementById("divfornecedor").className = "form-group col-md-3";
+
+                $('#divplaca').show();
+            } else {
+                $('#divplaca').hide();
+                document.getElementById("divfornecedor").className = "form-group col-md-6";
+            }
+        });
+
+    });</script>

@@ -1,0 +1,134 @@
+﻿@model IEnumerable<Transportadora.UI.Site.ViewModels.AuditLogViewModel>
+
+@{
+    ViewData["Title"] = "Logs de Alterações";
+    var controllerValue = ViewContext.RouteData.Values["Controller"].ToString();
+    var areaValue = ViewContext.RouteData.Values["Area"]?.ToString();
+}
+
+<div class="page-header">
+
+    <div class="container-fluid">
+        <ul class="breadcrumb">
+            <li>
+                <a href="@Url.Content("~/home/index")">Home</a>
+            </li>
+            <li>
+                @Html.ActionLink("Lista de Logs", "Index", "LogAudit", new { Area = "Portal" }, new { @class = "" })
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Logs de Alterações
+                </h3>
+            </div>
+            <div class="panel-body">
+
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" id="usersTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Id do Log
+                                </th>
+                                <th>
+                                    Data da Alteração
+                                </th>
+                                <th>
+                                    Nome Do Usuário
+                                </th>
+                                <th>
+                                    Tipo de Ação
+                                </th>
+                                <th>
+                                    Tabela
+                                </th>
+                                <th>
+                                    Ações
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Id)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DateTime)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Username)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Action)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.TableName)
+                                        </td>
+                                        <td>
+                                            <a asp-action="Details" asp-route-id="@item.Id">
+                                                <i class="fa fa-search"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="pagination">
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#usersTable').DataTable({
+            language: {
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_ resultados por página",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sSearch": "Pesquisar",
+                "oPaginate": {
+                    "sNext": "Próximo",
+                    "sPrevious": "Anterior",
+                    "sFirst": "Primeiro",
+                    "sLast": "Último"
+                },
+                "oAria": {
+                    "sSortAscending": ": Ordenar colunas de forma ascendente",
+                    "sSortDescending": ": Ordenar colunas de forma descendente"
+                }
+            }
+        });
+    });
+</script>

@@ -1,0 +1,102 @@
+﻿@model Transportadora.UI.Site.ViewModels.EmployeeViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                <div class="pull-right">
+                    <a asp-action="Index" data-toggle="tooltip" title="Voltar Para lista" class="btn btn-primary"><i class="fa fa-arrow-left "></i> Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Visualizar Funcionário</h3>
+            </div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Name)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.NickName)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.NickName)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.CelPhone)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.CelPhone)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Genre)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Genre)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.BirthDate)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.BirthDate)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.MaritalStatus)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.MaritalStatus)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Responsibility)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Responsibility.Description)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.AdmissionDate)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.AdmissionDate)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Salary)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Salary)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ResignationDate)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.ResignationDate)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Active)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Active)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Address)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Address.AddressLine)
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+

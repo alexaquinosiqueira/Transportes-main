@@ -1,0 +1,308 @@
+﻿@model Transportadora.UI.Site.ViewModels.InvoiceViewModel
+@using Transportadora.UI.Site.ViewModels
+
+@{
+    ViewData["Title"] = "Nova Receita";
+}
+
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                <div class="pull-right">
+                    <a asp-action="Index" data-toggle="tooltip" title="Voltar Para lista" class="btn btn-primary"><i class="fa fa-arrow-left "></i> Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Cadastrar Receita</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="CostCenter_Id" class="control-label"></label><b style="color:red" >*</b>
+                        <select required name="CostCenter_Id" id="CostCenter_Id" class="form-control">
+                            <option></option>
+                            @foreach (var costCenter in (ViewData["CostCenters"] as List<CostCenterViewModel>))
+                            {
+                                <option value="@costCenter.Id">@costCenter.Description</option>
+                            }
+                        </select>
+                        <span asp-validation-for="CostCenter_Id" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="BankAccount_Id" class="control-label"></label><b style="color:red">*</b>
+                        <select name="BankAccount_Id" required id="BankAccount_Id" class="form-control">
+                            <option></option>
+                            @foreach (var bankAccount in (ViewData["BankAccounts"] as List<BankAccountViewModel>))
+                            {
+                                <option value="@bankAccount.Id">@bankAccount.Description</option>
+                            }
+                        </select>
+                        <span asp-validation-for="BankAccount_Id" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Customer_Id" class="control-label"></label><b style="color:red">*</b>
+                        <select name="Customer_Id" required id="Customer_Id" class="form-control">
+                            <option></option>
+                            @foreach (var customer in (ViewData["Customers"] as List<CustomerViewModel>))
+                            {
+                                <option value="@customer.Id">@customer.Name</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Customer_Id" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label><b style="color:red">*</b>
+                        <input asp-for="Description" required class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DocumentType_Id" class="control-label"></label><b style="color:red">*</b>
+                        <select required name="DocumentType_Id" id="DocumentType_Id" class="form-control">
+                            <option></option>
+                            @foreach (var documentType in (ViewData["DocumentTypes"] as List<DocumentTypeViewModel>))
+                            {
+                                <option value="@documentType.Id">@documentType.Description</option>
+                            }
+                        </select>
+                        <span asp-validation-for="DocumentType_Id" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DocumentNumber" class="control-label"></label><b style="color:red">*</b>
+                        <input asp-for="DocumentNumber" required class="form-control" />
+                        <span asp-validation-for="DocumentNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Amount" class="control-label"></label><b style="color:red">*</b>
+                        <input asp-for="Amount" onchange="ChangeParcel()" class="form-control" required onkeyup="formatarMoeda(this);" id="Amount" />
+                        <span asp-validation-for="Amount" class="text-danger"></span>
+                    </div>
+                    @*<div class="form-group">
+                            <label asp-for="Date" class="control-label"></label>
+                            <input type="text" asp-for="Date" class="form-control dates" />
+                            <span asp-validation-for="Date" class="text-danger"></span>
+                        </div>*@
+                    @*<div class="form-group">
+                            <label asp-for="Status" class="control-label"></label>
+                            <select name="Status" id="Status" class="form-control">
+                                <option></option>
+                                <option value="0">Aberto</option>
+                                <option value="1">Em Andamento</option>
+                                <option value="2">Fechado</option>
+                            </select>
+                            <span asp-validation-for="Status" class="text-danger"></span>
+                        </div>*@
+                    <div class="form-group">
+                        <label asp-for="DueDate" class="control-label"></label><b style="color:red">*</b>
+                        <input type="text" asp-for="DueDate" required class="form-control dates" id="DueDate" data-format="dd/MM/yyyy"/>
+                        <span asp-validation-for="DueDate" class="text-danger"></span>
+                    </div>
+                    @*<div class="form-group">
+                            <label asp-for="SettlementDate" class="control-label"></label>
+                            <input type="text" asp-for="SettlementDate" class="form-control dates" />
+                            <span asp-validation-for="SettlementDate" class="text-danger"></span>
+                        </div>*@
+
+
+                    <div class="form-group">
+                        <label asp-for="PaymentForm_Id" class="control-label"></label><b style="color:red">*</b>
+                        <select name="PaymentForm_Id" required id="PaymentForm_Id" class="form-control">
+                            <option></option>
+                            @foreach (var paymentForm in (ViewData["PaymentForms"] as List<PaymentFormViewModel>))
+                            {
+                                <option value="@paymentForm.Id">@paymentForm.Description</option>
+                            }
+                        </select>
+                        <span asp-validation-for="PaymentForm_Id" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Observation" class="control-label"></label>
+                        <input asp-for="Observation" class="form-control" />
+                        <span asp-validation-for="Observation" class="text-danger"></span>
+                    </div>
+                    @*<div class="form-group">
+                            <label asp-for="LastSettlementDate" class="control-label"></label>
+                            <input type="text" asp-for="LastSettlementDate" class="form-control dates" />
+                            <span asp-validation-for="LastSettlementDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="PaidAmount" class="control-label"></label>
+                            <input asp-for="PaidAmount" class="form-control" />
+                            <span asp-validation-for="PaidAmount" class="text-danger"></span>
+                        </div>*@
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" id="TData">
+                            <thead>
+                                <tr>
+                                    <td colspan="6">
+                                        <label>Nº Parcelas</label>
+                                        @*<a href="javascript:void(0)" onclick="AddItems()" title="Adicionar Parcela" class="btn pull-right btn-sm btn-success"><i class="fa fa-plus"></i> Adicionar Parcela</a>*@
+                                        <div class="form-group">
+
+                                            <select name="NumParcel" onchange="ChangeParcel()" id="NumParcel" class="form-control" disabled="disabled">
+                                                <option></option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="9">9</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
+                                            </select>
+                                        </div>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Número</th>
+                                    <th>Valor Original</th>
+                                    <th>Vencimento</th>
+                                    <th>Status</th>
+                                    @*<th>Data Pagamento</th>*@
+
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="pull-right">
+                        <button type="reset" data-toggle="tooltip" title="Limpar Formulário" class="btn btn-warning">
+                            <i class="fa fa-eraser "></i> Limpar
+                        </button>
+                        <button type="submit" data-toggle="tooltip" title="Salvar" class="btn btn-primary">
+                            <i class="fa fa-save"></i> Salvar
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script type="text/javascript">
+
+    function ChangeParcel() {
+
+        if ($("#NumParcel").val() != "" ) {
+
+            $('#TData tbody tr').remove();
+            var num = parseInt($("#NumParcel").val())
+
+            var vv = $("#Amount").val().replace('.', '').replace(',', '.');
+
+            //var value = $("#Amount").val() / num;
+            var value = vv / num;
+            var from = $("#DueDate").val().split("/")
+            var d = new Date(from[2], from[1] - 1, from[0]);
+            for (var i = 0; i < num; i++) {
+                AddItems(value, d.toLocaleDateString());
+                d.setMonth(d.getMonth() + 1)
+            }
+        }
+    }
+
+    function AddItems(value, date) {
+        var row = $('#TData tbody tr').length;
+        if (row > 0) {
+            var index = $('.index').last().attr('id');
+            index = parseInt(index);
+            row = parseInt(row);
+            row = index + 1;
+        }
+
+        var valor_formatado = numberToReal(value); 
+
+        var html = '<tr id="' + row + '" class="index">';
+        html += "<td class='number'>" + (row + 1) + "</td>";
+    html += '<td><input type="text" value="' + valor_formatado + '" name="InvoicePayments[' + row + '].AmountInvoicePayment" id="InvoicePayments[' + row + '].AmountInvoicePayment" class="form-control" readonly="true" required/></td>';
+        html += '<td><input type="text" value="' + date + '" name="InvoicePayments[' + row + '].DueDateInvoicePayment" id="InvoicePayments[' + row + '].DueDateInvoicePayment" class="form-control dates" required data-format="dd/MM/yyyy"/></td>';
+        //html += '<td><input type="text" value="2" name="InvoicePayments[' + row + '].StatusInvoicePayment" id="InvoicePayments[' + row + '].StatusInvoicePayment" class="form-control" readonly="true" required/></td>';
+        html += '<td><select name="InvoicePayments[' + row + '].StatusInvoicePayment" id="InvoicePayments[' + row + '].StatusInvoicePayment" class="form-control">';
+        html += '    <option value="0">Aberto</option>';
+        html += '    <option value="2">Fechado</option>';
+        html += '</select></td>';
+        //html += '<td><input type="text" value="" name="InvoicePayments[' + row + '].ConcludedDate" id="InvoicePayments[' + row + '].ConcludedDate" class="form-control" /></td>';
+        html += '</tr>';
+        $('#TData tbody').append(html);
+        $('#id_item'+row).select2({
+            ajax: {
+                placeholder: 'Select Items',
+                url: '@Url.Content("~/Sales")/GetItems',
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return {
+                        q: term, // search term
+                    };
+                },
+                results: function (data) {
+                    var myResults = [];
+                    $.each(data, function (index, item) {
+                        myResults.push({
+                            'id': item.id_item,
+                            'text': item.item_description
+                        });
+                    });
+                    return {
+                        results: myResults
+                    };
+                },
+                minimumInputLength: 3
+            }
+        });
+
+        $('#qty'+row).on('propertychange change', function() {
+            var price = parseInt($("#price"+row).val()) || 0;
+            var qty = parseInt($(this).val()) || 0;
+            var total = parseInt(price*qty) || 0;
+            $("#total"+row).val(total);
+        });
+        $('.dates').datetimepicker({
+            pickTime: false,
+            format: 'DD/MM/YYYY'
+        });
+    }
+    function numberToReal(numero) {
+        var numero = numero.toFixed(2).split('.');
+        numero[0] = numero[0].split(/(?=(?:...)*$)/).join('.');
+        return numero.join(',');
+    }
+
+    function EnableDisableNumParcel() {
+        var $dueDate = $('#DueDate').val();
+        var $amount = $('#Amount').val();
+        if ($dueDate === "" || $amount === "")
+            $('#NumParcel').prop('disabled', true);
+
+        else
+            $('#NumParcel').prop('disabled', false);
+    }
+    $(document).ready(function () {
+        $('#DueDate').change(function () {
+            EnableDisableNumParcel()
+        });
+        $('#Amount').change(function () {
+            EnableDisableNumParcel()
+        });
+        $('select').select2();
+        $('.dates').datetimepicker({
+            pickTime: false,
+            format: 'DD/MM/YYYY'
+        });
+    });</script>
+

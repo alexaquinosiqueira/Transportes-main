@@ -1,0 +1,96 @@
+﻿@model Transportadora.UI.Site.ViewModels.CompanyViewModel
+@using Transportadora.UI.Site.ViewModels
+@{
+    ViewData["Title"] = "Visualizar Empresa";
+    var controllerValue = ViewContext.RouteData.Values["Controller"].ToString();
+    var areaValue = ViewContext.RouteData.Values["Area"]?.ToString();
+}
+
+<div class="page-header">
+    <div class="container-fluid">
+        <ul class="breadcrumb">
+            <li>
+                <a href="@Url.Content("~/home/index")">Home</a>
+            </li>
+            <li>
+                @Html.ActionLink("Lista de Empresa", "Index", "Companies", new { Area = "Portal" }, new { @class = "" })
+            </li>
+            <li>
+                @Html.ActionLink("Detalhe Empresa", "Details", "Companies", new { Area = "Portal" }, (controllerValue == "Companies" ? (new { @class = "active" }) : (new { @class = "" })))
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                <div class="pull-right">
+                    <a asp-action="Index" data-toggle="tooltip" title="Voltar Para lista" class="btn btn-primary"><i class="fa fa-arrow-left "></i> Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Visualizar Empresa</h3>
+            </div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Status)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Status)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.RazaoSocial)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.RazaoSocial)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.CNPJ)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.CNPJ)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Telefone)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Telefone)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Email)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Contato)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Contato)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.InscEstatudal)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.InscEstatudal)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.InscMunicipal)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.InscMunicipal)
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+

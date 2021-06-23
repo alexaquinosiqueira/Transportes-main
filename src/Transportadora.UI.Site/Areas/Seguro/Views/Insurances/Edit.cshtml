@@ -1,0 +1,164 @@
+﻿@model Transportadora.UI.Site.ViewModels.InsuranceViewModel
+@using Transportadora.UI.Site.ViewModels
+@{
+    ViewData["Title"] = "Editar Seguro";
+}
+
+
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                <div class="pull-right">
+                    <a asp-action="Index" data-toggle="tooltip" title="Voltar Para lista" class="btn btn-primary"><i class="fa fa-arrow-left "></i> Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Editar Seguro</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label class="control-label">Veículo</label>
+
+                        <select name="Vehicle_Id" id="Vehicle_Id" class="form-control">
+                            <option></option>
+                            @foreach (var vehicle in (ViewData["Vehicles"] as List<VehicleViewModel>))
+                            {
+
+                                if (vehicle.Id == Model.Vehicle_Id)
+                                {
+                                    <option value="@vehicle.Id" selected>@vehicle.Description</option>
+                                }
+                                else
+                                {
+                                    <option value="@vehicle.Id">@vehicle.Description</option>
+                                }
+
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Seguradora</label>
+
+                        <select name="InsuranceCompany_Id" id="InsuranceCompany_Id" class="form-control">
+                            <option></option>
+                            @foreach (var InsuranceCompany in (ViewData["InsuranceCompanies"] as List<InsuranceCompanyViewModel>))
+                            {
+
+                                if (InsuranceCompany.Id == Model.InsuranceCompany_Id)
+                                {
+                                    <option value="@InsuranceCompany.Id" selected>@InsuranceCompany.Description</option>
+                                }
+                                else
+                                {
+                                    <option value="@InsuranceCompany.Id">@InsuranceCompany.Description</option>
+                                }
+
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Apolice" class="control-label"></label>
+                        <input asp-for="Apolice" class="form-control" />
+                        <span asp-validation-for="Apolice" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="StartDate" class="control-label"></label>
+                        <input type="text" asp-for="StartDate" class="form-control dates" />
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="EndDate" class="control-label"></label>
+                        <input type="text" asp-for="EndDate" class="form-control dates" />
+                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Colision" class="control-label"></label>
+                        <input asp-for="Colision" class="form-control" />
+                        <span asp-validation-for="Colision" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Stole" class="control-label"></label>
+                        <input asp-for="Stole" class="form-control" />
+                        <span asp-validation-for="Stole" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Explosion" class="control-label"></label>
+                        <input asp-for="Explosion" class="form-control" />
+                        <span asp-validation-for="Explosion" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="MaterialTheft" class="control-label"></label>
+                        <input asp-for="MaterialTheft" class="form-control" />
+                        <span asp-validation-for="MaterialTheft" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ThirdDamage" class="control-label"></label>
+                        <input asp-for="ThirdDamage" class="form-control" />
+                        <span asp-validation-for="ThirdDamage" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Thunderbolt" class="control-label"></label>
+                        <input asp-for="Thunderbolt" class="form-control" />
+                        <span asp-validation-for="Thunderbolt" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Value" class="control-label"></label>
+                        <input asp-for="Value" class="form-control" />
+                        <span asp-validation-for="Value" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Situação</label>
+
+                        <select name="InsuranceSituation_Id" id="InsuranceSituation_Id" class="form-control">
+                            <option></option>
+                            @foreach (var InsuranceSituation in (ViewData["InsuranceSituations"] as List<InsuranceSituationViewModel>))
+                            {
+
+                                if (InsuranceSituation.Id == Model.InsuranceSituation_Id)
+                                {
+                                    <option value="@InsuranceSituation.Id" selected>@InsuranceSituation.Description</option>
+                                }
+                                else
+                                {
+                                    <option value="@InsuranceSituation.Id">@InsuranceSituation.Description</option>
+                                }
+
+                            }
+                        </select>
+                    </div>
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="pull-right">
+                        <button type="reset" data-toggle="tooltip" title="Limpar Formulário" class="btn btn-warning">
+                            <i class="fa fa-eraser "></i> Limpar
+                        </button>
+                        <button type="submit" data-toggle="tooltip" title="Atualizar" class="btn btn-primary">
+                            <i class="fa fa-save"></i> Atualizar
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('select').select2();
+        $('.dates').datetimepicker({
+            pickTime: false,
+            format: 'DD/MM/YYYY'
+        });
+    });</script>

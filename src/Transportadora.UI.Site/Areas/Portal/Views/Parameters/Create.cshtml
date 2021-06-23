@@ -1,0 +1,203 @@
+﻿@model Transportadora.UI.Site.ViewModels.ParameterViewModel
+@using Transportadora.UI.Site.ViewModels
+@{
+    ViewData["Title"] = "Configuração de Parâmetros";
+    var controllerValue = ViewContext.RouteData.Values["Controller"].ToString();
+    var areaValue = ViewContext.RouteData.Values["Area"]?.ToString();
+}
+
+<div class="page-header">
+
+    <div class="container-fluid">
+        <ul class="breadcrumb">
+            <li>
+                <a href="@Url.Content("~/home/index")">Home</a>
+            </li>
+            <li>
+                @Html.ActionLink("Parâmetros do acerto", "Create", "Parameters", new { Area = "Portal" }, new { @class = "" })
+            </li>
+        </ul>
+    </div>
+
+</div>
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Configurar Parâmetros</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label class="control-label">Centro de Custos</label>
+                        <select name="Id_CostCenter" id="Id_CostCenter" class="form-control">
+                            <option></option>
+                            @foreach (var costCenter in (ViewData["CostCenters"] as List<CostCenterViewModel>))
+                            {
+
+                                if (costCenter.Id == Model.Id_CostCenter)
+                                {
+                                    <option value="@costCenter.Id" selected>@costCenter.Description</option>
+                                }
+                                else
+                                {
+                                    <option value="@costCenter.Id">@costCenter.Description</option>
+                                }
+
+                            }
+                        </select>
+                        <span asp-validation-for="Id_CostCenter" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Conta Caixa</label>
+                        <select name="Id_BankAccount" id="Id_BankAccount" class="form-control">
+                            <option></option>
+                            @foreach (var bankAccount in (ViewData["BankAccounts"] as List<BankAccountViewModel>))
+                            {
+                                if (bankAccount.Id == Model.Id_BankAccount)
+                                {
+                                    <option value="@bankAccount.Id" selected>@bankAccount.Description</option>
+                                }
+                                else
+                                {
+                                    <option value="@bankAccount.Id">@bankAccount.Description</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="Id_BankAccount" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Tipo de Documento</label>
+                        <select name="Id_DocumentType" id="Id_DocumentType" class="form-control">
+                            <option></option>
+                            @foreach (var documentType in (ViewData["DocumentTypes"] as List<DocumentTypeViewModel>))
+                            {
+                                if (documentType.Id == Model.Id_DocumentType)
+                                {
+                                    <option value="@documentType.Id" selected>@documentType.Description</option>
+                                }
+                                else
+                                {
+                                    <option value="@documentType.Id">@documentType.Description</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="Id_DocumentType" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Forma de Pagamento</label>
+                        <select name="Id_PaymentForm" id="Id_PaymentForm" class="form-control">
+                            <option></option>
+                            @foreach (var paymentForm in (ViewData["PaymentForms"] as List<PaymentFormViewModel>))
+                            {
+                                if (paymentForm.Id == Model.Id_PaymentForm)
+                                {
+                                    <option value="@paymentForm.Id" selected>@paymentForm.Description</option>
+                                }
+                                else
+                                {
+                                    <option value="@paymentForm.Id">@paymentForm.Description</option>
+                                }
+
+                            }
+                        </select>
+                        <span asp-validation-for="Id_PaymentForm" class="text-danger"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Origem</div>
+                                <div class="panel-body">
+                                    <div class="form-group col-md-4 col-sm-4">
+                                        <label class="control-label">UF</label>
+                                        <select name="StateOrigin_Id" id="StateOrigin_Id" class="form-control">
+                                            <option></option>
+                                            @foreach (var state in (ViewData["States"] as List<StateViewModel>))
+                                            {
+                                                if (state.Id == Model.StateOrigin_Id)
+                                                {
+                                        <option value="@state.Id" selected>@state.Uf - @state.Name</option>
+                                                }
+                                                else
+                                                {
+                                        <option value="@state.Id">@state.Uf - @state.Name</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-8 col-sm-8">
+                                        <label class="control-label">Cidade</label>
+                                        <input id="CityOrigin_Id" class="form-control" name="CityOrigin_Id" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label>
+                                <input asp-for="ParameterAtive" /> Desabilitar tela de título no acerto
+                            </label>
+                        </div>
+                    </div>
+                    <div class="pull-right">
+                        <button type="reset" data-toggle="tooltip" title="Limpar Formulário" class="btn btn-warning">
+                            <i class="fa fa-eraser "></i> Limpar
+                        </button>
+                        <button type="submit" data-toggle="tooltip" title="Salvar" class="btn btn-primary">
+                            <i class="fa fa-save"></i> Salvar
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('select').select2();
+        $('#CityOrigin_Id').select2({
+            data: {
+                id: "",
+                text: ""
+            }
+        });
+        $('#StateOrigin_Id').change(function () {
+            $('#CityOrigin_Id').select2({
+                ajax: {
+                    placeholder: 'Selecione a cidade',
+                    url: '@Url.Content("~/Portal")/Parameters/GetCityByStateId/?StateId=' + $('#StateOrigin_Id').val(),
+                    dataType: 'json',
+                    quietMillis: 100,
+                    data: function (term) {
+                        return {
+                            q: term, // search term
+                        };
+                    },
+                    results: function (data) {
+                        var myResults = [];
+                        $.each(data, function (index, item) {
+                            myResults.push({
+                                'id': item.id,
+                                'text': item.text
+                            });
+                        });
+                        return {
+                            results: myResults
+                        };
+                    },
+                    minimumInputLength: 3
+                }
+            });
+        })
+
+    });</script>

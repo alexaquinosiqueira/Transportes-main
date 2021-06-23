@@ -1,0 +1,16 @@
+body,#header{
+	background-color: #1b2544;
+}
+
+
+#header {
+	border-bottom: 1px solid #1b2544;
+}
+
+#logo {
+	height: 200px
+}
+
+.panel {
+	border: 1px solid #fff;
+}

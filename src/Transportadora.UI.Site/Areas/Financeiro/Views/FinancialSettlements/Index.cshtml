@@ -1,0 +1,246 @@
+﻿
+@model IEnumerable<Transportadora.UI.Site.ViewModels.FinancialSettlementViewModel>
+@using Transportadora.UI.Site.ViewModels
+@using Transportadora.UI.Site.Configurations
+
+@{
+    ViewData["Title"] = "Listagem de Acertos";
+}
+
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoAcertosAdicionar)))
+                {
+                    <div class="pull-right">
+                        <a asp-action="Create" data-toggle="tooltip" title="Novo acerto" class="btn btn-primary">
+                            <i class="fa fa-plus"></i> Novo
+                        </a>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Lista de Acertos
+                </h3>
+            </div>
+            <div class="panel-body">
+                @if (TempData.ContainsKey("message"))
+                {
+                    <div class="alert alert-@TempData["cls"]">
+                        <i class="fa fa-exclamation-circle"></i><small> @TempData["Message"]</small>
+                        <button type="button" class="close" data-dismiss="alert">
+                            ×
+                        </button>
+                    </div>
+                    TempData.Remove("message");
+                    TempData.Remove("cls");
+                }
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" id="financialTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Data da Viagem
+                                </th>
+                                <th>
+                                    Cód.
+                                </th>
+                                <th>
+                                    Frota
+                                </th>
+                                <th>
+                                    Veículo
+                                </th>
+                                <th>
+                                    Placa
+                                </th>
+                                <th>
+                                    Motorista
+                                </th>
+                                <th>
+                                    Cidade Origem
+                                </th>
+                                <th>
+                                    Cidade Destino
+                                </th>
+                                <th>
+                                    Frete Total
+                                </th>
+                                <td>
+                                    Valor Acerto
+                                </td>
+                                <th>
+                                    Ações
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                foreach (var item in Model)
+                                {
+                            @if(item.Incoming < 0)
+                            {
+                            <tr style="color:red">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TravelDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Code)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Fleet.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Vehicle.Brand)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Vehicle.VehicleLicensePlate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Employee.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CityOrigin.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DestinationCity.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TotalShipping)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Incoming)
+                                </td>
+                                <td>
+                                    @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoAcertosEditar)))
+                                            {
+                                    <a asp-action="Edit" asp-route-id="@item.Id">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                            }
+                                    @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoAcertosListagem)))
+                                            {
+                                    <a asp-action="Details" asp-route-id="@item.Id">
+                                        <i class="fa fa-search"></i>
+                                    </a>
+                                            }
+                                    @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoAcertosRemover)))
+                                            {
+                                    <a asp-action="Delete" asp-route-id="@item.Id" data-confirm="Deseja remover o item?">
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
+                                            }
+
+                                </td>
+                            </tr>
+
+                            }
+                            else
+                            {
+
+                            <tr style="color:blue">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TravelDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Code)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Fleet.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Vehicle.Brand)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Vehicle.VehicleLicensePlate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Employee.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CityOrigin.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DestinationCity.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TotalShipping)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Incoming)
+                                </td>
+                                <td>
+                                    @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoAcertosEditar)))
+                                            {
+                                    <a asp-action="Edit" asp-route-id="@item.Id">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                            }
+                                    @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoAcertosListagem)))
+                                            {
+                                    <a asp-action="Details" asp-route-id="@item.Id">
+                                        <i class="fa fa-search"></i>
+                                    </a>
+                                            }
+                                    @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoAcertosRemover)))
+                                            {
+                                    <a asp-action="Delete" asp-route-id="@item.Id" data-confirm="Deseja remover o item?">
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
+                                            }
+
+                                </td>
+                            </tr>
+
+                            }
+
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="pagination">
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#financialTable').DataTable({
+            language: {
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_ resultados por página",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sSearch": "Pesquisar",
+                "oPaginate": {
+                    "sNext": "Próximo",
+                    "sPrevious": "Anterior",
+                    "sFirst": "Primeiro",
+                    "sLast": "Último"
+                },
+                "oAria": {
+                    "sSortAscending": ": Ordenar colunas de forma ascendente",
+                    "sSortDescending": ": Ordenar colunas de forma descendente"
+                }
+            }
+        });
+    });
+</script>

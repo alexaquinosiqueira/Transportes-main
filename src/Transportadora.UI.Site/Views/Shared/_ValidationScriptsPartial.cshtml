@@ -1,0 +1,14 @@
+﻿<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<link href="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.pt-BR.js" type="text/javascript" rel="stylesheet" media="screen" />
+<script type="text/javascript">
+    jQuery.extend(jQuery.validator.methods, {
+        date: function (value, element) {
+            return this.optional(element) || /^\d\d?\/\d\d?\/\d\d\d?\d?$/.test(value);
+        },
+        number: function (value, element) {
+            return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:\.\d{3})+)(?:,\d+)?$/.test(value);
+        }
+    });
+</script>
+

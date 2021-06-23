@@ -1,0 +1,273 @@
+﻿@model Transportadora.UI.Site.ViewModels.FinancialSettlementViewModel
+@using Transportadora.UI.Site.ViewModels
+
+
+@{
+    ViewData["Title"] = "Detalhes do Acerto";
+}
+<style>
+    #valores .valores {
+        margin: 0px;
+        text-transform: uppercase;
+    }
+
+        #valores .valores .numeros {
+            padding: 10px 26px;
+            background-color: var(--cor-gray2);
+        }
+
+            #valores .valores .numeros div {
+                margin-bottom: 10px;
+            }
+
+            #valores .valores .numeros h4 {
+                display: inline;
+            }
+
+            #valores .valores .numeros span {
+                float: right;
+            }
+
+        #valores .valores .total {
+            padding: 40px 20px 0px;
+            background-color: var(--cor-gray3);
+            text-align: end;
+        }
+</style>
+
+
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                <div class="pull-right">
+                    <a asp-action="Index" data-toggle="tooltip" title="Voltar Para lista" class="btn btn-primary"><i class="fa fa-arrow-left "></i> Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Visualizar Acerto</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label">Data</label>
+                                <div>@Html.DisplayFor(model => model.Date)</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label">Descrição</label>
+
+                                <div>@Html.DisplayFor(model => model.Description)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+
+                            <div class="form-group">
+                                <label class="control-label">Frota</label>
+
+                                <div>@Html.DisplayFor(model => model.Fleet.Description)</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label">Veículo</label>
+
+                                <div>@Html.DisplayFor(model => model.Vehicle.Description)</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label">Motorista</label>
+
+
+                        <div>@Html.DisplayFor(model => model.Employee.Name)</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Origem</div>
+                                <div class="panel-body">
+                                    <div class="form-group col-md-4 col-sm-4">
+                                        <label class="control-label">UF</label>
+
+                                        <div>@Html.DisplayFor(model => model.CityOrigin.State.Name)</div>
+                                    </div>
+                                    <div class="form-group col-md-8 col-sm-8">
+                                        <label class="control-label">Cidade</label>
+
+                                        <div>@Html.DisplayFor(model => model.CityOrigin.Name)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Destino</div>
+                                <div class="panel-body">
+                                    <div class="form-group col-md-4 col-sm-4">
+                                        <label class="control-label">UF</label>
+
+                                        <div>@Html.DisplayFor(model => model.DestinationCity.State.Name)</div>
+                                    </div>
+                                    <div class="form-group col-md-8 col-sm-8">
+                                        <label class="control-label">Cidade</label>
+
+                                        <div>@Html.DisplayFor(model => model.DestinationCity.Name)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Dados da Viagem</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-md-3 col-sm-3">
+                                    <label class="control-label">Frete Total</label>
+                                    <div>@Html.DisplayFor(model => model.TotalShipping)</div>
+
+                                </div>
+                                <div class="form-group col-md-3 col-sm-3">
+                                    <label class="control-label">Adiantamento</label>
+                                    <div>@Html.DisplayFor(model => model.Advance)</div>
+
+                                </div>
+                                <div class="form-group col-md-3 col-sm-3">
+                                    <label class="control-label">% Viagem</label>
+                                    <div>@Html.DisplayFor(model => model.TravelPercentage)</div>
+
+                                </div>
+                                <div class="form-group col-md-3 col-sm-3">
+                                    <label class="control-label">Valor da Viagem</label>
+                                    <div>@Html.Raw(Model.Advance)</div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-3 col-sm-3">
+                                    <label class="control-label">KM Inicial</label>
+
+                                    <div>@Html.DisplayFor(model => model.KmInitial)</div>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-3">
+                                    <label class="control-label">KM Final</label>
+
+                                    <div>@Html.DisplayFor(model => model.FinalKm)</div>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-3">
+                                    <label class="control-label">Distância Percorrida</label>
+                                    <div>@Html.Raw(Model.KmTotal)</div>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-3">
+                                    <label class="control-label">Qtd Litro</label>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Despesas</div>
+                        <div class="panel-body">
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered " id="TData">
+                                    <thead>
+                                        <tr>
+                                            <th>Número</th>
+                                            <th>Fornecedor</th>
+                                            <th>Tipo Despesa</th>
+                                            <th>Valor</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            List<ExpenseFinancialSettlementViewModel> expensePaymentViewModels = Model.ExpenseFinancialSettlements.ToList();
+                                        }
+                                        @for (int i = 0; i < expensePaymentViewModels.Count; i++)
+                                        {
+                                        <tr id="@i" class="index">
+
+                                            <td class='number'>
+                                                @Html.Raw(i + 1)
+                                            </td>
+                                            <td>
+                                                @expensePaymentViewModels[@i].Supplier.Name
+
+                                            </td>
+                                            <td>
+                                                @expensePaymentViewModels[@i].ExpenseType.Description
+
+                                            </td>
+                                            <td>
+                                                @expensePaymentViewModels[@i].Amount
+
+                                            </td>
+                                        </tr>
+
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group col-md-4 col-sm-4 pull-right">
+                                <label class="control-label">Total Das despesas</label>
+                                <div>@Html.Raw(Model.ExpenseTotal)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <main class="row">
+                        <div id="finalizar-pagamento" class="col-sm-12">
+                            <div class="title">
+                                Dados do Acerto
+                            </div>
+                        </div>
+
+                        <div id="valores" class="col-sm-12">
+                            <div class="row valores">
+                                <div class="col-md-7 numeros">
+                                    <div>
+                                        <h4>R$ Adiantamento</h4>
+                                        <span id="AdvanceLabel">@Html.Raw(Model.Advance)</span>
+                                    </div>
+                                    <div>
+                                        <h4>R$ Valor Comissão</h4>
+                                        <span id="TravelPercentageLabel">@Html.Raw(Model.Commission)</span>
+                                    </div>
+                                    <div>
+                                        <h4>R$ Total Despesas</h4>
+                                        <span id="despesaTotalLabel">-@Html.Raw(Model.ExpenseTotal)</span>
+                                    </div>
+                                    <div>
+                                        <h4>R$ Valor a Receber do Motorista </h4>
+                                        <span id="totalReceiverLabel">+@Html.Raw(Model.Incoming)</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-5 total">
+                                    <h5>R$ Valor do Acerto</h5>
+                                    <h1 id="totalLabel">R$ @Html.Raw(Model.Incoming)</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,107 @@
+﻿@model Transportadora.UI.Site.ViewModels.InsuranceViewModel
+
+@{
+    ViewData["Title"] = "Detalhe do seguro";
+}
+
+
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                <div class="pull-right">
+                    <a asp-action="Index" data-toggle="tooltip" title="Voltar Para lista" class="btn btn-primary"><i class="fa fa-arrow-left "></i> Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Visualizar Seguro</h3>
+            </div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Vehicle)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Vehicle.Brand)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.InsuranceCompany)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.InsuranceCompany.Description)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Apolice)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Apolice)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.StartDate)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.StartDate)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.EndDate)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.EndDate)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Colision)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Colision)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Stole)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Stole)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Explosion)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Explosion)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.MaterialTheft)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.MaterialTheft)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ThirdDamage)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.ThirdDamage)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Thunderbolt)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Thunderbolt)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Value)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Value)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.InsuranceSituation)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.InsuranceSituation.Description)
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>

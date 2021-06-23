@@ -1,0 +1,149 @@
+﻿@model IEnumerable<Transportadora.UI.Site.ViewModels.BankAccountViewModel>
+
+
+
+@{
+    ViewData["Title"] = "Listagem de Contas";
+}
+
+
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                <div class="pull-right">
+                    <a asp-action="Create" data-toggle="tooltip" title="Nova conta" class="btn btn-primary">
+                        <i class="fa fa-plus"></i> Novo
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Lista de Contas
+                </h3>
+            </div>
+            <div class="panel-body">
+                @if (TempData.ContainsKey("message"))
+                {
+                    <div class="alert alert-@TempData["cls"]">
+                        <i class="fa fa-exclamation-circle"></i><small> @TempData["Message"]</small>
+                        <button type="button" class="close" data-dismiss="alert">
+                            ×
+                        </button>
+                    </div>
+                    TempData.Remove("message");
+                    TempData.Remove("cls");
+                }
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" id="banksAccountsTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Banco
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Branch)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Account)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Overdraft)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.OpeningBalance)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.CurrentBalance)
+                                </th>
+
+
+                                <th>
+                                    Ações
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Bank.Description)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Branch)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Account)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Overdraft)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.OpeningBalance)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CurrentBalance)
+                                        </td>
+
+                                        <td>
+                                            <a asp-action="Edit" asp-route-id="@item.Id">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                            <a asp-action="Details" asp-route-id="@item.Id">
+                                                <i class="fa fa-search"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@item.Id" data-confirm="Deseja remover o item?">
+                                                <i class="fa fa-trash-o"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="pagination">
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#banksAccountsTable').DataTable({
+            language: {
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_ resultados por página",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sSearch": "Pesquisar",
+                "oPaginate": {
+                    "sNext": "Próximo",
+                    "sPrevious": "Anterior",
+                    "sFirst": "Primeiro",
+                    "sLast": "Último"
+                },
+                "oAria": {
+                    "sSortAscending": ": Ordenar colunas de forma ascendente",
+                    "sSortDescending": ": Ordenar colunas de forma descendente"
+                }
+            }
+        });
+    });
+</script>

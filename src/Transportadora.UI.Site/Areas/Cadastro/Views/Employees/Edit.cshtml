@@ -1,0 +1,490 @@
+﻿@model Transportadora.UI.Site.ViewModels.EmployeeViewModel
+@using Transportadora.UI.Site.ViewModels
+@using System.IO;
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                <div class="pull-right">
+                    <a asp-action="Index" data-toggle="tooltip" title="Voltar Para lista" class="btn btn-primary"><i class="fa fa-arrow-left "></i> Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Editar Funcionário</h3>
+            </div>
+            <div class="panel-body">
+                <form enctype="multipart/form-data" asp-action="Edit">
+                    <ul class="nav nav-tabs">
+
+                        <li class="active">
+                            <a href="#Principal" data-toggle="tab">Principal</a>
+                        </li>
+                        <li>
+                            <a href="#Endereco" data-toggle="tab">Endereço</a>
+                        </li>
+
+                        <li>
+                            <a href="#Documentos" data-toggle="tab">Documentos</a>
+                        </li>
+
+                        <li>
+                            <a href="#Parentesco" data-toggle="tab">Parentesco</a>
+                        </li>
+                    </ul>
+                    @*<div asp-validation-summary="All" class="text-danger"></div>*@
+                <div class="tab-content ">
+                    <div class='tab-pane active' id="Principal">
+
+                        <div class="form-group">
+                            <label class="control-label">Foto</label>
+                            <input type="file" name="ImagemUpload" id="ImagemUpload" />
+
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-4 col-sm-4">
+                                <label asp-for="Name" class="control-label"></label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-4 col-sm-4">
+                                <label asp-for="NickName" class="control-label"></label>
+                                <input asp-for="NickName" class="form-control" />
+                                <span asp-validation-for="NickName" class="text-danger"></span>
+
+                            </div>
+                            <div class="form-group col-md-4 col-sm-4">
+
+                                <label asp-for="CelPhone" class="control-label"></label>
+                                <input asp-for="CelPhone" class="form-control" onKeyPress="MascaraTelefone(this);" maxlength="15" onBlur="ValidaTelefone(this);" />
+                                <span asp-validation-for="CelPhone" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-4 col-sm-4">
+                                <label class="control-label">Sexo</label>
+
+                                <select name="Genre" id="Genre" class="form-control">
+                                    <option></option>
+                                    @foreach (var option in Enum.GetNames(typeof(GenreViewModel)))
+                                    {
+                                        if (option == Model.Genre.ToString())
+                                        {
+                                            <option value="@option" selected>@option</option>
+                                        }
+                                        else
+                                        {
+
+                                            <option value="@option">@option</option>
+                                        }
+                                    }
+
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4 col-sm-4">
+                                <label asp-for="BirthDate" class="control-label"></label>
+                                <input type="text" asp-for="BirthDate" class="form-control dates" data-format="dd/MM/yyyy" onKeyPress="MascaraData(this);" maxlength="10" onblur="ValidaData(this)" />
+                                <span asp-validation-for="BirthDate" class="text-danger"></span>
+
+                            </div>
+                            <div class="form-group col-md-4 col-sm-4">
+
+                                <label class="control-label">Estado Civil</label>
+
+                                <select name="MaritalStatus" id="MaritalStatus" class="form-control">
+                                    <option></option>
+                                    @foreach (var option in Enum.GetNames(typeof(MaritalStatusViewModel)))
+                                    {
+                                        if (option == Model.MaritalStatus.ToString())
+                                        {
+                                            <option value="@option" selected>@option</option>
+                                        }
+                                        else
+                                        {
+
+                                            <option value="@option">@option</option>
+                                        }
+                                    }
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-4 col-sm-4">
+                                <label class="control-label">Cargo</label>
+
+                                <select name="Responsibility_Id" id="Responsibility_Id" class="form-control">
+                                    <option></option>
+
+                                    @if (ViewData["responsibilities"] != null)
+                                    {
+
+                                    @foreach (var responsibility in (ViewData["responsibilities"] as List<ResponsibilityViewModel>))
+                                    {
+
+                                        if (responsibility.Id == Model.Responsibility_Id)
+                                        {
+                                            <option value="@responsibility.Id" selected>@responsibility.Description</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@responsibility.Id">@responsibility.Description</option>
+                                        }
+
+                                    }
+                                    }
+
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4 col-sm-4">
+                                <label asp-for="AdmissionDate" class="control-label"></label>
+                                <input type="text" asp-for="AdmissionDate" class="form-control dates" data-format="dd/MM/yyyy" onKeyPress="MascaraData(this);" maxlength="10" onblur="ValidaData(this)" />
+                                <span asp-validation-for="AdmissionDate" class="text-danger"></span>
+
+                            </div>
+                            <div class="form-group col-md-4 col-sm-4">
+
+                                <label asp-for="Salary" class="control-label"></label>
+                                <input asp-for="Salary" class="form-control" onkeyup="formatarMoeda(this);" />
+                                <span asp-validation-for="Salary" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-4 col-sm-4">
+                                <label asp-for="ResignationDate" class="control-label"></label>
+                                <input type="text" asp-for="ResignationDate" class="form-control dates" data-format="dd/MM/yyyy" onKeyPress="MascaraData(this);" maxlength="10" onblur="ValidaData(this)" />
+                                <span asp-validation-for="ResignationDate" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-4 col-sm-4">
+                                <div class="checkbox">
+                                    <label>
+                                        <input asp-for="Active" /> @Html.DisplayNameFor(model => model.Active)
+                                    </label>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class='tab-pane' id="Endereco">
+                        <div class="row">
+                            <div class="form-group col-md-4 col-sm-4">
+                                <label asp-for="Address.AddressLine" class="control-label"></label>
+                                <input asp-for="Address.AddressLine" class="form-control" />
+                                <span asp-validation-for="Address.AddressLine" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-4 col-sm-4">
+
+                                <label asp-for="Address.Number" class="control-label"></label>
+                                <input asp-for="Address.Number" class="form-control" />
+                                <span asp-validation-for="Address.Number" class="text-danger"></span>
+
+                            </div>
+                            <div class="form-group col-md-4 col-sm-4">
+
+                                <label asp-for="Address.Neighborhood" class="control-label"></label>
+                                <input asp-for="Address.Neighborhood" class="form-control" />
+                                <span asp-validation-for="Address.Neighborhood" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-4 col-sm-4">
+
+                                <label asp-for="Address.State" class="control-label"></label>
+                                <select name="Address.State_Id" id="State_Id" class="form-control">
+                                    <option></option>
+                                    @if(ViewData["States"]!= null)
+                                    {
+                                    @foreach (var state in (ViewData["States"] as List<StateViewModel>))
+                                    {
+
+                                        @if (Model.Address != null)
+                                        {
+
+                                            if (state.Id == Model.Address.State_id)
+                                            {
+                                <option value="@state.Id" selected>@state.Uf - @state.Name</option>
+                                            }
+                                            else
+                                            {
+                                <option value="@state.Id">@state.Uf - @state.Name</option>
+                                            }
+                                        }
+
+                                        }
+
+                                    }
+                                </select>
+                                <span asp-validation-for="Address.State" class="text-danger"></span>
+
+                            </div>
+                            <div class="form-group col-md-4 col-sm-4">
+                                <label asp-for="Address.City" class="control-label"></label>
+                                <select name="Address.City_Id" id="City_Id" class="form-control">
+                                    <option></option>
+                                    @if (ViewData["Cities"] != null)
+                                    {
+                                    @foreach (var city in (ViewData["Cities"] as List<CityViewModel>))
+                                    {
+
+                                        @if (Model.Address != null)
+                                        {
+
+                                            if (city.Id == Model.Address.City_Id)
+                                            {
+                            <option value="@city.Id" selected>@city.Name</option> }
+                                            else
+                                            {
+                            <option value="@city.Id">@city.Name</option>}
+
+                                        }
+
+                                        }
+
+                                    }
+                                </select>
+                                <span asp-validation-for="Address.City" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group col-md-4 col-sm-4">
+
+                                <label asp-for="Address.PostalCode" class="control-label"></label>
+                                <input asp-for="Address.PostalCode" class="form-control" maxlength="10" onKeyPress="MascaraCep(this);" />
+                                <span asp-validation-for="Address.PostalCode" class="text-danger"></span>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class='tab-pane' id="Documentos">
+
+                        <div class="row">
+                            <div class="form-group col-md-4 col-sm-4">
+                                <label asp-for="CNH" class="control-label"></label>
+                                <input asp-for="CNH" class="form-control" maxlength="11" />
+                                <span asp-validation-for="CNH" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-4 col-sm-4">
+                                <label class="control-label">Categoria CNH</label>
+
+                                <select name="TipoCNH" id="TipoCNH" class="form-control">
+                                    <option></option>
+                                    <option value="0">A</option>
+                                    <option value="1">B</option>
+                                    <option value="0">C</option>
+                                    <option value="1">D</option>
+                                    <option value="1">E</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4 col-sm-4">
+
+                                <label asp-for="DataCNH" class="control-label"></label>
+                                <input type="text" asp-for="DataCNH" class="form-control dates" data-format="dd/MM/yyyy" onKeyPress="MascaraData(this);" maxlength="10" onblur="ValidaData(this)" />
+                                <span asp-validation-for="DataCNH" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-4 col-sm-4">
+                                <label asp-for="RG" class="control-label"></label>
+                                <input asp-for="RG" class="form-control" maxlength="12" onKeyPress="MascaraRG(this);" />
+                                <span asp-validation-for="RG" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-4 col-sm-4">
+                                <label asp-for="OrgaoExpedidor" class="control-label"></label>
+                                <input asp-for="OrgaoExpedidor" class="form-control" />
+                                <span asp-validation-for="OrgaoExpedidor" class="text-danger"></span>
+
+                            </div>
+                            <div class="form-group col-md-4 col-sm-4">
+                                <label asp-for="UFRG" class="control-label"></label>
+                                <input asp-for="UFRG" class="form-control" />
+                                <span asp-validation-for="UFRG" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-4 col-sm-4">
+                                <label asp-for="DataEmissao" class="control-label"></label>
+                                <input type="text" asp-for="DataEmissao" class="form-control dates" data-format="dd/MM/yyyy" onKeyPress="MascaraData(this);" maxlength="10" onblur="ValidaData(this)" />
+                                <span asp-validation-for="DataEmissao" class="text-danger"></span>
+
+                            </div>
+                            <div class="form-group col-md-4 col-sm-4">
+                                <label asp-for="CPF" class="control-label"></label>
+                                <input asp-for="CPF" class="form-control" maxlength="14" onKeyPress="MascaraCPF(this);" onblur="ValidarCPF(this)" />
+                                <span asp-validation-for="CPF" class="text-danger"></span>
+
+                            </div>
+                            <div class="form-group col-md-4 col-sm-4">
+                                <label asp-for="NumeroINSS" class="control-label"></label>
+                                <input asp-for="NumeroINSS" class="form-control" />
+                                <span asp-validation-for="NumeroINSS" class="text-danger"></span>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class='tab-pane' id="Parentesco">
+
+                        <div class="row">
+                            <div class="form-group col-md-6 col-sm-6">
+                                <label asp-for="NomeMae" class="control-label"></label>
+                                <input asp-for="NomeMae" class="form-control" />
+                                <span asp-validation-for="NomeMae" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-6">
+                                <label asp-for="NomePai" class="control-label"></label>
+                                <input asp-for="NomePai" class="form-control" />
+                                <span asp-validation-for="NomePai" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6 col-sm-6">
+                                <label asp-for="Filho1" class="control-label"></label>
+                                <input asp-for="Filho1" class="form-control" />
+                                <span asp-validation-for="Filho1" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-6">
+                                <label asp-for="DtNascimentoFilho1" class="control-label"></label>
+                                <input type="text" asp-for="DtNascimentoFilho1" class="form-control dates" data-format="dd/MM/yyyy" onKeyPress="MascaraData(this);" maxlength="10" onblur="ValidaData(this)" />
+                                <span asp-validation-for="DtNascimentoFilho1" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6 col-sm-6">
+                                <label asp-for="Filho2" class="control-label"></label>
+                                <input asp-for="Filho2" class="form-control" />
+                                <span asp-validation-for="Filho2" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-6">
+                                <label asp-for="DtNascimentoFilho2" class="control-label"></label>
+                                <input type="text" asp-for="DtNascimentoFilho2" class="form-control dates" data-format="dd/MM/yyyy" onKeyPress="MascaraData(this);" maxlength="10" onblur="ValidaData(this)" />
+                                <span asp-validation-for="DtNascimentoFilho2" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6 col-sm-6">
+                                <label asp-for="Filho3" class="control-label"></label>
+                                <input asp-for="Filho3" class="form-control" />
+                                <span asp-validation-for="Filho3" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-6">
+                                <label asp-for="DtNascimentoFilho3" class="control-label"></label>
+                                <input type="text" asp-for="DtNascimentoFilho3" class="form-control dates" data-format="dd/MM/yyyy" onKeyPress="MascaraData(this);" maxlength="10" onblur="ValidaData(this)" />
+                                <span asp-validation-for="DtNascimentoFilho3" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6 col-sm-6">
+                                <label asp-for="Filho4" class="control-label"></label>
+                                <input asp-for="Filho4" class="form-control" />
+                                <span asp-validation-for="Filho4" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-6">
+                                <label asp-for="DtNascimentoFilho4" class="control-label"></label>
+                                <input type="text" asp-for="DtNascimentoFilho4" class="form-control dates" data-format="dd/MM/yyyy" onKeyPress="MascaraData(this);" maxlength="10" onblur="ValidaData(this)" />
+                                <span asp-validation-for="DtNascimentoFilho4" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6 col-sm-6">
+                                <label asp-for="Filho5" class="control-label"></label>
+                                <input asp-for="Filho5" class="form-control" />
+                                <span asp-validation-for="Filho5" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-6">
+                                <label asp-for="DtNascimentoFilho5" class="control-label"></label>
+                                <input type="text" asp-for="DtNascimentoFilho5" class="form-control dates" data-format="dd/MM/yyyy" onKeyPress="MascaraData(this);" maxlength="10" onblur="ValidaData(this)" />
+                                <span asp-validation-for="DtNascimentoFilho5" class="text-danger"></span>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                    <input type="hidden" asp-for="Id" />
+                    <div class="pull-right">
+                        <button type="reset" data-toggle="tooltip" title="Limpar Formulário" class="btn btn-warning">
+                            <i class="fa fa-eraser "></i> Limpar
+                        </button>
+                        <button type="submit" data-toggle="tooltip" title="Atualizar" class="btn btn-primary">
+                            <i class="fa fa-save"></i> Atualizar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var image = "@Url.Content("~/imagens/" + Model.Imagem)";
+
+        if (image != "") {
+            $('input[type=file]').fileinput({
+                initialPreview: [
+					"<img src='" + image + "' class='file-preview-image' alt='Upload Foto' title='Upload Foto'>",
+				],
+                showUpload: false
+            });
+        } else {
+            $('input[type=file]').fileinput({
+                showUpload: false
+            });
+        }
+
+
+        $('select').select2();
+        $('.dates').datetimepicker({
+            pickTime: false,
+            format: 'DD/MM/YYYY'
+        });
+
+    });
+    $('#State_Id').change(function () {
+                    debugger
+            $('#City_Id').select2({
+                ajax: {
+                    placeholder: 'Selecione a cidade',
+                    url: '@Url.Content("~/Cadastro")/Employees/GetCityByStateId/?StateId=' + $('#State_Id').val(),
+                    dataType: 'json',
+                    quietMillis: 100,
+                    data: function (term) {
+                        return {
+                            q: term, // search term
+                        };
+                    },
+                    results: function (data) {
+                        var myResults = [];
+                        $.each(data, function (index, item) {
+                            myResults.push({
+                                'id': item.id,
+                                'text': item.text
+                            });
+                        });
+                        return {
+                            results: myResults
+                        };
+                    },
+                    minimumInputLength: 3
+                }
+            });
+        })
+</script>

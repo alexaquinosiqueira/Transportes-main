@@ -1,0 +1,92 @@
+﻿@model Transportadora.UI.Site.ViewModels.ProfileViewModel
+@using Transportadora.UI.Site.ViewModels
+@{
+    ViewData["Title"] = "Visualizar Perfil";
+    var controllerValue = ViewContext.RouteData.Values["Controller"].ToString();
+    var areaValue = ViewContext.RouteData.Values["Area"]?.ToString();
+}
+
+<div class="page-header">
+    <div class="container-fluid">
+        <ul class="breadcrumb">
+            <li>
+                <a href="@Url.Content("~/home/index")">Home</a>
+            </li>
+            <li>
+                @Html.ActionLink("Lista de Perfis", "Index", "Profile", new { Area = "Portal" }, new { @class = "" })
+            </li>
+            <li>
+                @Html.ActionLink("Detalhe do Perfil", "Details", "Profile", new { Area = "Portal" }, new { @class = "" })
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                <div class="pull-right">
+                    <a asp-action="Index" data-toggle="tooltip" title="Voltar Para lista" class="btn btn-primary"><i class="fa fa-arrow-left "></i> Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Visualizar Perfil</h3>
+            </div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Name)
+                    </dd>
+                </dl>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Acesso aos Módulos</div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <div data-role="treeview" class="profile-treeview k-widget k-treeview" data-text-field="Name" data-bind="source: actionsDataSource" style="height: 180px" tabindex="0" role="tree">
+                                @foreach (var module in (ViewData["modules"] as List<ModuleViewModel>))
+                                {
+                                    <ul class="k-group k-treeview-lines" role="group">
+                                        <li role="treeitem" class="k-item k-first" data-uid="56ca2bc7-8185-4d34-8f71-41ddbcb59bdb" data-expanded="true" aria-expanded="true">
+                                            <div class="k-top"><span class="k-icon k-minus" role="presentation"></span>@module.Name<span class="k-in"></span></div>
+                                            @foreach (var funcionality in module.Functionalities)
+                                            {
+                                                <ul class="k-group k-treeview-lines" role="group">
+                                                    <li role="treeitem" class="k-item k-first" data-uid="56ca2bc7-8185-4d34-8f71-41ddbcb59bdb" data-expanded="true" aria-expanded="true">
+                                                        <div class="k-top"><span class="k-icon k-minus" role="presentation"></span><span class="k-in">@funcionality.Name</span></div>
+                                                        @foreach (var action in funcionality.Actions)
+                                                        {
+                                                            <ul class="k-group" role="group" style="display: block;">
+                                                                <li role="treeitem" class="k-item" data-uid="62cb2bc8-57f3-4a33-bc08-98dbade94b19">
+                                                                    <input id="@action.Id" type="checkbox"><span> @action.Name</span>
+                                                                </li>
+
+                                                            </ul>
+                                                        }
+
+                                                    </li>
+
+                                                </ul>
+                                            }
+
+                                        </li>
+                                    </ul>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

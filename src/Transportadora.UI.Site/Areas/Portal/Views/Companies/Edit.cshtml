@@ -1,0 +1,158 @@
+﻿@model Transportadora.UI.Site.ViewModels.CompanyViewModel
+@using Transportadora.UI.Site.ViewModels
+@{
+    ViewData["Title"] = "Editar Empresa";
+    var controllerValue = ViewContext.RouteData.Values["Controller"].ToString();
+    var areaValue = ViewContext.RouteData.Values["Area"]?.ToString();
+}
+
+<div class="page-header">
+    <div class="container-fluid">
+        <ul class="breadcrumb">
+            <li>
+                <a href="@Url.Content("~/home/index")">Home</a>
+            </li>
+            <li>
+                @Html.ActionLink("Lista de Empresa", "Index", "Companies", new { Area = "Portal" }, new { @class = "" })
+            </li>
+            <li>
+                @Html.ActionLink("Edição Empresa", "Edit", "Companies", new { Area = "Portal" }, (controllerValue == "Companies" ? (new { @class = "active" }) : (new { @class = "" })))
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                <div class="pull-right">
+                    <a asp-action="Index" data-toggle="tooltip" title="Voltar Para lista" class="btn btn-primary"><i class="fa fa-arrow-left "></i> Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Editar Empresa</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="Address_Id" />
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label asp-for="RazaoSocial" class="control-label"></label>
+                            <input asp-for="RazaoSocial" class="form-control" />
+                            <span asp-validation-for="RazaoSocial" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="CNPJ" class="control-label"></label>
+                            <input asp-for="CNPJ" class="form-control"  maxlength="18" onKeyPress="MascaraCNPJ(this);" onblur="ValidarCNPJ(this)"/>
+                            <span asp-validation-for="CNPJ" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label asp-for="Telefone" class="control-label"></label>
+                            <input asp-for="Telefone" class="form-control"  onKeyPress="MascaraTelefone(this);" maxlength="15" onBlur="ValidaTelefone(this);" />
+                            <span asp-validation-for="Telefone" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label asp-for="Email" class="control-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label asp-for="Contato" class="control-label"></label>
+                            <input asp-for="Contato" class="form-control" />
+                            <span asp-validation-for="Contato" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="form-group col-md-6">
+                            <label asp-for="InscEstatudal" class="control-label"></label>
+                            <input asp-for="InscEstatudal" class="form-control" />
+                            <span asp-validation-for="InscEstatudal" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="InscMunicipal" class="control-label"></label>
+                            <input asp-for="InscMunicipal" class="form-control" />
+                            <span asp-validation-for="InscMunicipal" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label asp-for="Address.AddressLine" class="control-label"></label>
+                            <input asp-for="Address.AddressLine" class="form-control" />
+                            <span asp-validation-for="Address.AddressLine" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label asp-for="Address.Number" class="control-label"></label>
+                            <input asp-for="Address.Number" class="form-control" />
+                            <span asp-validation-for="Address.Number" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label asp-for="Address.Neighborhood" class="control-label"></label>
+                            <input asp-for="Address.Neighborhood" class="form-control" />
+                            <span asp-validation-for="Address.Neighborhood" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label asp-for="Address.City" class="control-label"></label>
+                            <input asp-for="Address.City" class="form-control" />
+                            <span asp-validation-for="Address.City" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label asp-for="Address.State" class="control-label"></label>
+                            <input asp-for="Address.State" class="form-control" />
+                            <span asp-validation-for="Address.State" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label asp-for="Address.PostalCode" class="control-label"></label>
+                            <input asp-for="Address.PostalCode" class="form-control"  maxlength="10" onKeyPress="MascaraCep(this);" />
+                            <span asp-validation-for="Address.PostalCode" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label>
+                                <input asp-for="Status" /> @Html.DisplayNameFor(model => model.Status)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="pull-right">
+                        <button type="reset" data-toggle="tooltip" title="Limpar Formulário" class="btn btn-warning">
+                            <i class="fa fa-eraser "></i> Limpar
+                        </button>
+                        <button type="submit" data-toggle="tooltip" title="Atualizar" class="btn btn-primary">
+                            <i class="fa fa-save"></i> Atualizar
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script type="text/javascript">
+$(document).ready(function () {
+        $('select').select2();
+        $('.dates').datetimepicker({
+            pickTime: false,
+            format: 'DD/MM/YYYY'
+        });
+    });</script>

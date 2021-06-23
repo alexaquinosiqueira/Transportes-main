@@ -1,0 +1,674 @@
+﻿@*@model IEnumerable<Transportadora.UI.Site.ViewModels.ExpenseFinancialSettlementViewModel>*@
+@using Transportadora.UI.Site.ViewModels
+@using Transportadora.UI.Site.Configurations
+
+@{ ViewData["Title"] = "Relatório"; }
+@*<script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script language="javascript" type="text/javascript" src="@Url.Content("~/")assets/js/lib/jquery-1.8.3.min.js"></script>*@
+
+<style type="text/css">
+    #flot-placeholder {
+        width: 900px;
+        height: 500px;
+    }
+</style>
+
+<script language="javascript" type="text/javascript" src="@Url.Content("~/")assets/js/jquery/flot/jquery.flot.js"></script>
+<script language="javascript" type="text/javascript" src="@Url.Content("~/")assets/js/jquery/flot/jquery.flot.categories.js"></script>
+<script language="javascript" type="text/javascript" src="@Url.Content("~/")assets/js/jquery/flot/jquery.flot.resize.min.js"></script>
+
+<div class="container-fluid">
+
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoAcertosAdicionar)))
+                {
+                <div class="pull-right">
+                </div>}
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                </h3>
+            </div>
+            <div class="panel-body">
+                @if (TempData.ContainsKey("message"))
+                {
+                <div class="alert alert-@TempData["cls"]">
+                    <i class="fa fa-exclamation-circle"></i><small> @TempData["Message"]</small>
+                    <button type="button" class="close" data-dismiss="alert">
+                        ×
+                    </button>
+                </div>TempData.Remove("message");
+    TempData.Remove("cls");
+}
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+
+                        <script language="javascript" type="text/javascript" src="@Url.Content("~/")assets/js/jquery/flot/excanvas.min.js"></script>
+
+                        <script language="javascript" type="text/javascript" src="@Url.Content("~/")assets/js/jquery/flot/jquery.flot.js"></script>
+                        <script language="javascript" type="text/javascript" src="@Url.Content("~/")assets/js/jquery/flot/jquery.flot.time.js"></script>
+                        <script language="javascript" type="text/javascript" src="@Url.Content("~/")assets/js/jquery/flot/jquery.flot.categories.js"></script>
+                        <script language="javascript" type="text/javascript" src="@Url.Content("~/")assets/js/jquery/flot/jquery.flot.resize.min.js"></script>
+                        <script language="javascript" type="text/javascript" src="@Url.Content("~/")assets/js/jquery/flot/jquery.flot.time.min.js"></script>
+
+                        <script type="text/javascript" src="@Url.Content("~/")assets/js/jquery/flot/jquery.flot.symbol.js"></script>
+                        <script type="text/javascript" src="@Url.Content("~/")assets/js/jquery/flot/jquery.flot.axislabels.js"></script>
+
+                        <div id="flot-placeholder1" style="width:900px;height:500px;margin:0 auto; margin-left:0"></div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-12" style="text-align:left; margin-top:20px;">
+
+                        <table id="myTable" class="table table-bordered table-hover">
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        arry_fornecedores = [];
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            url: '@Url.Content("~/Relatorio")/Relatorio/GetLiqFornecedoresAll/', //' + $('#stateOrigin').val(),
+            data: '{}',
+            success:
+                function (jsonData) {
+
+                    $.each(jsonData, function (k, v) {
+                        arry_fornecedores.push([v.nome]);
+                    });
+                }
+            ,
+            error: function () {
+                alert("Erro ao carregar dados Fornecedores! Tente novamente.");
+            }
+        });
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            url: '@Url.Content("~/Relatorio")/Relatorio/GetLiqFornecedoresId/?data_ini="", data_fim="", motorista=0  ', //' + $('#stateOrigin').val(),
+            data: '{}',
+            success:
+                function (jsonData) {
+
+                    var arry0 = [
+                        [0, 0],
+                        [1, 0],
+                        [2, 0],
+                        [3, 0],
+                        [4, 0],
+                        [5, 0],
+                        [6, 0],
+                        [7, 0],
+                        [8, 0],
+                        [9, 0],
+                        [10, 0],
+                        [11, 0]
+                    ];
+                    var arry1 = [
+                        [0, 0],
+                        [1, 0],
+                        [2, 0],
+                        [3, 0],
+                        [4, 0],
+                        [5, 0],
+                        [6, 0],
+                        [7, 0],
+                        [8, 0],
+                        [9, 0],
+                        [10, 0],
+                        [11, 0]
+                    ];
+                    var arry2 = [
+                        [0, 0],
+                        [1, 0],
+                        [2, 0],
+                        [3, 0],
+                        [4, 0],
+                        [5, 0],
+                        [6, 0],
+                        [7, 0],
+                        [8, 0],
+                        [9, 0],
+                        [10, 0],
+                        [11, 0]
+                    ];
+                    var arry3 = [
+                        [0, 0],
+                        [1, 0],
+                        [2, 0],
+                        [3, 0],
+                        [4, 0],
+                        [5, 0],
+                        [6, 0],
+                        [7, 0],
+                        [8, 0],
+                        [9, 0],
+                        [10, 0],
+                        [11, 0]
+                    ];
+                    var arry4 = [
+                        [0, 0],
+                        [1, 0],
+                        [2, 0],
+                        [3, 0],
+                        [4, 0],
+                        [5, 0],
+                        [6, 0],
+                        [7, 0],
+                        [8, 0],
+                        [9, 0],
+                        [10, 0],
+                        [11, 0]
+                    ];
+                    var arry5 = [
+                        [0, 0],
+                        [1, 0],
+                        [2, 0],
+                        [3, 0],
+                        [4, 0],
+                        [5, 0],
+                        [6, 0],
+                        [7, 0],
+                        [8, 0],
+                        [9, 0],
+                        [10, 0],
+                        [11, 0]
+                    ];
+                    var arry6 = [
+                        [0, 0],
+                        [1, 0],
+                        [2, 0],
+                        [3, 0],
+                        [4, 0],
+                        [5, 0],
+                        [6, 0],
+                        [7, 0],
+                        [8, 0],
+                        [9, 0],
+                        [10, 0],
+                        [11, 0]
+                    ];
+                    var arry7 = [
+                        [0, 0],
+                        [1, 0],
+                        [2, 0],
+                        [3, 0],
+                        [4, 0],
+                        [5, 0],
+                        [6, 0],
+                        [7, 0],
+                        [8, 0],
+                        [9, 0],
+                        [10, 0],
+                        [11, 0]
+                    ];
+                    var arry8 = [
+                        [0, 0],
+                        [1, 0],
+                        [2, 0],
+                        [3, 0],
+                        [4, 0],
+                        [5, 0],
+                        [6, 0],
+                        [7, 0],
+                        [8, 0],
+                        [9, 0],
+                        [10, 0],
+                        [11, 0]
+                    ];
+                    var arry9 = [
+                        [0, 0],
+                        [1, 0],
+                        [2, 0],
+                        [3, 0],
+                        [4, 0],
+                        [5, 0],
+                        [6, 0],
+                        [7, 0],
+                        [8, 0],
+                        [9, 0],
+                        [10, 0],
+                        [11, 0]
+                    ];
+
+                    var nomem0 = "";
+                    var nomem1 = "";
+                    var nomem2 = "";
+                    var nomem3 = "";
+                    var nomem4 = "";
+                    var nomem5 = "";
+                    var nomem6 = "";
+                    var nomem7 = "";
+                    var nomem8 = "";
+                    var nomem9 = "";
+
+                    for (var i = 0; i < arry_fornecedores.length; i++) {
+
+                        if (i == 0) {
+
+                            mes = 1;
+
+                            $.each(jsonData, function (k, v) {
+
+                                if (arry_fornecedores[0] == v.nome) {
+
+                                    for (var i = 0; i < arry0.length; i++) {
+
+                                        if (arry0[i][0] == v.mes) {                                            
+                                            arry0[i][1] = v.valor;
+                                            break;
+                                        }
+                                    }
+                                    nomem0 = arry_fornecedores[0];
+                                }
+                            });
+                        }
+
+                        if (i == 1) {
+                            $.each(jsonData, function (k, v) {
+                                if (arry_fornecedores[1] == v.nome) {
+
+                                    for (var i = 0; i < arry1.length; i++) {
+
+                                        if (arry1[i][0] == v.mes) {
+                                            arry1[i][1] = v.valor;
+
+                                            break;
+                                        }
+                                    }
+                                    nomem1 = arry_fornecedores[1];
+
+                                }
+                            });
+                        }
+
+                        if (i == 2) {
+                            $.each(jsonData, function (k, v) {
+                                if (arry_fornecedores[2] == v.nome) {
+                                    for (var i = 0; i < arry2.length; i++) {
+
+                                        if (arry2[i][0] == v.mes) {
+                                            arry2[i][1] = v.valor;
+
+                                            break;
+                                        }
+                                    }
+                                    nomem2 = arry_fornecedores[2];
+                                }
+                            });
+                        }
+
+                        if (i == 3) {
+                            $.each(jsonData, function (k, v) {
+                                if (arry_fornecedores[3] == v.nome) {
+                                    for (var i = 0; i < arry3.length; i++) {
+
+                                        if (arry3[i][0] == v.mes) {
+                                            arry3[i][1] = v.valor;
+
+                                            break;
+                                        }
+                                    }
+                                    nomem3 = arry_fornecedores[3];
+                                }
+                            });
+                        }
+
+                        if (i == 4) {
+                            $.each(jsonData, function (k, v) {
+                                if (arry_fornecedores[4] == v.nome) {
+                                    for (var i = 0; i < arry4.length; i++) {
+
+                                        if (arry4[i][0] == v.mes) {
+                                            arry4[i][1] = v.valor;
+
+                                            break;
+                                        }
+                                    }
+                                    nomem4 = arry_fornecedores[4];
+                                }
+                            });
+                        }
+
+                        if (i == 5) {
+                            $.each(jsonData, function (k, v) {
+                                if (arry_fornecedores[5] == v.nome) {
+                                    for (var i = 0; i < arry5.length; i++) {
+
+                                        if (arry5[i][0] == v.mes) {
+                                            arry5[i][1] = v.valor;
+
+                                            break;
+                                        }
+                                    }
+                                    nomem5 = arry_fornecedores[5];
+                                }
+                            });
+                        }
+
+
+                        if (i == 6) {
+                            $.each(jsonData, function (k, v) {
+                                if (arry_fornecedores[6] == v.nome) {
+                                    for (var i = 0; i < arry6.length; i++) {
+
+                                        if (arry6[i][0] == v.mes) {
+                                            arry6[i][1] = v.valor;
+
+                                            break;
+                                        }
+                                    }
+                                    nomem6 = arry_fornecedores[6];
+                                }
+                            });
+                        }
+
+                        if (i == 7) {
+                            $.each(jsonData, function (k, v) {
+                                if (arry_fornecedores[7] == v.nome) {
+                                    for (var i = 0; i < arry7.length; i++) {
+
+                                        if (arry7[i][0] == v.mes) {
+                                            arry7[i][1] = v.valor;
+
+                                            break;
+                                        }
+                                    }
+                                    nomem7 = arry_fornecedores[7];
+                                }
+                            });
+                        }
+
+
+                        if (i == 8) {
+                            $.each(jsonData, function (k, v) {
+                                if (arry_fornecedores[8] == v.nome) {
+                                    for (var i = 0; i < arry8.length; i++) {
+
+                                        if (arry8[i][0] == v.mes) {
+                                            arry8[i][1] = v.valor;
+
+                                            break;
+                                        }
+                                    }
+                                    nomem8 = arry_fornecedores[8];
+                                }
+                            });
+                        }
+
+
+                        if (i == 9) {
+                            $.each(jsonData, function (k, v) {
+                                if (arry_fornecedores[9] == v.nome) {
+                                    for (var i = 0; i < arry9.length; i++) {
+
+                                        if (arry9[i][0] == v.mes) {
+                                            arry9[i][1] = v.valor;
+
+                                            break;
+                                        }
+                                    }
+                                    nomem9 = arry_fornecedores[9];
+                                }
+                            });
+                        }
+                    }
+
+                    for (var i = 0; i < jsonData.length; i++) {
+                        var table = document.getElementById("myTable");
+                        var row = table.insertRow(0);
+                        var cell1 = row.insertCell(0);
+                        var cell2 = row.insertCell(1);
+                        var cell3 = row.insertCell(2);
+
+                        if (jsonData[i].mes == 1)
+                            var nomemes = "Janeiro";
+                        if (jsonData[i].mes == 2)
+                            var nomemes = "Fevereiro";
+                        if (jsonData[i].mes == 3)
+                            var nomemes = "Março";
+                        if (jsonData[i].mes == 4)
+                            var nomemes = "Abril";
+                        if (jsonData[i].mes == 5)
+                            var nomemes = "Maio";
+                        if (jsonData[i].mes == 6)
+                            var nomemes = "Junho";
+                        if (jsonData[i].mes == 7)
+                            var nomemes = "Julho";
+                        if (jsonData[i].mes == 8)
+                            var nomemes = "Agosto";
+                        if (jsonData[i].mes == 9)
+                            var nomemes = "Setembro";
+                        if (jsonData[i].mes == 10)
+                            var nomemes = "Outubro";
+                        if (jsonData[i].mes == 11)
+                            var nomemes = "Novembro";
+                        if (jsonData[i].mes == 12)
+                            var nomemes = "Dezembro";
+
+                        var valor = jsonData[i].valor;
+                        var valorFormatado = valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+                        cell1.innerHTML = nomemes;
+                        cell2.innerHTML = valorFormatado;
+                        cell3.innerHTML = jsonData[i].nome;
+                    }
+
+
+                    for (var i = 0; i < arry0.length; i++) {
+                       arry0[i][0] = gd(2012, i, 1);
+                    }
+
+                    for (var i = 0; i < arry1.length; i++) {
+                        arry1[i][0] = gd(2012, i, 1);
+                    }
+
+                    for (var i = 0; i < arry2.length; i++) {
+                        arry2[i][0] = gd(2012, i, 1);
+                    }
+
+                    for (var i = 0; i < arry3.length; i++) {
+                        arry3[i][0] = gd(2012, i, 1);
+                    }
+
+                    for (var i = 0; i < arry4.length; i++) {
+                        arry4[i][0] = gd(2012, i, 1);
+                    }
+
+                    for (var i = 0; i < arry5.length; i++) {
+                        arry5[i][0] = gd(2012, i, 1);
+                    }
+
+                    for (var i = 0; i < arry6.length; i++) {
+                        arry6[i][0] = gd(2012, i, 1);
+                    }
+
+                    for (var i = 0; i < arry7.length; i++) {
+                        arry7[i][0] = gd(2012, i, 1);
+                    }
+
+                    for (var i = 0; i < arry8.length; i++) {
+                        arry8[i][0] = gd(2012, i, 1);
+                    }
+
+                    for (var i = 0; i < arry9.length; i++) {
+                        arry9[i][0] = gd(2012, i, 1);
+                    }
+
+                    var dataset = [
+                        { label: nomem0, data: arry0, points: { symbol: "circle" } },
+                        { label: nomem1, data: arry1, points: { symbol: "circle" } },
+                        { label: nomem2, data: arry2, points: { symbol: "circle" } },
+                        { label: nomem3, data: arry3, points: { symbol: "circle" } },
+                        { label: nomem4, data: arry4, points: { symbol: "circle" } },
+                        { label: nomem5, data: arry5, points: { symbol: "circle" } },
+                        { label: nomem6, data: arry6, points: { symbol: "circle" } },
+                        { label: nomem7, data: arry7, points: { symbol: "circle" } },
+                        { label: nomem8, data: arry8, points: { symbol: "circle" } },
+                        { label: nomem9, data: arry9, points: { symbol: "circle" } }
+
+                        //{ label: "Change", data: data2, yaxis: 2 }
+                    ];
+
+                    var options = {
+                        series: {
+                            lines: {
+                                show: true
+                            },
+                            points: {
+                                radius: 3,
+                                fill: true,
+                                show: true
+                            }
+                        },
+                        xaxis: {
+                            mode: "time",
+                            tickSize: [1, "month"],
+                            tickLength: 0,
+                            axisLabel: "2021",
+                            axisLabelUseCanvas: true,
+                            axisLabelFontSizePixels: 12,
+                            axisLabelFontFamily: 'Verdana, Arial',
+                            axisLabelPadding: 10
+                        },
+                        yaxes: [{
+                            axisLabel: "Fornecedores",
+                            axisLabelUseCanvas: true,
+                            axisLabelFontSizePixels: 12,
+                            axisLabelFontFamily: 'Verdana, Arial',
+                            axisLabelPadding: 3
+                            //tickFormatter: function (v, axis) {
+                            //    return $.formatNumber(v, { format: "#,###", locale: "us" });
+                            //}
+                        }, {
+                            position: "right",
+                            axisLabel: "",
+                            axisLabelUseCanvas: true,
+                            axisLabelFontSizePixels: 12,
+                            axisLabelFontFamily: 'Verdana, Arial',
+                            axisLabelPadding: 3
+                        }
+                        ],
+                        legend: {
+                            noColumns: 0,
+                            labelBoxBorderColor: "#000000",
+                            position: "nw"
+                        },
+                        grid: {
+                            hoverable: true,
+                            borderWidth: 2,
+                            borderColor: "#633200",
+                            backgroundColor: { colors: ["#ffffff", "#EDF5FF"] }
+                        },
+                        colors: ["#FF0000", "#0022FF"]
+                    };
+
+                    $(document).ready(function () {
+                        $.plot($("#flot-placeholder1"), dataset, options);
+                        $("#flot-placeholder1").UseTooltip();
+                    });
+
+                }
+            ,
+            error: function () {
+                alert("Erro ao carregar dados! Tente novamente.");
+            }
+
+
+        });
+
+
+
+        function gd(year, month, day) {
+            return new Date(year, month, day).getTime();
+        }
+
+        var previousPoint = null, previousLabel = null;
+        var monthNames = ["JAN", "FEV", "MAR", "APR", "MAIO", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
+
+        $.fn.UseTooltip = function () {
+            $(this).bind("plothover", function (event, pos, item) {
+                if (item) {
+                    if ((previousLabel != item.series.label) || (previousPoint != item.dataIndex)) {
+                        previousPoint = item.dataIndex;
+                        previousLabel = item.series.label;
+                        $("#tooltip").remove();
+
+                        var x = item.datapoint[0];
+                        var y = item.datapoint[1];
+
+                        var color = item.series.color;
+                        var month = new Date(x).getMonth();
+
+                        //console.log(item);
+
+                        if (item.seriesIndex == 0) {
+                            showTooltip(item.pageX,
+                                item.pageY,
+                                color,
+                                "<strong>" + item.series.label + "</strong><br> Fornecedor: <strong>" + y + "</strong>(R$)");
+                        } else {
+                            showTooltip(item.pageX,
+                                item.pageY,
+                                color,
+                                "<strong>" + item.series.label + "</strong><br> Fornecedor: <strong>" + y + "</strong>");
+                        }
+                    }
+                } else {
+                    $("#tooltip").remove();
+                    previousPoint = null;
+                }
+            });
+        };
+
+        function showTooltip(x, y, color, contents) {
+            $('<div id="tooltip">' + contents + '</div>').css({
+                position: 'absolute',
+                display: 'none',
+                top: y - 40,
+                left: x - 120,
+                border: '2px solid ' + color,
+                padding: '3px',
+                'font-size': '9px',
+                'border-radius': '5px',
+                'background-color': '#fff',
+                'font-family': 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
+                opacity: 0.9
+            }).appendTo("body").fadeIn(200);
+        }
+
+    });
+
+</script>
+
+
+
+

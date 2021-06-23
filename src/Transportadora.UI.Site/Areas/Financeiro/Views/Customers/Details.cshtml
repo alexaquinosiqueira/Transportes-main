@@ -1,0 +1,134 @@
+﻿@model Transportadora.UI.Site.ViewModels.CustomerViewModel
+
+
+
+@{
+    ViewData["Title"] = "Visualizar Cliente";
+}
+
+
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                <div class="pull-right">
+                    <a asp-action="Index" data-toggle="tooltip" title="Voltar Para lista" class="btn btn-primary"><i class="fa fa-arrow-left "></i> Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Visualizar Cliente</h3>
+            </div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Name)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.KindPerson)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.KindPerson)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Document)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Document)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.DateSince)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.DateSince)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Observation)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Observation)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.CreditLimit)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.CreditLimit)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.CelPhone)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.CelPhone)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Address_Id)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Address_Id)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.StateRegistration)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.StateRegistration)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.MunicipalRegistration)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.MunicipalRegistration)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.GeneralRecord)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.GeneralRecord)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.DispatchingAgency)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.DispatchingAgency)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.UFRG)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.UFRG)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.IssuanceDate)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.IssuanceDate)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.BirthDate)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.BirthDate)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Genre)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Genre)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.MaritalStatus)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.MaritalStatus)
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+

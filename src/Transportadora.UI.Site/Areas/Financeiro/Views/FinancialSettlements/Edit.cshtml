@@ -1,0 +1,1434 @@
+﻿@model Transportadora.UI.Site.ViewModels.FinancialSettlementViewModel
+@using Transportadora.UI.Site.ViewModels
+
+@{ ViewData["Title"] = "Editar Acerto"; }
+<style>
+    #valores .valores {
+        margin: 0px;
+        text-transform: uppercase;
+    }
+
+        #valores .valores .numeros {
+            padding: 10px 26px;
+            background-color: var(--cor-gray2);
+        }
+
+            #valores .valores .numeros div {
+                margin-bottom: 10px;
+            }
+
+            #valores .valores .numeros h4 {
+                display: inline;
+            }
+
+            #valores .valores .numeros span {
+                float: right;
+            }
+
+        #valores .valores .total {
+            padding: 40px 20px 0px;
+            background-color: var(--cor-gray3);
+            text-align: end;
+        }
+</style>
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                <div class="pull-right">
+                    <a asp-action="Index" data-toggle="tooltip" title="Voltar Para lista" class="btn btn-primary"><i class="fa fa-arrow-left "></i> Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Editar Acerto</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <div class="row">
+                        <div class="form-group col-md-4 col-sm-4">
+                            <label class="control-label">Data Lançamento</label>
+                            <input type="text" asp-for="Date" class="form-control dates" readonly />
+                            <span asp-validation-for="Date" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-4 col-sm-4">
+
+                            <label class="control-label">Código da viagem</label>
+                            <input asp-for="Code" class="form-control" readonly />
+                            <span asp-validation-for="Code" class="text-danger"></span>
+
+                        </div>
+                        <div class="form-group col-md-4 col-sm-4">
+
+                            <label class="control-label">Data Viagem</label>
+                            <input required type="text" asp-for="TravelDate" class="form-control date" />
+                            <span asp-validation-for="TravelDate" class="text-danger"></span>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-4 col-sm-4">
+                            <label class="control-label">Frota</label>
+                            <select name="Fleet_Id" id="Fleet_Id" class="form-control">
+                                <option></option>
+                                <option></option>
+                                @if (ViewData["Fleets"] != null)
+                                {
+                                @foreach (var fleet in (ViewData["Fleets"] as List<FleetViewModel>))
+                                    {
+
+                                        if (fleet.Id == Model.Fleet_Id)
+                                        {
+                                <option value="@fleet.Id" selected>@fleet.Description</option>
+                                        }
+                                        else
+                                        {
+                                <option value="@fleet.Id">@fleet.Description</option>
+                                        }
+
+                                    }}
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4 col-sm-4">
+                            <label class="control-label">Veículo</label>
+                            <select name="Vehicle_Id" id="Vehicle_Id" class="form-control">
+                                <option></option>
+
+                                @if (ViewData["Vehicles"] != null)
+                                {
+
+                                @foreach (var vehicle in (ViewData["Vehicles"] as List<VehicleViewModel>))
+                                    {
+
+                                        if (vehicle.Id == Model.Vehicle_Id)
+                                        {
+                                <option value="@vehicle.Id" selected>@vehicle.Description</option>
+                                        }
+                                        else
+                                        {
+                                <option value="@vehicle.Id">@vehicle.Description</option>
+                                        }
+
+
+                                    }}
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4 col-sm-4">
+
+                            <label class="control-label">Motorista</label>
+
+                            <select name="Employee_Id" id="Employee_Id" class="form-control">
+                                <option></option>
+
+                                @if (ViewData["Employees"] != null)
+                                {
+
+                                @foreach (var employee in (ViewData["Employees"] as List<EmployeeViewModel>))
+                                    {
+
+                                        if (employee.Id == Model.Employee_Id)
+                                        {
+                                <option value="@employee.Id" selected>@employee.Name</option>
+ }
+                                        else
+                                        {
+                                <option value="@employee.Id">@employee.Name</option>
+}
+                                    }}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-4 col-sm-4">
+
+                            <label class="control-label">Cliente</label>
+
+                            <select name="Customer_Id" id="Customer_Id" class="form-control">
+                                <option></option>
+
+                                @if (ViewData["Customers"] != null)
+                                {
+
+                                @foreach (var customer in (ViewData["Customers"] as List<CustomerViewModel>))
+                                    {
+
+                                        if (customer.Id == Model.Customer_Id)
+                                        {
+                                <option value="@customer.Id" selected>@customer.Name</option>
+                                        }
+                                        else
+                                        {
+                                <option value="@customer.Id">@customer.Name</option>
+                                        }
+                                    }}
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-4 col-sm-4">
+                            <label class="control-label">Número Viagem</label>
+                            <input asp-for="TravelNumber" class="form-control" />
+                            <span asp-validation-for="TravelNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-4 col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label">Descrição/Observação</label>
+                                @Html.TextAreaFor(m => m.Description, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Origem</div>
+                                <div class="panel-body">
+                                    <div class="form-group col-md-4 col-sm-4">
+                                        <label class="control-label">UF</label>
+                                        <select name="stateOrigin" id="stateOrigin" class="form-control">
+                                            <option></option>
+                                            @if (ViewData["States"] != null)
+                                            {
+                                            @foreach (var state in (ViewData["States"] as List<StateViewModel>))
+                                                {
+
+                                                    {
+                                                        if (Model.CityOrigin != null)
+
+                                                            if (state.Id == Model.CityOrigin.State.Id)
+                                                            {
+                                        <option value="@state.Id" selected>@state.Uf - @state.Name</option>
+                                                            }
+                                                            else
+                                                            {
+                                        <option value="@state.Id">@state.Uf - @state.Name</option>
+                                                                }
+                                                        }
+
+
+
+                                                    }}
+
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-8 col-sm-8">
+                                        <label class="control-label">Cidade</label>
+                                        <select name="CityOrigin_Id" id="CityOrigin_Id" class="form-control">
+                                            <option></option>
+
+                                            @if (ViewData["CitiesOrigin"] != null)
+                                            {
+
+                                            @foreach (var city in (ViewData["CitiesOrigin"] as List<CityViewModel>))
+                                                {
+
+                                                    if (Model.CityOrigin != null)
+                                                    {
+
+                                                        if (city.Id == Model.CityOrigin_Id)
+                                                        {
+                                            <option value="@city.Id" selected>@city.Name</option>
+                                                        }
+                                                        else
+                                                        {
+                                            <option value="@city.Id">@city.Name</option>
+                                                            }
+                                                        }
+
+                                                    }}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Destino</div>
+                                <div class="panel-body">
+                                    <div class="form-group col-md-4 col-sm-4">
+                                        <label class="control-label">UF</label>
+                                        <select name="stateDestination" id="stateDestination" class="form-control">
+                                            <option></option>
+
+                                            @if (ViewData["States"] != null)
+                                            {
+
+                                            @foreach (var state in (ViewData["States"] as List<StateViewModel>))
+                                                {
+
+                                                    if (Model.DestinationCity != null)
+                                                    {
+
+                                                        if (state.Id == Model.DestinationCity.State.Id)
+                                                        {
+                                        <option value="@state.Id" selected>@state.Uf - @state.Name</option>
+                                                        }
+                                                        else
+                                                        {
+                                        <option value="@state.Id">@state.Uf - @state.Name</option>
+                                                            }
+                                                        }
+
+                                                    }}
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-8 col-sm-8">
+                                        <label class="control-label">Cidade</label>
+                                        <select name="DestinationCity_Id" id="DestinationCity_Id" class="form-control">
+                                            <option></option>
+                                            @if (ViewData["DestinationCities"] != null)
+                                            {
+
+
+
+                                            @foreach (var city in (ViewData["DestinationCities"] as List<CityViewModel>))
+                                                {
+
+                                                    if (city.Id == Model.DestinationCity_Id)
+                                                    {
+                                            <option value="@city.Id" selected>@city.Name</option>
+ }
+                                                    else
+                                                    {
+                                            <option value="@city.Id">@city.Name</option>
+}
+
+                                                }}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Dados da Viagem</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-md-3 col-sm-3">
+                                    <label class="control-label">Frete Total</label>
+                                    <input asp-for="TotalShipping" class="form-control" onkeyup="formatarMoeda(this);" />
+                                    <span asp-validation-for="TotalShipping" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-3">
+                                    <label class="control-label">% Adiantamento</label>
+                                    <input name="TravelPercAdiantamento" id="TravelPercAdiantamento" class="form-control" value="@Model.TravelPercAdiantamento" />
+                                    <span asp-validation-for="TravelPercAdiantamento" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-3">
+                                    <label class="control-label">Adiantamento</label>
+                                    <input asp-for="Advance" id="Advance" class="form-control" onkeyup="formatarMoeda(this);" />
+                                    <span asp-validation-for="Advance" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-3">
+                                    <label class="control-label">% Viagem</label>
+                                    <input name="TravelPercentage" id="TravelPercentage" class="form-control" value="@Model.TravelPercentage" />
+                                    <span asp-validation-for="TravelPercentage" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-3 col-sm-3">
+                                    <label class="control-label">Valor da Viagem</label>
+                                    <input readonly name="TravelValue" id="TravelValue" onkeyup="formatarMoeda(this)" class="form-control" value="@Model.Commission" />
+                                </div>
+                                <div class="form-group col-md-3 col-sm-3">
+                                    <label class="control-label">KM Inicial</label>
+                                    <input asp-for="KmInitial" id="KmInitial" class="form-control" />
+                                    <span asp-validation-for="KmInitial" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-3">
+                                    <label class="control-label">KM Final</label>
+                                    <input asp-for="FinalKm" id="FinalKm" class="form-control" />
+                                    <span asp-validation-for="FinalKm" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-3">
+                                    <label class="control-label">Distância Percorrida</label>
+                                    <input name="distance" id="distance" class="form-control" value="@Model.KmTotal" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Despesas</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group col-md-3 col-sm-3">
+                                    <label class="control-label">Data</label>
+                                    <input name="ExpenseDate" id="ExpenseDate" class="form-control date" />
+                                </div>
+                                <div class="form-group col-md-3 col-sm-3">
+                                    <label class="control-label">Fornecedor</label>
+                                    <select name="Supplier_Id" id="Supplier_Id" class="form-control">
+                                        <option></option>
+
+                                        @if (ViewData["Suppliers"] != null)
+                                        {
+
+                                        @foreach (var supplier in (ViewData["Suppliers"] as List<SupplierViewModel>))
+                                            {
+                                        <option value="@supplier.Id">@supplier.Name</option>
+}}
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-3">
+                                    <label class="control-label">Descrição</label>
+                                    <select onchange="PegaValor()" name="ExpenseType_Id" id="ExpenseType_Id" class="form-control">
+                                        <option></option>
+                                        @if (ViewData["ExpenseTypes"] != null)
+                                        {
+                                        @foreach (var expenseType in (ViewData["ExpenseTypes"] as List<ExpenseTypeViewModel>))
+                                            {
+                                        <option value="@expenseType.Id">@expenseType.Description</option>
+}}
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-3 col-sm-3">
+                                    <label id="desc_valor" class="control-label">Valor da Despesa</label>
+                                    <input name="despesaValor" id="despesaValor" class="form-control" onkeyup="formatarMoeda(this);" />
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div id="clitros" style="display:none;" class="form-group col-md-2 col-sm-2">
+                                    <label class="control-label">Litros</label>
+                                    <input name="litros" id="litros" class="form-control" maxlength="21" onkeyup="formatarMoeda(this);" />
+                                </div>
+
+                                <div id="cvaltotal" style="display:none;" class="form-group col-md-2 col-sm-2">
+                                    <label class="control-label">Valor Total</label>
+                                    <input name="valtotal" id="valtotal" class="form-control" value="0,00" onkeyup="formatarMoeda(this);" readonly />
+                                </div>
+
+                                <div id="cconsumo" style="display:none;" class="form-group col-md-2 col-sm-2">
+                                    <label class="control-label">Consumo</label>
+                                    <input name="consumo" id="consumo" class="form-control" onkeyup="formatarMoeda(this);" readonly />
+                                </div>
+
+                                <div id="cdesconto" style="display:none;" class="form-group col-md-2 col-sm-2">
+                                    <label class="control-label">Desconto</label>
+                                    <input name="desconto" id="desconto" class="form-control" maxlength="21" onkeyup="formatarMoeda(this);" />
+                                </div>
+
+                                <div class="form-group col-md-12 col-sm-12">
+                                    <label class="control-label">Comprovantes das despesas realizadas</label>
+                                    <input type="file" multiple name="ImagemUpload" id="ImagemUpload" />
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-10 col-sm-10"></div>
+                                <div style="text-align:right" class="form-group col-md-2 col-sm-2">
+                                    <a id="btnadd" href="javascript:void(0)" style="margin: 0 16px 16px 0; margin-top:16px; margin-right:0px;" onclick="AtualizaDados()" title="Adicionar Despesa" class="btn btn-danger"><i class="fa fa-plus"></i> Adicionar Despesa</a>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover" id="TData">
+                                    <thead>
+                                        <tr>
+                                            <th>Número</th>
+                                            <th>Data</th>
+                                            <th>Fornecedor</th>
+                                            <th>Descrição</th>
+                                            <th>Valor</th>
+                                            <th id="tlitros">Litros</th>
+                                            <th id="tvaltotal">Total</th>
+                                            <th id="tvaldesc">Desconto</th>
+                                            <th style="display:none" id="tarquivo">Comprovante</th>
+                                            <th>Ação</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{ List<ExpenseFinancialSettlementViewModel> expenses = Model.ExpenseFinancialSettlements.ToList(); }
+                                        @for (int i = 0; i < expenses.Count; i++)
+                                        {
+
+                                        @if(expenses[@i].Arquivo != "Performance Motorista")
+                                        {                                       
+                                         <tr id="@i" class="index">
+
+                                            <td class='number'>
+                                                @Html.Raw(i + 1)
+                                                <input type="hidden" value="@expenses[@i].Id" name="ExpenseFinancialSettlements[@i].Id" id="FinancialSettlement.ExpenseFinancialSettlements[@i].Id" class="form-control" readonly required />
+                                                <input type="hidden" value="@expenses[@i].FinancialSettlement_Id" name="ExpenseFinancialSettlements[@i].FinancialSettlement_Id" id="FinancialSettlement.ExpenseFinancialSettlements[@i].FinancialSettlement_Id" class="form-control" readonly required />
+                                            </td>
+                                            <td>
+                                                <input type="text" value="@expenses[@i].ExpenseDate" name="ExpenseFinancialSettlements[@i].ExpenseDate" id="FinancialSettlement.ExpenseFinancialSettlements[@i].ExpenseDate" class="form-control" readonly required />
+                                            </td>
+                                            <td>
+                                                @if (expenses[@i].Supplier != null)
+                                                {
+                                                <input type="text" value="@expenses[@i].Supplier.Name" name="ExpenseFinancialSettlements[@i].Supplier_Name" id="FinancialSettlement.ExpenseFinancialSettlements[@i].Supplier_Name" class="form-control" readonly required />
+                                                <input type="hidden" value="@expenses[@i].Supplier.Id" name="ExpenseFinancialSettlements[@i].Supplier_Id" id="FinancialSettlement.ExpenseFinancialSettlements[@i].Supplier_Id" class="form-control" readonly required />
+                                                <input type="hidden" value="@expenses[@i].Supplier.Id" name="ExpenseFinancialSettlements[@i].Supplier_Index" id="FinancialSettlement.ExpenseFinancialSettlements[@i].Supplier_Index" class="form-control" readonly />}
+                                            </td>
+                                            <td>
+                                                @if (expenses[@i].ExpenseType != null)
+                                                {
+                                                <input type="text" value="@expenses[@i].ExpenseType.Description" name="ExpenseFinancialSettlements[@i].ExpenseType_Name" id="FinancialSettlement.ExpenseFinancialSettlements[@i].ExpenseType_Name" class="form-control" readonly required />
+                                                <input type="hidden" value="@expenses[@i].ExpenseType.Id" name="ExpenseFinancialSettlements[@i].ExpenseType_Id" id="FinancialSettlement.ExpenseFinancialSettlements[@i].ExpenseType_Id" class="form-control" readonly required />}
+                                            </td>
+                                            <td>
+                                                <input style="text-align:right" type="text" value="@expenses[@i].Amount" name="ExpenseFinancialSettlements[@i].Amount" id="FinancialSettlement.ExpenseFinancialSettlements[@i].Amount" class="form-control" readonly required />
+                                            </td>
+                                            <td>
+                                                <input style="text-align:right" type="text" value="@expenses[@i].Litros" name="ExpenseFinancialSettlements[@i].Litros" id="FinancialSettlement.ExpenseFinancialSettlements[@i].Litros" class="form-control" readonly required />
+                                            </td>
+                                            <td class="invert" style="text-align:right">
+
+                                                @if (@expenses[@i].Desconto > 0)
+                                                        {
+                                                            decimal totalcdesc = Convert.ToDecimal(@expenses[@i].Valor_Total - @expenses[@i].Desconto);
+                                                    <input style="text-align:right" type="text" value=" @totalcdesc" name="ExpenseFinancialSettlements[@i].Valor_Total" id="FinancialSettlement.ExpenseFinancialSettlements[@i].Valor_Total" class="form-control" readonly required />
+
+                                                }
+                                                else
+                                                {
+                                                    <input style="text-align:right" type="text" value="@expenses[@i].Valor_Total" name="ExpenseFinancialSettlements[@i].Valor_Total" id="FinancialSettlement.ExpenseFinancialSettlements[@i].Valor_Total" class="form-control" readonly required />
+                                                }
+
+                                                <span id="cspam">
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <input style="text-align:right" type="text" value="@expenses[@i].Desconto" name="ExpenseFinancialSettlements[@i].Desconto" id="FinancialSettlement.ExpenseFinancialSettlements[@i].Desconto" class="form-control" readonly />
+                                            </td>
+                                            <td style="display:none">
+                                                <input style="text-align:left" type="text" value="@expenses[@i].Arquivo" name="ExpenseFinancialSettlements[@i].Arquivo" id="FinancialSettlement.ExpenseFinancialSettlements[@i].Arquivo" class="form-control" readonly />
+                                            </td>
+
+                                            <td><a href="javascript:void(0)" onclick="javascript:deleteRow(this)" class="btn btn-sm btn-danger"><i class="fa fa-times"></i> Remover</a></td>
+                                            <td><a href="javascript:void(0)" onclick="javascript:EditaRow(this)" class="btn btn-sm btn-success"><i class="fa fa-pencil fa-fw"></i> Editar</a></td>
+
+                                        </tr>
+                                        }
+}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group col-md-4 col-sm-4 pull-right">
+                                <label class="control-label">Total Das despesas</label>
+                                <input name="despesaTotal" id="despesaTotal" class="form-control" value="@Model.ExpenseTotal" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <main class="row">
+                        <div id="finalizar-pagamento" class="col-sm-12">
+                            <div class="title">
+                                Dados do Acerto
+                            </div>
+                        </div>
+
+                        <div id="valores" class="col-sm-12">
+                            <div class="row valores">
+                                <div class="col-md-7 numeros">
+                                    <div>
+                                        <h4>Adiantamento</h4>
+                                        <span id="AdvanceLabel">@Model.Advance</span>
+                                    </div>
+                                    <div>
+                                        <h4>Performance </h4>
+                                        <span id="TravelPercentageLabel">-@Model.Commission</span>
+                                    </div>
+                                    <div>
+                                        <h4>Total Despesas</h4>
+                                        <span id="despesaTotalLabel">-@Model.ExpenseTotal</span>
+                                    </div>
+                                    <div>
+                                        <h4>CONSUMO MÉDIO</h4>
+                                        <span id="Consumo">@Model.Consumo (Km/L)</span>
+                                    </div>
+                                    <div>
+                                        @if (@Model.Incoming > 0)
+                                        {
+
+
+                                        <h4 id="infmotor" style="color:blue;">R$ Valor a Receber do Motorista </h4>
+                                        <span style="color:blue" id="totalReceiverLabel">@Model.Incoming</span> }
+                                        else
+                                        {
+                                        <h4 id="infmotor" style="color:red;">R$ Valor a pagar ao Motorista </h4>
+                                        <span style="color:red" id="totalReceiverLabel">@Model.Incoming</span>}
+
+                                    </div>
+                                </div>
+                                <div class="col-md-5 total">
+
+                                    @if (@Model.Incoming > 0)
+                                    {
+                                    <h5 style="color:blue">R$ Valor a receber do Motorista</h5>
+                                    <h1 style="color:blue" id="totalLabel">R$ @Model.Incoming</h1> }
+                                    else
+                                    {
+                                    <h5 style="color:red">R$ Valor a pagar ao Motorista</h5>
+                                    <h1 style="color:red" id="totalLabel">R$ @Model.Incoming</h1>}
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </main>
+
+                    <div class="pull-right">
+                        <button type="reset" data-toggle="tooltip" title="Limpar Formulário" class="btn btn-warning">
+                            <i class="fa fa-eraser "></i> Limpar
+                        </button>
+                        <button type="submit" data-toggle="tooltip" title="Salvar" class="btn btn-primary">
+                            <i class="fa fa-save"></i> Salvar
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script type="text/javascript">
+    class FinancialSettlements {
+        constructor() {
+            this.TotalShipping = 0;
+            this.Advance = 0;
+            this.TravelPercentage = 0;
+            this.TravelPercAdiantamento = 0;
+            this.TotalConsumod = 0;
+            this.Expenses = [];
+        }
+        GetTravelValue() {
+            return (this.TotalShipping * (this.TravelPercentage / 100)).toFixed(2) || 0.0;
+        }
+
+        GetTotal() {
+            return (this.Advance - this.GetTravelValue() - this.GetExpenseTotal()).toFixed(2);
+        }
+
+        GetTotalDiesel() {
+
+            var ValorDesc = $("#desconto").val() || 0.0;
+            var ValUnit = $("#despesaValor").val() || 0.0;
+            var litros = $("#litros").val() || 0.0;
+
+            if (ValorDesc != 0) {
+                var vvalordesc = ValorDesc.replace(',', '.');
+            } else {
+                vvalordesc = 0;
+            }
+
+            if (ValUnit != 0) {
+                var vvalorunit = ValUnit.replace(',', '.');
+            }
+            else {
+                vvalorunit = 0;
+            }
+
+            var llitros = $("#litros").val().replace(',', '.').replace('.', '');
+
+            ValorDesc = vvalordesc;
+            ValUnit = vvalorunit;
+            litros = llitros;
+
+            if (llitros.length >= 6) {
+                return (((parseFloat(vvalorunit) * parseFloat(llitros)) - parseFloat(vvalordesc)));
+            } else {
+                return (((parseFloat(vvalorunit) * parseFloat(llitros)) - parseFloat(vvalordesc)) / 100);
+            }
+
+        }
+
+        //--- inclusão do consumo
+        GetExpenseTotalDieselConsumo() {
+            var vtotalConsumo = "";
+
+            this.Expenses.forEach((item) => {
+                if (item.id != 99) {
+                    vtotalConsumo += item.TotalConsumod + '-';
+                }
+            })
+            return vtotalConsumo.replace(',', '.');
+        }
+
+        //aas;
+        GetTotalDieselLabel() {
+            return this.GetExpenseTotalDieselConsumo();
+        }
+        GetTotalDesp() {
+            return this.GetExpenseTotal();
+        }
+
+        GetTotallitragem() {
+            return this.GetExpenseTotalLitros();
+        }
+
+        //------
+
+        GetTravelPercAdiantamentoValue() {
+
+            var result_percad = $("#TravelPercAdiantamento").val().replace('.','').replace(',','.');
+            var result_frete = $("#TotalShipping").val().replace('.', '').replace(',', '.');
+
+            return ((result_frete * result_percad) / 100).toFixed(2) || 0.0;
+        }
+
+        GetExpenseTotalDieselConsumo2() {
+            var vtotalConsumo = 0;
+
+            this.Expenses.forEach((item) => {
+
+                if (item.litros != 0) {
+                    if (item.id != 99) {
+
+                        var ll = item.litros.replace('.', '');
+                        var lll = ll.replace(',', '.');
+                        vtotalConsumo = (parseFloat(vtotalConsumo) + parseFloat(lll));
+                    }
+                }
+
+            })
+            return vtotalConsumo;
+        }
+
+        GetExibe() {
+            return this.GetExpenseTotalDieselConsumo2();
+        }
+
+        GetExpenseTotal() {
+            var total = 0;
+            this.Expenses.forEach((item) => {
+                if (item.id != 99) {
+                    if (item.Valor_Total != 0) {
+                        total += parseFloat(item.Valor_Total);
+                    }
+
+                }
+            })
+            return total;
+        }
+
+        GetDescDiesel() {
+
+            var valorTotal = converteMoedaFloat($("#valtotal").val()) || 0.0;
+            var desconto = converteMoedaFloat($("#desconto").val()) || 0.0;
+
+            return (valorTotal - desconto);
+        }
+
+        GetConsumoDiesel() {
+            var kmpercorrido = $("#distance").val();
+            var litros = converteMoedaFloat($("#litros").val()) || 0.0;
+            return kmpercorrido / litros;
+        }
+    }
+    class Expense {
+        constructor() {
+            this.id = 0;
+            this.amount = 0;
+            this.litros = 0;
+            this.Valor_Total = 0;
+            this.Valor_Unitario = 0;
+            this.totalconsumod = 0;
+            this.Desconto = 0;
+            this.Arquivo = "";
+            this.Distancia = 0;
+        }
+    }
+    var financialSettlements = new FinancialSettlements();
+    $(document).ready(function () {
+
+
+        var image = "@Url.Content("~/imagens/" + Model.Imagem)";
+
+        if (image != "") {
+            $('input[type=file]').fileinput({
+                initialPreview: [
+					"<img src='" + image + "' class='file-preview-image' alt='Upload Foto' title='Upload Foto'>",
+				],
+                showUpload: false
+            });
+        } else {
+            $('input[type=file]').fileinput({
+                showUpload: false
+            });
+        }
+
+
+        $('#stateOrigin').change(function () {
+            $('#CityOrigin_Id').select2({
+                ajax: {
+                    placeholder: 'Selecione a cidade',
+                    url: '@Url.Content("~/Financeiro")/FinancialSettlements/GetCityByStateId/?StateId=' + $('#stateOrigin').val(),
+                    dataType: 'json',
+                    quietMillis: 100,
+                    data: function (term) {
+                        return {
+                            q: term, // search term
+                        };
+                    },
+                    results: function (data) {
+                        var myResults = [];
+                        $.each(data, function (index, item) {
+                            myResults.push({
+                                'id': item.id,
+                                'text': item.text
+                            });
+                        });
+                        return {
+                            results: myResults
+                        };
+                    },
+                    minimumInputLength: 3
+                }
+            });
+        })
+        $("#TravelDate").val("");
+        $('#FinalKm').change(function () {
+            var distance = (parseFloat($('#FinalKm').val()) || 0.0) - (parseFloat($('#KmInitial').val()) || 0.0);
+
+            if (distance < 0) {
+                alert('Valor inválido');
+                this.focus();
+                return;
+            }
+
+            $("#distance").val(distance);
+
+        });
+
+        $('#stateDestination').change(function () {
+            $('#DestinationCity_Id').select2({
+                ajax: {
+                    placeholder: 'Selecione a cidade',
+                    url: '@Url.Content("~/Financeiro")/FinancialSettlements/GetCityByStateId/?StateId=' + $('#stateDestination').val(),
+                    dataType: 'json',
+                    quietMillis: 100,
+                    data: function (term) {
+                        return {
+                            q: term, // search term
+                        };
+                    },
+                    results: function (data) {
+                        var myResults = [];
+                        $.each(data, function (index, item) {
+                            myResults.push({
+                                'id': item.id,
+                                'text': item.text
+                            });
+                        });
+                        return {
+                            results: myResults
+                        };
+                    },
+                    minimumInputLength: 3
+                }
+            });
+        })
+
+
+        $('#TravelPercentage').focusout(function () {
+
+
+            var TotalShipping = converteMoedaFloat($("#TotalShipping").val()) || 0.0;
+            var Advance = converteMoedaFloat($("#Advance").val()) || 0.0;
+            var TravelPercentage = converteMoedaFloat($("#TravelPercentage").val().replace('.','').replace(',','.')) || 0.0;
+
+            financialSettlements.TotalShipping = TotalShipping;
+            financialSettlements.Advance = Advance;
+            financialSettlements.TravelPercentage = TravelPercentage;
+
+            $("#TravelValue").val(converteFloatMoeda(financialSettlements.GetTravelValue()));
+            $("#TravelPercentageLabel").text("-" + converteFloatMoeda(financialSettlements.GetTravelValue()));
+
+           // $("#totalLabel").text("R$ " + converteFloatMoeda(financialSettlements.GetTotal()));
+           // $("#totalReceiverLabel").text(converteFloatMoeda(financialSettlements.GetTotal()));
+            $("#totalConsumoDieselLabel").text(converteFloatMoeda(financialSettlements.GetTotalDieselLabel()));
+
+            calcular_despesas_lista();
+
+        })
+
+        $('#TravelPercAdiantamento').focusout(function () {
+            //aas
+            $("#Advance").val(converteFloatMoeda(financialSettlements.GetTravelPercAdiantamentoValue()));
+        })
+
+        $('#litros').focusout(function () {
+            $("#valtotal").val(converteFloatMoeda(financialSettlements.GetTotalDiesel()));
+            $("#desconto").focus();
+        })
+
+        $('#desconto').focusout(function () {
+            $("#Valor_Total").val(converteFloatMoeda(financialSettlements.GetTotalDiesel()));
+
+        })
+
+        $('#valtotal').focusout(function () {
+            $("#valtotal").val(converteFloatMoeda(financialSettlements.GetTotalDiesel()));
+            $("#desconto").focus();
+
+        })
+
+        $('#Advance').focusout(function () {
+
+            var Advance = converteMoedaFloat($("#Advance").val()) || 0.0;
+            $("#AdvanceLabel").text("+" + converteFloatMoeda(Advance));
+
+            $("#totalLabel").text("R$ " + converteFloatMoeda(financialSettlements.GetTotal()));
+            $("#totalReceiverLabel").text(converteFloatMoeda(financialSettlements.GetTotal()));
+
+            financialSettlements.TotalShipping = TotalShipping;
+            financialSettlements.Advance = Advance;
+        })
+
+        $('#ExpenseDate').focusout(function () {
+
+            var datav = $("#TravelDate").val();
+            var datad = $("#ExpenseDate").val()
+
+            if (datad < datav) {
+                alert('Data não pode ser menor que a data do acerto');
+                return;
+            }
+        })
+    });
+
+    function validarArquivo() {
+
+        var arquivoInput = document.getElementById('ImagemUpload');
+        var caminhoArquivo = arquivoInput.value;
+
+        if (arquivoInput.value == '') {
+            return false;
+        }
+
+        var extensoesPermitidas = /(.jpg|.jpeg|.png|.gif)$/i;
+        if (!extensoesPermitidas.exec(caminhoArquivo)) {
+            alert('AVISO: Somente arquivos permitidos com as extensões.jpeg/.jpg/.png/.gif .');
+            return false;
+        } else {
+            if (arquivoInput.files && arquivoInput.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    //document.getElementById('visualizarImagem').innerHTML = '';
+                };
+                reader.readAsDataURL(arquivoInput.files[0]);
+                console.log(arquivoInput.files[0].size / 1024 / 1024);
+                console.log(arquivoInput.files[0].size);
+                if (arquivoInput.files[0].size > 2097152) {
+                    alert("Tamanho do arquivo deve ser 2 MB!");
+                    return false;
+                }
+            }
+        }
+    }
+
+    function PegaValor() {
+
+        if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
+            $('#clitros').show();
+            $('#cvaltotal').show();
+            $('#cconsumo').show();
+            $('#cdesconto').show();
+            document.getElementById('desc_valor').innerHTML = "Valor Unitário";
+        } else {
+            $('#clitros').hide();
+            $('#cvaltotal').hide();
+            $('#cconsumo').hide();
+            $('#cdesconto').hide();
+
+            document.getElementById('desc_valor').innerHTML = "Valor da Despesa";
+        }
+    }
+
+    function deleteRow(btn) {
+
+        calcular_despesas_lista();
+
+        var row = btn.parentNode.parentNode;
+        var idDespesaRemovida = row.getElementsByClassName("number")[0].textContent;
+
+
+        //alert('id a ser removido ' + idDespesaRemovida);
+
+        var indexDespesa = financialSettlements.Expenses.map(x => {
+            return x.id;
+        }).indexOf(idDespesaRemovida);
+
+        //alert('id encontrado na lista' + idDespesaRemovida);
+
+
+        financialSettlements.Expenses.splice(indexDespesa, 1);
+
+        var expenseTotal = financialSettlements.GetExpenseTotal();
+
+        $("#despesaTotal").val(converteFloatMoeda(expenseTotal))
+        $("#despesaTotalLabel").text("-" + converteFloatMoeda(expenseTotal));
+
+      //  $("#totalLabel").text("R$ " + (converteFloatMoeda(financialSettlements.GetTotal())));
+      //  $("#totalReceiverLabel").text(converteFloatMoeda(financialSettlements.GetTotal()));
+
+        //alert(row.innerHTML);
+
+        row.parentNode.removeChild(row);
+        $('.number').each(function (i) {
+            $(this).text(i + 1);
+        });
+
+        document.getElementById('ExpenseDate').value = "";
+        document.getElementById('despesaValor').value = "";
+
+        $("#Supplier_Id").attr('selectedIndex', '-1');
+        $("#ExpenseType_Id").attr('selectedIndex', '-1');
+
+        var distancia = $("#distance").val();
+        var consumoD = (distancia / financialSettlements.GetExibe()).toFixed(2);
+
+        if (consumoD == 'Infinity') {
+            consumoD = 0.00;
+        } else {
+            consumoD = (distancia / financialSettlements.GetExibe()).toFixed(2);
+        }
+
+        $("#totalConsumoLabel").text(consumoD + ' KM/L ');
+
+        calcular_despesas_lista();
+        LimparDados();
+    }
+
+    function EditaRow(btn) {
+
+        var row = btn.parentNode.parentNode;
+        var idPesq = row.getElementsByClassName("number")[0].textContent;
+        var idreg = idPesq;
+
+        idregparam = idreg - 1;
+
+        regsel = idPesq ;//document.getElementById('FinancialSettlement.ExpenseFinancialSettlements[' + idPesq + '].Supplier_Index').value;
+
+        editado = true;
+
+        //fornecedor
+        var cfornecedor_codigo = document.getElementById('FinancialSettlement.ExpenseFinancialSettlements[' + idregparam + '].Supplier_Id').value;
+        var cfornecedor_name = document.getElementById('FinancialSettlement.ExpenseFinancialSettlements[' + idregparam + '].Supplier_Name').value;
+
+        document.getElementById("Supplier_Id").text = cfornecedor_name;
+        document.getElementById("Supplier_Id").value = cfornecedor_codigo;
+
+        $("#Supplier_Id").select2({
+            text: cfornecedor_name
+        })
+
+
+        //descricao
+        var cdespesa_codigo = document.getElementById('FinancialSettlement.ExpenseFinancialSettlements[' + idregparam + '].ExpenseType_Id').value;
+        var cdespesa_name = document.getElementById('FinancialSettlement.ExpenseFinancialSettlements[' + idregparam + '].ExpenseType_Name').value;
+
+        document.getElementById("ExpenseType_Id").text = cdespesa_name;
+        document.getElementById("ExpenseType_Id").value = cdespesa_codigo;
+
+        $("#ExpenseType_Id").select2({
+            text: cdespesa_name
+        })
+        document.getElementById("ExpenseType_Id").onchange();
+
+        var cdata = document.getElementById('FinancialSettlement.ExpenseFinancialSettlements[' + idregparam + '].ExpenseDate').value;
+        var cvalor = document.getElementById('FinancialSettlement.ExpenseFinancialSettlements[' + idregparam + '].Amount').value;
+        document.getElementById('ExpenseDate').value = cdata;
+
+        document.getElementById('litros').value = document.getElementById('FinancialSettlement.ExpenseFinancialSettlements[' + idregparam + '].Litros').value;
+        document.getElementById('valtotal').value = document.getElementById('FinancialSettlement.ExpenseFinancialSettlements[' + idregparam + '].Valor_Total').value;
+        document.getElementById('desconto').value = document.getElementById('FinancialSettlement.ExpenseFinancialSettlements[' + idregparam + '].Desconto').value;
+
+        document.getElementById('despesaValor').value = cvalor;
+
+        if ($('#ExpenseType_Id option:selected').text().trim() == "Diesel") {
+            document.getElementById('despesaValor').value = cvalor;
+        } else {
+            document.getElementById('despesaValor').value = cvalor;
+        }
+
+    }
+
+    function AtualizaDados() {
+
+        validarArquivo();
+
+        if (typeof editado === "undefined") {
+            editado = false;
+        }
+
+        if (!editado) {
+            AddItems();
+        } else {
+            AtualizaItem();
+        }
+    }
+
+    function AtualizaItem() {
+
+        var Litros = $("#litros").val();
+        var desconto = $("#desconto").val();
+        var arquivo = document.getElementById('ImagemUpload').value;
+
+        if (Litros == "")
+            Litros = 0.00;
+        if (desconto == "")
+            desconto = 0.00;
+
+        document.getElementById('FinancialSettlement.ExpenseFinancialSettlements[' + idregparam + '].ExpenseType_Name').value = $('#ExpenseType_Id option:selected').text();
+        document.getElementById('FinancialSettlement.ExpenseFinancialSettlements[' + idregparam + '].ExpenseType_Id').value = document.getElementById("ExpenseType_Id").value;
+
+        document.getElementById('FinancialSettlement.ExpenseFinancialSettlements[' + idregparam + '].Supplier_Name').value = $('#Supplier_Id option:selected').text();
+        document.getElementById('FinancialSettlement.ExpenseFinancialSettlements[' + idregparam + '].Supplier_Id').value = document.getElementById("Supplier_Id").value;
+
+        document.getElementById('FinancialSettlement.ExpenseFinancialSettlements[' + idregparam + '].ExpenseDate').value = document.getElementById('ExpenseDate').value;
+        document.getElementById('FinancialSettlement.ExpenseFinancialSettlements[' + idregparam + '].Amount').value = document.getElementById('despesaValor').value;
+
+
+        if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
+            document.getElementById('FinancialSettlement.ExpenseFinancialSettlements[' + idregparam + '].Valor_Total').value = document.getElementById('valtotal').value;
+        }
+
+        if ($('#ExpenseType_Id option:selected').text() != "Diesel") {
+            document.getElementById('FinancialSettlement.ExpenseFinancialSettlements[' + idregparam + '].Valor_Total').value = document.getElementById('despesaValor').value;
+        }
+
+        document.getElementById('FinancialSettlement.ExpenseFinancialSettlements[' + idregparam + '].Litros').value = Litros; //document.getElementById('litros').value;
+        document.getElementById('FinancialSettlement.ExpenseFinancialSettlements[' + idregparam + '].Desconto').value = $("#desconto").val();//document.getElementById('desconto').value;
+
+
+        var indexDespesa = financialSettlements.Expenses.map(x => {
+
+            if (x.id == regsel) {
+
+                if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
+
+                    if (x.TotalConsumod != 0) {
+                        //x.amount = ValorTotal; /// Despesas com Diesel
+                        x.TotalConsumod = litros;
+                        x.litros = Litros;
+
+                        x.Valor_Total = document.getElementById('valtotal').value;
+                        x.Arquivo = arquivo;
+                        x.Desconto = desconto;
+                    }
+
+                } else {
+                    x.amount = document.getElementById('despesaValor').value; /// Outras despesas
+                    x.Valor_Total = document.getElementById('despesaValor').value; /// Despesas com Diesel
+                    x.Arquivo = arquivo;
+                    x.litros = 0;
+                }
+            }
+            return x.id;
+        }).indexOf(regsel);
+
+        calcular_despesas_lista();
+
+        var expenseTotal = financialSettlements.GetExpenseTotal();
+        $("#despesaTotal").val(converteFloatMoeda(financialSettlements.GetTotalDesp()));
+        $("#despesaTotalLabel").text("-" + converteFloatMoeda(expenseTotal));
+
+        $("#Supplier_Id").attr('selectedIndex', '-1');
+        $("#ExpenseType_Id").attr('selectedIndex', '-1');
+
+       // $("#totalLabel").text("R$ " + financialSettlements.GetTotal());
+        //$("#totalReceiverLabel").text(financialSettlements.GetTotal());
+
+        if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
+            var distancia = $("#distance").val();
+            var litross = (distancia / financialSettlements.GetExibe()).toFixed(2);
+            $("#totalConsumoLabel").text(litross + ' KM/L ');
+        }
+
+        LimparDados();
+    }
+
+    function LimparDados() {
+
+        document.getElementById('ExpenseDate').value = "";
+        document.getElementById('despesaValor').value = "";
+
+        document.getElementById("Supplier_Id").selectedIndex = 0;
+        document.getElementById("Supplier_Id").text = " ";
+        document.getElementById("Supplier_Id").value = " ";
+
+        document.getElementById("ExpenseType_Id").selectedIndex = 0;
+        document.getElementById("ExpenseType_Id").text = " ";
+        document.getElementById("ExpenseType_Id").value = " ";
+        document.getElementById("consumo").value = " ";
+
+        $("#ExpenseType_Id").select2({
+            text: ' ',
+            placeholder: 'Selecione despesa'
+        })
+        $("#Supplier_Id").select2({
+            text: ' ',
+            placeholder: 'Selecione fornecedor'
+        })
+
+        document.getElementById("desconto").value = " ";
+        document.getElementById("valtotal").value = "0,00";
+        document.getElementById("litros").value = "";
+        document.getElementById("ImagemUpload").value = "";
+
+        $(document).ready(function () {
+            document.getElementById('infmotor').style.color = 'blue';
+            document.getElementById('totalReceiverLabel').style.color = 'blue';
+            document.getElementById('totalLabel').style.color = 'blue';
+            document.getElementById('totalReceiverLabel').style.color = 'blue';
+        });
+
+        var valor = converteFloatMoeda(financialSettlements.GetTotal());
+
+        if (valor < 0) {
+            $(document).ready(function () {
+                document.getElementById('infmotor').style.color = 'red';
+                document.getElementById('totalReceiverLabel').style.color = 'red';
+                document.getElementById('totalLabel').style.color = 'red';
+                document.getElementById('totalReceiverLabel').style.color = 'red';
+            });
+        }
+
+        editado = false;
+    }
+
+    function AddItems() {
+
+        var datav = $("#TravelDate").val();
+        var datad = $("#ExpenseDate").val()
+
+        var tipoDespesa = $("#ExpenseType_Id").val();
+        var tipoDespesaNome = $('#ExpenseType_Id option:selected').text();
+
+        if (datad < datav) {
+            alert('Data não pode ser menor que a data do acerto');
+            return;
+        }
+
+        if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
+            var amount = $("#despesaValor").val();
+            var Valor_Total = $("#valtotal").val();
+        }
+
+        if ($('#ExpenseType_Id option:selected').text() != "Diesel") {
+            var amount = $("#despesaValor").val();
+            var Valor_Total = $("#despesaValor").val();
+        }
+
+        //alert(Valor_Total);
+
+
+        var Litros = $("#litros").val();
+        var desconto = $("#desconto").val();
+        var arquivo = document.getElementById('ImagemUpload').value;
+
+        if (Litros == "")
+            Litros = 0.00;
+        if (desconto == "")
+            desconto = 0.00;
+
+        var comboTipoDespesa = document.getElementById("ExpenseType_Id");
+        var tipoDespesaIndice = comboTipoDespesa.selectedIndex;
+
+        var fornecedor = $("#Supplier_Id").val();
+        var fornecedorNome = $('#Supplier_Id option:selected').text();
+
+        var comboFornecedor = document.getElementById("Supplier_Id");
+        var forncedorIndice = comboFornecedor.selectedIndex;
+
+        if (tipoDespesa === "" || amount === "" || datad === "" || fornecedor === "") {
+
+            //alert(' Tipo  -> ' + tipoDespesa + '|  Amount  -> ' + amount + '  | Datav  -> ' + datav + ' fornecedor ' + fornecedor);
+            alert("Dadoss incompletos.");
+            return;
+        }
+
+        var row = $('#TData tbody tr').length;
+
+        if (row > 0) {
+            var index = $('.index').last().attr('id');
+            index = parseInt(index);
+            row = parseInt(row);
+            row = index + 1;
+        }
+
+        var html = '<tr id="' + row + '" class="index">';
+        html += "<td class='number'>" + (row + 1) + "</td>";
+        html += '<td><input type="text" value="' + datad + '" name="ExpenseFinancialSettlements[' + row + '].ExpenseDate" id="FinancialSettlement.ExpenseFinancialSettlements[' + row + '].ExpenseDate" class="form-control" readonly="true" required/></td>';
+
+        html += '<td><input type="text" value="' + fornecedorNome + '" name="ExpenseFinancialSettlements[' + row + '].Supplier_Name" id="FinancialSettlement.ExpenseFinancialSettlements[' + row + '].Supplier_Name" class="form-control" readonly="true" />';
+        html += '<input type="hidden" value="' + fornecedor + '" name="ExpenseFinancialSettlements[' + row + '].Supplier_Id" id="FinancialSettlement.ExpenseFinancialSettlements[' + row + '].Supplier_Id" class="form-control" readonly="true" /></td>';
+        html += '<input type="hidden" value="' + forncedorIndice + '" name="ExpenseFinancialSettlements[' + row + '].Supplier_Index" id="FinancialSettlement.ExpenseFinancialSettlements[' + row + '].Supplier_Index" class="form-control" readonly="true" /></td>';
+
+        html += '<td><input type="text" value="' + tipoDespesaNome + '" name="ExpenseFinancialSettlements[' + row + '].ExpenseType_Name" id="FinancialSettlement.ExpenseFinancialSettlements[' + row + '].ExpenseType_Name" class="form-control" readonly="true" />';
+        html += '<input type="hidden" value="' + tipoDespesa + '" name="ExpenseFinancialSettlements[' + row + '].ExpenseType_Id" id="FinancialSettlement.ExpenseFinancialSettlements[' + row + '].ExpenseType_Id" class="form-control" readonly="true" /></td>';
+        html += '<input type="hidden" value="' + tipoDespesaIndice + '" name="ExpenseFinancialSettlements[' + row + '].ExpenseType_Index" id="FinancialSettlement.ExpenseFinancialSettlements[' + row + '].ExpenseType_Index" class="form-control" readonly="true" /></td>';
+
+        html += '<td class="despesaitem"><input style="text-align:right" type="text" value="' + amount + '"name="ExpenseFinancialSettlements[' + row + '].Amount" id="FinancialSettlement.ExpenseFinancialSettlements[' + row + '].Amount"class="form-control" readonly="true" /></td>';
+
+        html += '<td><input style="text-align:right" type="text" value="' + Litros + '" name="ExpenseFinancialSettlements[' + row + '].Litros" id="FinancialSettlement.ExpenseFinancialSettlements[' + row + '].Litros" style="text-align: right" class="form-control" readonly="true" />';
+        html += '<td><input style="text-align:right" type="text" value="' + Valor_Total + '" name="ExpenseFinancialSettlements[' + row + '].Valor_Total" id="FinancialSettlement.ExpenseFinancialSettlements[' + row + '].Valor_Total" style="text-align: right" class="form-control" readonly="true" />';
+
+        html += '<td><input style="text-align:right" type="text" value="' + desconto + '" name="ExpenseFinancialSettlements[' + row + '].Desconto" id="FinancialSettlement.ExpenseFinancialSettlements[' + row + '].Desconto" style="text-align: right" class="form-control" readonly="true" />';
+
+        html += '<td><a href="javascript:void(0)" onclick="javascript:deleteRow(this)" class="btn btn-danger"><i class="fa fa-times"></i> Remover</a></td>';
+        html += '<td><a href="javascript:void(0)" onclick="javascript:EditaRow(this)" class="btn btn-success"><i class="fa fa-pencil fa-fw"></i> Editar</a></td>';
+        html += '</tr>';
+        $('#TData tbody').append(html);
+
+        calcular_despesas_lista();
+
+        LimparDados();
+    }
+
+    function calcular_despesas_lista() {
+
+        var amount = $("#despesaValor").val();
+        var Valor_Total = $("#valtotal").val();
+
+        if ($('#ExpenseType_Id option:selected').text() != "Diesel") {
+            var Valor_Total = $("#despesaValor").val();
+        }
+
+        var Litros = $("#litros").val();
+        var desconto = $("#desconto").val();
+        var arquivo = document.getElementById('ImagemUpload').value;
+
+
+        /// calculo dinamico das despesas.....
+        var valores = document.querySelectorAll("table td:nth-child(7)");
+        financialSettlements.Expenses = [];
+
+        for (var i = 0; i < valores.length; ++i) {
+
+            var ctext1 = valores[i].innerHTML;
+
+            ctext1 = ctext1.trim();
+            var ctext2 = ctext1.substring(ctext1.indexOf('value=') + 5, ctext1.indexOf('name'));
+
+            if (ctext2.substring(0, 1) == "=") {
+
+                var vvalor_total = parseFloat(ctext2.replace('="', '').replace('"', '').replace('.', '').replace(',', '.'));
+                var expense = new Expense();
+                expense.id = i + 1;
+
+                //alert('Listando a lista  ' + expense.id);
+
+                financialSettlements.Expenses.push(expense);
+
+                if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
+
+
+                    var ddesconto = desconto.replace(',', '.');
+                    var result = vvalor_total - ddesconto;
+
+                    expense.amount = vvalor_total;
+                    expense.litros = Litros;
+                    expense.Valor_Total = result;
+
+                    expense.Arquivo = arquivo;
+                    expense.Desconto = desconto;
+                    expense.Distancia = $("#distance").val();
+
+
+                } else {
+                    expense.amount = amount; /// Outras despesas
+                    expense.Valor_Total = vvalor_total;
+                    expense.Arquivo = arquivo;
+                    expense.litros = 0;
+                    expense.Desconto = 0;
+                }
+            }
+        }
+
+        var TotalShipping = converteMoedaFloat($("#TotalShipping").val()) || 0.0;
+        var Advance = converteMoedaFloat($("#Advance").val()) || 0.0;
+        var TravelPercentage = converteMoedaFloat($("#TravelPercentage").val()) || 0.0;
+
+        financialSettlements.TotalShipping = TotalShipping;
+        financialSettlements.Advance = Advance;
+        financialSettlements.TravelPercentage = TravelPercentage;
+
+        $("#TravelValue").val(converteFloatMoeda(financialSettlements.GetTravelValue()));
+        $("#TravelPercentageLabel").text("-" + converteFloatMoeda(financialSettlements.GetTravelValue()).replace('.',','));
+
+        $("#totalLabel").text("R$ " + converteFloatMoeda(financialSettlements.GetTotal()).replace('.',','));
+        $("#totalReceiverLabel").text(converteFloatMoeda(financialSettlements.GetTotal()).replace('.',','));
+        $("#totalConsumoDieselLabel").text(converteFloatMoeda(financialSettlements.GetTotalDieselLabel()).replace('.',','));
+
+        if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
+            var distancia = $("#distance").val();
+            var litross = (distancia / financialSettlements.GetExibe()).toFixed(2);
+            $("#totalConsumoLabel").text(litross + ' KM/L ');
+        }
+
+        $(document).ready(function () {
+
+            if (converteFloatMoeda(financialSettlements.GetTotal()) < 0) {
+                document.getElementById('infmotor').style.color = 'red';
+                document.getElementById('totalReceiverLabel').style.color = 'red';
+                document.getElementById('totalLabel').style.color = 'red';
+                document.getElementById('totalReceiverLabel').style.color = 'red';
+            } else {
+                document.getElementById('infmotor').style.color = 'blue';
+                document.getElementById('totalReceiverLabel').style.color = 'blue';
+                document.getElementById('totalLabel').style.color = 'blue';
+                document.getElementById('totalReceiverLabel').style.color = 'blue';
+            }
+        });
+
+        var expenseTotal = financialSettlements.GetExpenseTotal();
+        $("#despesaTotal").val(converteFloatMoeda(converteFloatMoeda(financialSettlements.GetTotalDesp())));
+        $("#despesaTotalLabel").text("-" + converteFloatMoeda(expenseTotal).replace('.','.'));
+
+        ///////
+    }
+
+    $(document).ready(function () {
+
+        $('#litros').focusout(function () {
+            $("#valtotal").val(converteFloatMoeda(financialSettlements.GetTotalDiesel()));
+            $("#desconto").focus();
+
+        })
+
+        $('#desconto').focusout(function () {
+            $("#Valor_Total").val(converteFloatMoeda(financialSettlements.GetTotalDiesel()));
+
+        })
+
+        $('#valtotal').focusout(function () {
+            $("#valtotal").val(converteFloatMoeda(financialSettlements.GetTotalDiesel()));
+            $("#desconto").focus();
+
+        })
+
+        $('.date').datetimepicker({
+            pickTime: false,
+            format: 'DD/MM/YYYY'
+        });
+
+        $('.dates').datetimepicker({
+            pickTime: false,
+            format: 'DD/MM/YYYY HH:mm',
+            defaultDate: new Date()
+        });
+
+        calcular_despesas_lista();
+
+    });</script>

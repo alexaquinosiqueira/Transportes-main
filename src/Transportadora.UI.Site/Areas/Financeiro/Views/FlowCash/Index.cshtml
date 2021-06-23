@@ -1,0 +1,170 @@
+﻿@model IEnumerable<Transportadora.UI.Site.ViewModels.FluxoCaixaViewModel>
+
+
+@{ ViewData["Title"] = "Fluxo de Caixa"; }
+
+<style>
+    td, th {
+        border: 1px solid black;
+    }
+
+    .invisible {
+        border: none;
+        background-color: transparent;
+    }
+
+    .leftHeader {
+        font-weight: bold;
+        background-color: lightgray;
+    }
+
+    th {
+        background-color: lightgray;
+    }
+</style>
+
+<div class="container-fluid">
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Fluxo de Caixa
+                </h3>
+            </div>
+            <div class="panel-body">
+                <div class="well">
+                    <div class="row">
+                        <div class="col-sm-12">
+
+                            @using (Html.BeginForm())
+                            {
+                                <div class="form-group">
+                                    <label class="control-label" for="search">Filtro</label>
+                                    <div class="input-group date" id="years">
+                                        <input type="text" id="ano" name="ano" class="form-control" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon-calendar glyphicon"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <button type="submit" id="button-filter" class="btn btn-primary pull-right">
+                                    <i class="fa fa-search"></i> Pesquisar
+                                </button>}
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" id="invoicesTable">
+                        <thead>
+                            <tr>
+                                <th class="invisible"></th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Janeiro)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Fevereiro)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Março)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Abril)
+                                </th>
+
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Maio)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Junho)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Julho)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Agosto)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Setembro)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Outubro)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Novembro)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Dezembro)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="leftHeader">
+                                            @Html.DisplayFor(modelItem => item.Tipo)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Janeiro)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Fevereiro)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Março)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Abril)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Maio)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Junho)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Julho)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Agosto)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Setembro)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Outubro)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Novembro)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Dezembro)
+                                        </td>
+                                    </tr>
+}
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="pagination">
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#years').datetimepicker({
+            format: 'YYYY',
+            defaultDate: new Date(),
+            viewMode: 'years',
+        });
+
+    });</script>

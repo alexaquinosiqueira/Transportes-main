@@ -1,0 +1,117 @@
+﻿@model Transportadora.UI.Site.ViewModels.ProfileViewModel
+@using Transportadora.UI.Site.ViewModels
+@{
+    ViewData["Title"] = "Criar Perfil";
+    int count = 0;
+    int moduleCount = 0;
+    var controllerValue = ViewContext.RouteData.Values["Controller"].ToString();
+    var areaValue = ViewContext.RouteData.Values["Area"]?.ToString();
+}
+<div class="page-header">
+    <div class="container-fluid">
+        <ul class="breadcrumb">
+            <li>
+                <a href="@Url.Content("~/home/index")">Home</a>
+            </li>
+            <li>
+                @Html.ActionLink("Lista de perfis", "Index", "Profile", new { Area = "Portal" }, new { @class = "" })
+            </li>
+            <li>
+                @Html.ActionLink("Novo Perfil", "Create", "Profile", new { Area = "Portal" }, new { @class = "" })
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                <div class="pull-right">
+                    <a asp-action="Index" data-toggle="tooltip" title="Voltar Para lista" class="btn btn-primary"><i class="fa fa-arrow-left "></i> Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Criar Perfil</h3>
+            </div>
+
+            <div class="panel-body">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Acesso aos Módulos</div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+
+                                    <ul class="nav nav-tabs">
+                                        @foreach (var module in (ViewData["modules"] as List<ModuleViewModel>))
+                                        {
+                                            <li class='@(moduleCount == 0 ? "active" : "")'>
+                                                <a href="#@module.Name" data-toggle="tab">@module.Name</a>
+                                            </li>
+                                            moduleCount++;
+                                        }
+                                    </ul>
+
+                                    <div class="tab-content ">
+                                        @foreach (var module in (ViewData["modules"] as List<ModuleViewModel>))
+                                        {
+                                            <div class='tab-pane @(count == 0 ? "active" : "")' id="@module.Name">
+                                                @foreach (var funcionality in module.Functionalities)
+                                                {
+                                                    <ul class="list-group" role="group">
+                                                        <li class="list-group-item">
+                                                            @funcionality.Name
+                                                            @foreach (var action in funcionality.Actions)
+                                                            {
+
+                                                                <ul class="list-unstyled">
+                                                                    <li>
+                                                                        <input name="ActionIds[]" value="@action.Id" type="checkbox"><span> @action.Name</span>
+                                                                    </li>
+
+                                                                </ul>
+
+                                                                count++;
+                                                            }
+
+                                                        </li>
+
+                                                    </ul>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="pull-right">
+                        <button type="reset" data-toggle="tooltip" title="Limpar Formulário" class="btn btn-warning">
+                            <i class="fa fa-eraser "></i> Limpar
+                        </button>
+                        <button type="submit" data-toggle="tooltip" title="Salvar" class="btn btn-primary">
+                            <i class="fa fa-save"></i> Salvar
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

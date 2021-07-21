@@ -1,9 +1,7 @@
 ﻿@model IEnumerable<Transportadora.UI.Site.ViewModels.ExpenseTypeViewModel>
 
 
-@{
-    ViewData["Title"] = "Listagem de tipos de Despesas";
-}
+@{ ViewData["Title"] = "Listagem de tipos de Despesas"; }
 
 <div class="container-fluid">
     <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
@@ -28,13 +26,12 @@
 
                 @if (TempData.ContainsKey("message"))
                 {
-                    <div class="alert alert-@TempData["cls"]">
-                        <i class="fa fa-exclamation-circle"></i><small> @TempData["Message"]</small>
-                        <button type="button" class="close" data-dismiss="alert">
-                            ×
-                        </button>
-                    </div>
-                    TempData.Remove("message");
+    <div class="alert alert-@TempData["cls"]">
+        <i class="fa fa-exclamation-circle"></i><small> @TempData["Message"]</small>
+        <button type="button" class="close" data-dismiss="alert">
+            ×
+        </button>
+    </div>TempData.Remove("message");
                     TempData.Remove("cls");
                 }
                 <div class="table-responsive">
@@ -48,6 +45,9 @@
                                     Ativo?
                                 </th>
                                 <th>
+                                    Segmento
+                                </th>
+                                <th>
                                     Ações
                                 </th>
                             </tr>
@@ -57,27 +57,43 @@
                             {
                                 foreach (var item in Model)
                                 {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Description)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Active)
-                                        </td>
-                                        <td>
-                                            <a asp-action="Edit" asp-route-id="@item.Id">
-                                                <i class="fa fa-pencil"></i>
-                                            </a>
-                                            <a asp-action="Details" asp-route-id="@item.Id">
-                                                <i class="fa fa-search"></i>
-                                            </a>
-                                            <a asp-action="Delete" asp-route-id="@item.Id" data-confirm="Deseja remover o item?">
-                                                <i class="fa fa-trash-o"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Active)
+                    </td>
 
-                                }
+
+                    @if (item.Segmento == "C")
+                    {
+                <td>
+                    Combustível
+                </td>
+                         }
+                        else
+                        {
+                <td>
+                    Outros Serviços
+                </td>
+                }
+
+
+
+
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                        <a asp-action="Details" asp-route-id="@item.Id">
+                            <i class="fa fa-search"></i>
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" data-confirm="Deseja remover o item?">
+                            <i class="fa fa-trash-o"></i>
+                        </a>
+                    </td>
+                </tr>}
                             }
                         </tbody>
                     </table>

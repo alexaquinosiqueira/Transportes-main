@@ -40,21 +40,22 @@
     <ul class="@(areaValue == "Cadastro" ? "collapse in" : "")">
         @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoCargosListagem)))
         {
-<li>@Html.ActionLink("Cargo", "Index", "Responsibilities", new { Area = "Cadastro" }, (controllerValue == "Responsibilities" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
+    <li>@Html.ActionLink("Cargo", "Index", "Responsibilities", new { Area = "Cadastro" }, (controllerValue == "Responsibilities" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
         @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoFuncionáriosListagem)))
         {
-<li>@Html.ActionLink("Funcionário", "Index", "Employees", new { Area = "Cadastro" }, (controllerValue == "Employees" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
+    <li>@Html.ActionLink("Funcionário", "Index", "Employees", new { Area = "Cadastro" }, (controllerValue == "Employees" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
         @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoFrotaListagem)))
         {
-<li>@Html.ActionLink("Frota", "Index", "Fleets", new { Area = "Cadastro" }, (controllerValue == "Fleets" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
+    <li>@Html.ActionLink("Frota", "Index", "Fleets", new { Area = "Cadastro" }, (controllerValue == "Fleets" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
         @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoTipoVeículoListagem)))
         {
-<li>@Html.ActionLink("Tipo de veículo", "Index", "VehicleTypes", new { Area = "Cadastro" }, (controllerValue == "VehicleTypes" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
+    <li>@Html.ActionLink("Tipo de veículo", "Index", "VehicleTypes", new { Area = "Cadastro" }, (controllerValue == "VehicleTypes" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
         @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoVeículoListagem)))
         {
-<li>@Html.ActionLink("Veículo", "Index", "Vehicles", new { Area = "Cadastro" }, (controllerValue == "Vehicles" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
-
-
+    <li>@Html.ActionLink("Veículo", "Index", "Vehicles", new { Area = "Cadastro" }, (controllerValue == "Vehicles" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
+        @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoVeículoListagem)))
+        {
+    <li>@Html.ActionLink("Importações", "Index", "Importacoes", new { Area = "Cadastro" }, (controllerValue == "Importacoes" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
     </ul>
 </li>
 

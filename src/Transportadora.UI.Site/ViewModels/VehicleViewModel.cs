@@ -43,7 +43,7 @@ namespace Transportadora.UI.Site.ViewModels
         public string Model { get; set; }
         [DisplayName("Chassi")]
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
-        public decimal chassi { get; set; }
+        public string chassi { get; set; }
         [DisplayName("Renavam")]
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public decimal renavam { get; set; }

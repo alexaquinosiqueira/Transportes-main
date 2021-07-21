@@ -17,6 +17,7 @@ namespace Transportadora.Business.Models
         public virtual ExpenseType ExpenseType { get; set; }
         public Guid ExpenseType_Id { get; set; }
 
+
         public DateTime ExpenseDate { get; set; }
 
         public decimal Litros { get; set; }

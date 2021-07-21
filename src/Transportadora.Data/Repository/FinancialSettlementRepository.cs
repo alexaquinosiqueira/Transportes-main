@@ -16,5 +16,10 @@ namespace Transportadora.Data.Repository
         {
             return Search(x => x.Company_Id == companyId);
         }
+
+        public Task<IEnumerable<FinancialSettlement>> GetByCode(string code)
+        {
+            return Search(x => x.Code.Contains(code));
+        }
     }
 }

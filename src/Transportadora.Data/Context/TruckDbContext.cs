@@ -60,6 +60,7 @@ namespace Transportadora.Data.Context
         public DbSet<Expense> Expense { get; set; }
         public DbSet<ExpensePayment> ExpensePayment { get; set; }
         public DbSet<ExpenseType> ExpenseType { get; set; }
+        public DbSet<ExpenseSupplier> ExpenseSupplier { get; set; }
 
         public DbSet<City> City { get; set; }
         public DbSet<State> State { get; set; }
@@ -172,6 +173,8 @@ namespace Transportadora.Data.Context
                     return "ACERTODESPESA";
                 case "Transportadora.Business.Models.ExpensePayment":
                     return "PAGAMENTODESPESA";
+                case "Transportadora.Business.Models.ExpenseSupplier":
+                    return "DESPESAFORNECEDOR";
                 case "Transportadora.Business.Models.FinancialSettlement":
                     return "ACERTO";
                 case "Transportadora.Business.Models.Fleet":

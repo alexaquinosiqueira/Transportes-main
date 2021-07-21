@@ -23,6 +23,7 @@ namespace Transportadora.UI.Site.Areas.Financeiro.Controllers
         private readonly IAddressRepository _addressRepository;
         private readonly ICityRepository _cityRepository;
         private readonly IStateRepository _stateRepository;
+        private readonly IExpenseSupplierRepository _expenseSupplierRepository;
         private readonly IMapper _mapper;
         public SuppliersController(ISupplierRepository SupplierRepository,
                                 IAddressRepository addressRepository,
@@ -30,6 +31,7 @@ namespace Transportadora.UI.Site.Areas.Financeiro.Controllers
                                     ICityRepository cityRepository,
                                 IExpenseTypeRepository expenseTypeRepository,
                                 IStateRepository stateRepository,
+                                IExpenseSupplierRepository expenseSupplierRepository,
                                 IMapper mapper)
         {
             _SupplierRepository = SupplierRepository;
@@ -37,6 +39,7 @@ namespace Transportadora.UI.Site.Areas.Financeiro.Controllers
             _cityRepository = cityRepository;
             _ExpenseFinancialSettlementRepository = expenseFinancialSettlementRepository;
             _expenseTypeRepository = expenseTypeRepository;
+            _expenseSupplierRepository = expenseSupplierRepository;
             _stateRepository = stateRepository;
             _mapper = mapper;
         }
@@ -80,6 +83,10 @@ namespace Transportadora.UI.Site.Areas.Financeiro.Controllers
 
             var expenseType = await _expenseTypeRepository.GetByCompanyId(companyId);
             ViewData["ExpenseTypes"] = _mapper.Map<IEnumerable<ExpenseTypeViewModel>>(expenseType);
+
+            var expenseSupplier = await _expenseSupplierRepository.GetAll();
+            ViewData["ExpenseSupplier"] = _mapper.Map<IEnumerable<ExpenseSupplierViewModel>>(expenseSupplier);
+
 
             return View();
         }
@@ -187,7 +194,7 @@ namespace Transportadora.UI.Site.Areas.Financeiro.Controllers
             TempData["cls"] = "success";
             TempData["message"] = "Editado com sucesso !!";
 
-            return RedirectToAction("Index");
+            return  RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -236,7 +243,6 @@ namespace Transportadora.UI.Site.Areas.Financeiro.Controllers
             {
                 await _SupplierRepository.Remove(await _SupplierRepository.GetById(id));
 
-
                 TempData["cls"] = "success";
                 TempData["message"] = "Deletado com sucesso !!";
 
@@ -245,5 +251,23 @@ namespace Transportadora.UI.Site.Areas.Financeiro.Controllers
             }
 
         }
+
+        public async Task<IActionResult> RemoveServicoId(List<string> data)
+        {
+            string retorno = "Exclusão realizada";
+
+            IdentityManager identityManager = new IdentityManager(User);
+            var companyId = Guid.Parse(identityManager.CompanyID);
+
+            var id_despesa = data[0];
+
+            Guid id_desp = Guid.Parse(id_despesa);           
+
+
+            await _expenseSupplierRepository.Remove(await _expenseSupplierRepository.GetById(id_desp));
+
+            return Content(retorno);
+        }
+
     }
 }

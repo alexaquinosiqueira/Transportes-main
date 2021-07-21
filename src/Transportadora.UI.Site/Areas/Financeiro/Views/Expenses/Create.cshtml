@@ -12,7 +12,7 @@
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -75,13 +75,13 @@
 
                     <div class="row">
                         <div class="form-group  col-md-3">
-                            <label  class="control-label">Centro de Custo</label>
+                            <label class="control-label">Centro de Custo</label>
                             <select name="CostCenter_Id" id="CostCenter_Id" class="form-control">
                                 <option></option>
                                 @foreach (var costCenter in (ViewData["CostCenters"] as List<CostCenterViewModel>))
                                 {
 
-                                    <option value="@costCenter.Id">@costCenter.Description</option>
+                                <option value="@costCenter.Id">@costCenter.Description</option>
 }
                             </select>
                             <span asp-validation-for="CostCenter_Id" class="text-danger"></span>
@@ -95,7 +95,7 @@
                                 @foreach (var Vehicle in (ViewData["Vehicle"] as List<VehicleViewModel>))
                                 {
 
-                                    <option value="@Vehicle.Id">@Vehicle.VehicleLicensePlate - @Vehicle.Description</option>
+                                <option value="@Vehicle.Id">@Vehicle.VehicleLicensePlate - @Vehicle.Description</option>
 }
                             </select>
                             <span asp-validation-for="Vehicle_Id" class="text-danger"></span>
@@ -110,19 +110,19 @@
                                 <option></option>
                                 @foreach (var bankAccount in (ViewData["BankAccounts"] as List<BankAccountViewModel>))
                                 {
-                                    <option value="@bankAccount.Id">@bankAccount.Description</option>
+                                <option value="@bankAccount.Id">@bankAccount.Description</option>
 }
                             </select>
                             <span asp-validation-for="BankAccount_Id" class="text-danger"></span>
                         </div>
 
                         <div id="divfornecedor" class="form-group col-md-6">
-                            <label  class="control-label">Fornecedor</label>
+                            <label class="control-label">Fornecedor</label>
                             <select name="Supplier_Id" id="Supplier_Id" class="form-control">
                                 <option></option>
                                 @foreach (var supplier in (ViewData["Suppliers"] as List<SupplierViewModel>))
                                 {
-                                    <option value="@supplier.Id">@supplier.Name</option>
+                                <option value="@supplier.Id">@supplier.Name</option>
 }
                             </select>
                             <span asp-validation-for="Supplier_Id" class="text-danger"></span>
@@ -141,7 +141,7 @@
                                 <option></option>
                                 @foreach (var documentType in (ViewData["DocumentTypes"] as List<DocumentTypeViewModel>))
                                 {
-                                    <option value="@documentType.Id">@documentType.Description</option>
+                                <option value="@documentType.Id">@documentType.Description</option>
 }
                             </select>
                             <span asp-validation-for="DocumentType_Id" class="text-danger"></span>
@@ -162,7 +162,7 @@
 
                         <div class="form-group col-md-4">
                             <label asp-for="DueDate" class="control-label"></label>
-                            <input type="text" asp-for="DueDate" class="form-control dates" id="DueDate"  />
+                            <input type="text" asp-for="DueDate" class="form-control dates" id="DueDate" />
                             <span asp-validation-for="DueDate" class="text-danger"></span>
                         </div>
                     </div>
@@ -174,7 +174,7 @@
                                 <option></option>
                                 @foreach (var paymentForm in (ViewData["PaymentForms"] as List<PaymentFormViewModel>))
                                 {
-                                    <option value="@paymentForm.Id">@paymentForm.Description</option>
+                                <option value="@paymentForm.Id">@paymentForm.Description</option>
 }
                             </select>
                             <span asp-validation-for="PaymentForm_Id" class="text-danger"></span>
@@ -229,6 +229,8 @@
                                     <th>Número</th>
                                     <th>Valor Original</th>
                                     <th>Vencimento</th>
+                                    <th>Valor Pago</th>
+                                    <th>Juros</th>
                                     <th>Status</th>
                                     @*<th>Data Pagamento</th>*@
 
@@ -294,9 +296,13 @@
 
         var val_formatado = numberToReal(value)
 
+        var val_formatado_pago = numberToReal(0);
+        var val_formatato_juros = numberToReal(0);
 
         html += '<td><input type="text" value="' + val_formatado + '" name="ExpensePayment[' + row + '].AmountExpensePayment" id="ExpensePayment[' + row + '].AmountExpensePayment" class="form-control" readonly="true" required/></td>';
         html += '<td><input type="text" value="' + date + '" name="ExpensePayment[' + row + '].DueDateExpensePayment" id="ExpensePayment[' + row + '].DueDateExpensePayment" class="form-control dates" required/></td>';
+        html += '<td><input type="text" onclick="javascript:EditaRow(this)" onfocusout="calcula(this)" value="' + val_formatado_pago + '" onkeyup="formatarMoeda(this);" name="ExpensePayment[' + row + '].Valor_Pago" id="ExpensePayment[' + row + '].Valor_Pago" class="form-control" /></td>';
+        html += '<td><input type="text" value="' + val_formatato_juros + '" onkeyup="formatarMoeda(this);" name="ExpensePayment[' + row + '].Valor_Juros" id="ExpensePayment[' + row + '].Valor_Juros" class="form-control" readonly="true" /></td>';
         //html += '<td><input type="text" value="2" name="ExpensePayment[' + row + '].StatusExpensePayment" id="ExpensePayment[' + row + '].StatusExpensePayment" class="form-control" readonly="true" required/></td>';
         html += '<td><select name="ExpensePayment[' + row + '].StatusExpensePayment" id="ExpensePayment[' + row + '].StatusExpensePayment" class="form-control">';
         html += '    <option value="0">Aberto</option>';
@@ -327,6 +333,31 @@
         return numero.join(',');
     }
 
+    function calcula(btn) {
+
+        var row = btn.parentNode.parentNode;
+        var idPesq = row.getElementsByClassName("number")[0].textContent;
+        var idreg = idPesq - 1;
+
+        var valorpg = document.getElementById('ExpensePayment[' + idreg + '].Valor_Pago').value;
+        var valorog = document.getElementById('ExpensePayment[' + idreg + '].AmountExpensePayment').value;
+
+        valorpg = valorpg.replace('.', '').replace(',', '.');
+        valorog = valorog.replace('.', '').replace(',', '.');
+
+        if (valorpg > 0) {
+
+            var vjuros = parseFloat(valorpg - valorog).toFixed(2);
+            document.getElementById('ExpensePayment[' + idreg + '].Valor_Juros').value = vjuros;
+        }
+    }
+
+    function EditaRow(btn) {
+        var row = btn.parentNode.parentNode;
+        var idPesq = row.getElementsByClassName("number")[0].textContent;
+        var idreg = idPesq - 1;
+        //document.getElementById('ExpensePayment[' + idreg + '].Valor_Pago').value = document.getElementById('ExpensePayment[' + idreg + '].AmountExpensePayment').value;
+    }
 
     function opcao_tipo_pesquisa() {
         var tipos = document.getElementsByName("opttipo");
@@ -469,6 +500,7 @@
     }
 
     $(document).ready(function () {
+
         $('#DueDate').change(function () {
             EnableDisableNumParcel()
         });

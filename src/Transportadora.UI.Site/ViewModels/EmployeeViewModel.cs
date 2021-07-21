@@ -65,16 +65,11 @@ namespace Transportadora.UI.Site.ViewModels
         public IEnumerable<ResponsibilityViewModel> Responsibilities { get; set; }
         public Guid Company_Id { get; set; }
         public CompanyViewModel Company { get; set; }
-        [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [DisplayName("CNH")]
         public string CNH { get; set; }
-        [Required(ErrorMessage = "O campo {0} é obrigatório")]
-        [DisplayName("Tipo CNH")]
         public int TipoCNH { get; set; }
-        [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [DisplayName("Data CNH")]
         public DateTime DataCNH { get; set; }
-        [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [DisplayName("RG")]
         public string RG { get; set; }
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
@@ -83,13 +78,11 @@ namespace Transportadora.UI.Site.ViewModels
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [DisplayName("UFRG")]
         public string UFRG { get; set; }
-        [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [DisplayName("Data Emissão")]
         public DateTime DataEmissao { get; set; }
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [DisplayName("CPF")]
         public string CPF { get; set; }
-        [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [DisplayName("Número INSS")]
         public string NumeroINSS { get; set; }
         [DisplayName("Nome Pai")]

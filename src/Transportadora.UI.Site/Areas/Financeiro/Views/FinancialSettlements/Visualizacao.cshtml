@@ -1,7 +1,7 @@
 ﻿@model Transportadora.UI.Site.ViewModels.FinancialSettlementViewModel
 @using Transportadora.UI.Site.ViewModels
 
-@{ ViewData["Title"] = "Edição do Acerto"; }
+@{ ViewData["Title"] = "Visualização do Acerto"; }
 <style>
     #valores .valores {
         margin: 0px;
@@ -44,7 +44,7 @@
     <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Editar Acerto</h3>
+                <h3 class="panel-title">Visualização do Acerto</h3>
             </div>
             <div class="panel-body">
                 <form asp-action="Edit">
@@ -79,16 +79,16 @@
                                 <option></option>
                                 @if (ViewData["Fleets"] != null)
                                 {
-                                    @foreach (var fleet in (ViewData["Fleets"] as List<FleetViewModel>))
+                                @foreach (var fleet in (ViewData["Fleets"] as List<FleetViewModel>))
                                     {
 
                                         if (fleet.Id == Model.Fleet_Id)
                                         {
-                                            <option value="@fleet.Id" selected>@fleet.Description</option>
+                                <option value="@fleet.Id" selected>@fleet.Description</option>
                                         }
                                         else
                                         {
-                                            <option value="@fleet.Id">@fleet.Description</option>
+                                <option value="@fleet.Id">@fleet.Description</option>
                                         }
 
                                     }}
@@ -102,16 +102,16 @@
                                 @if (ViewData["Vehicles"] != null)
                                 {
 
-                                    @foreach (var vehicle in (ViewData["Vehicles"] as List<VehicleViewModel>))
+                                @foreach (var vehicle in (ViewData["Vehicles"] as List<VehicleViewModel>))
                                     {
 
                                         if (vehicle.Id == Model.Vehicle_Id)
                                         {
-                                            <option value="@vehicle.Id" selected>@vehicle.VehicleLicensePlate</option>
+                                <option value="@vehicle.Id" selected>@vehicle.VehicleLicensePlate</option>
                                         }
                                         else
                                         {
-                                            <option value="@vehicle.Id">@vehicle.VehicleLicensePlate</option>
+                                <option value="@vehicle.Id">@vehicle.VehicleLicensePlate</option>
                                         }
 
 
@@ -128,17 +128,17 @@
                                 @if (ViewData["Employees"] != null)
                                 {
 
-                                    @foreach (var employee in (ViewData["Employees"] as List<EmployeeViewModel>))
+                                @foreach (var employee in (ViewData["Employees"] as List<EmployeeViewModel>))
                                     {
 
                                         if (employee.Id == Model.Employee_Id)
                                         {
-                                            <option value="@employee.Id" selected>@employee.Name</option>
-                                        }
+                                <option value="@employee.Id" selected>@employee.Name</option>
+ }
                                         else
                                         {
-                                            <option value="@employee.Id">@employee.Name</option>
-                                        }
+                                <option value="@employee.Id">@employee.Name</option>
+}
                                     }}
                             </select>
                         </div>
@@ -154,16 +154,16 @@
                                 @if (ViewData["Customers"] != null)
                                 {
 
-                                    @foreach (var customer in (ViewData["Customers"] as List<CustomerViewModel>))
+                                @foreach (var customer in (ViewData["Customers"] as List<CustomerViewModel>))
                                     {
 
                                         if (customer.Id == Model.Customer_Id)
                                         {
-                                            <option value="@customer.Id" selected>@customer.Name</option>
+                                <option value="@customer.Id" selected>@customer.Name</option>
                                         }
                                         else
                                         {
-                                            <option value="@customer.Id">@customer.Name</option>
+                                <option value="@customer.Id">@customer.Name</option>
                                         }
                                     }}
                             </select>
@@ -194,7 +194,7 @@
                                             <option></option>
                                             @if (ViewData["States"] != null)
                                             {
-                                                @foreach (var state in (ViewData["States"] as List<StateViewModel>))
+                                            @foreach (var state in (ViewData["States"] as List<StateViewModel>))
                                                 {
 
                                                     {
@@ -202,17 +202,17 @@
 
                                                             if (state.Id == Model.CityOrigin.State.Id)
                                                             {
-                                                                <option value="@state.Id" selected>@state.Uf - @state.Name</option>
+                                        <option value="@state.Id" selected>@state.Uf - @state.Name</option>
                                                             }
                                                             else
                                                             {
-                                                                <option value="@state.Id">@state.Uf - @state.Name</option>
-                                                            }
-                                                    }
+                                        <option value="@state.Id">@state.Uf - @state.Name</option>
+                                                                }
+                                                        }
 
 
 
-                                                }}
+                                                    }}
 
                                         </select>
                                     </div>
@@ -224,7 +224,7 @@
                                             @if (ViewData["CitiesOrigin"] != null)
                                             {
 
-                                                @foreach (var city in (ViewData["CitiesOrigin"] as List<CityViewModel>))
+                                            @foreach (var city in (ViewData["CitiesOrigin"] as List<CityViewModel>))
                                                 {
 
                                                     if (Model.CityOrigin != null)
@@ -232,15 +232,15 @@
 
                                                         if (city.Id == Model.CityOrigin_Id)
                                                         {
-                                                            <option value="@city.Id" selected>@city.Name</option>
+                                            <option value="@city.Id" selected>@city.Name</option>
                                                         }
                                                         else
                                                         {
-                                                            <option value="@city.Id">@city.Name</option>
+                                            <option value="@city.Id">@city.Name</option>
+                                                            }
                                                         }
-                                                    }
 
-                                                }}
+                                                    }}
                                         </select>
                                     </div>
                                 </div>
@@ -259,7 +259,7 @@
                                             @if (ViewData["States"] != null)
                                             {
 
-                                                @foreach (var state in (ViewData["States"] as List<StateViewModel>))
+                                            @foreach (var state in (ViewData["States"] as List<StateViewModel>))
                                                 {
 
                                                     if (Model.DestinationCity != null)
@@ -267,15 +267,15 @@
 
                                                         if (state.Id == Model.DestinationCity.State.Id)
                                                         {
-                                                            <option value="@state.Id" selected>@state.Uf - @state.Name</option>
+                                        <option value="@state.Id" selected>@state.Uf - @state.Name</option>
                                                         }
                                                         else
                                                         {
-                                                            <option value="@state.Id">@state.Uf - @state.Name</option>
+                                        <option value="@state.Id">@state.Uf - @state.Name</option>
+                                                            }
                                                         }
-                                                    }
 
-                                                }}
+                                                    }}
                                         </select>
                                     </div>
                                     <div class="form-group col-md-8 col-sm-8">
@@ -287,17 +287,17 @@
 
 
 
-                                                @foreach (var city in (ViewData["DestinationCities"] as List<CityViewModel>))
+                                            @foreach (var city in (ViewData["DestinationCities"] as List<CityViewModel>))
                                                 {
 
                                                     if (city.Id == Model.DestinationCity_Id)
                                                     {
-                                                        <option value="@city.Id" selected>@city.Name</option>
-                                                    }
+                                            <option value="@city.Id" selected>@city.Name</option>
+ }
                                                     else
                                                     {
-                                                        <option value="@city.Id">@city.Name</option>
-                                                    }
+                                            <option value="@city.Id">@city.Name</option>
+}
 
                                                 }}
                                         </select>
@@ -371,10 +371,10 @@
                                         <option></option>
                                         @if (ViewData["ExpenseTypes"] != null)
                                         {
-                                            @foreach (var expenseType in (ViewData["ExpenseTypes"] as List<ExpenseTypeViewModel>))
+                                        @foreach (var expenseType in (ViewData["ExpenseTypes"] as List<ExpenseTypeViewModel>))
                                             {
-                                                <option value="@expenseType.Id">@expenseType.Description</option>
-                                            }}
+                                        <option value="@expenseType.Id">@expenseType.Description</option>
+}}
                                     </select>
 
 
@@ -387,16 +387,16 @@
 
 
                                     @*<select name="Supplier_Id" id="Supplier_Id" class="form-control">
-                                                                                <option></option>
+                                        <option></option>
 
-                                                                                @if (ViewData["Suppliers"] != null)
-                                                                                {
+                                        @if (ViewData["Suppliers"] != null)
+                                        {
 
-                                                                                @foreach (var supplier in (ViewData["Suppliers"] as List<SupplierViewModel>))
-                                                                                    {
-                                                                                <option value="@supplier.Id">@supplier.Name</option>
-                                        }}
-                                                                            </select>*@
+                                        @foreach (var supplier in (ViewData["Suppliers"] as List<SupplierViewModel>))
+                                            {
+                                        <option value="@supplier.Id">@supplier.Name</option>
+}}
+                                    </select>*@
 
 
 
@@ -471,73 +471,73 @@
 
 
 
-                                        @for (int i = 0; i < expenses.Count; i++)
+                                        @for (int i = 0; i < expenses.Count ; i++)
                                         {
 
-                                            @*@if(expenses[@i].Arquivo != "Performance Motorista")
-                                                {*@
+                                        @*@if(expenses[@i].Arquivo != "Performance Motorista")
+                                        {*@
 
 
-                                            <tr id="@i" class="index">
+                                        <tr id="@i" class="index">
 
-                                                <td class='number'>
-                                                    @Html.Raw(i + 1)
-                                                    <input type="hidden" value="@expenses[@i].Id" name="ExpenseFinancialSettlements[@i].Id" id="ExpenseFinancialSettlements[@i].Id" class="form-control" readonly required />
-                                                    <input type="hidden" value="@expenses[@i].FinancialSettlement_Id" name="ExpenseFinancialSettlements[@i].FinancialSettlement_Id" id="ExpenseFinancialSettlements[@i].FinancialSettlement_Id" class="form-control" readonly required />
-                                                </td>
-                                                <td>
-                                                    <input type="text" value="@expenses[@i].ExpenseDate" name="ExpenseFinancialSettlements[@i].ExpenseDate" id="ExpenseFinancialSettlements[@i].ExpenseDate" class="form-control" readonly required />
-                                                </td>
-                                                <td>
-                                                    @if (expenses[@i].Supplier != null)
-                                                    {
-                                                        <input type="text" value="@expenses[@i].Supplier.Name" name="ExpenseFinancialSettlements[@i].Supplier_Name" id="ExpenseFinancialSettlements[@i].Supplier_Name" class="form-control" readonly required />
-                                                        <input type="hidden" value="@expenses[@i].Supplier.Id" name="ExpenseFinancialSettlements[@i].Supplier_Id" id="ExpenseFinancialSettlements[@i].Supplier_Id" class="form-control" readonly required />
-                                                        @*<input type="hidden" value="@expenses[@i].Supplier.Id" name="ExpenseFinancialSettlements[@i].Supplier_Index" id="FinancialSettlement.ExpenseFinancialSettlements[@i].Supplier_Index" class="form-control" readonly />*@}
-                                                </td>
-                                                <td>
-                                                    @if (expenses[@i].ExpenseType != null)
-                                                    {
-                                                        <input type="text" value="@expenses[@i].ExpenseType.Description" name="ExpenseFinancialSettlements[@i].ExpenseType_Name" id="ExpenseFinancialSettlements[@i].ExpenseType_Name" class="form-control" readonly required />
-                                                        <input type="hidden" value="@expenses[@i].ExpenseType.Id" name="ExpenseFinancialSettlements[@i].ExpenseType_Id" id="ExpenseFinancialSettlements[@i].ExpenseType_Id" class="form-control" readonly required />}
-                                                </td>
-                                                <td>
-                                                    <input style="text-align:right" type="text" value="@expenses[@i].Amount" name="ExpenseFinancialSettlements[@i].Amount" id="ExpenseFinancialSettlements[@i].Amount" class="form-control" readonly required />
-                                                </td>
-                                                <td>
-                                                    <input style="text-align:right" type="text" value="@expenses[@i].Litros" name="ExpenseFinancialSettlements[@i].Litros" id="ExpenseFinancialSettlements[@i].Litros" class="form-control" readonly required />
-                                                </td>
-                                                <td class="invert" style="text-align:right">
+                                            <td class='number'>
+                                                @Html.Raw(i + 1)
+                                                <input type="hidden" value="@expenses[@i].Id" name="ExpenseFinancialSettlements[@i].Id" id="ExpenseFinancialSettlements[@i].Id" class="form-control" readonly required />
+                                                <input type="hidden" value="@expenses[@i].FinancialSettlement_Id" name="ExpenseFinancialSettlements[@i].FinancialSettlement_Id" id="ExpenseFinancialSettlements[@i].FinancialSettlement_Id" class="form-control" readonly required />
+                                            </td>
+                                            <td>
+                                                <input type="text" value="@expenses[@i].ExpenseDate" name="ExpenseFinancialSettlements[@i].ExpenseDate" id="ExpenseFinancialSettlements[@i].ExpenseDate" class="form-control" readonly required />
+                                            </td>
+                                            <td>
+                                                @if (expenses[@i].Supplier != null)
+                                                {
+                                                <input type="text" value="@expenses[@i].Supplier.Name" name="ExpenseFinancialSettlements[@i].Supplier_Name" id="ExpenseFinancialSettlements[@i].Supplier_Name" class="form-control" readonly required />
+                                                <input type="hidden" value="@expenses[@i].Supplier.Id" name="ExpenseFinancialSettlements[@i].Supplier_Id" id="ExpenseFinancialSettlements[@i].Supplier_Id" class="form-control" readonly required />
+                                                @*<input type="hidden" value="@expenses[@i].Supplier.Id" name="ExpenseFinancialSettlements[@i].Supplier_Index" id="FinancialSettlement.ExpenseFinancialSettlements[@i].Supplier_Index" class="form-control" readonly />*@}
+                                            </td>
+                                            <td>
+                                                @if (expenses[@i].ExpenseType != null)
+                                                {
+                                                <input type="text" value="@expenses[@i].ExpenseType.Description" name="ExpenseFinancialSettlements[@i].ExpenseType_Name" id="ExpenseFinancialSettlements[@i].ExpenseType_Name" class="form-control" readonly required />
+                                                <input type="hidden" value="@expenses[@i].ExpenseType.Id" name="ExpenseFinancialSettlements[@i].ExpenseType_Id" id="ExpenseFinancialSettlements[@i].ExpenseType_Id" class="form-control" readonly required />}
+                                            </td>
+                                            <td>
+                                                <input style="text-align:right" type="text" value="@expenses[@i].Amount" name="ExpenseFinancialSettlements[@i].Amount" id="ExpenseFinancialSettlements[@i].Amount" class="form-control" readonly required />
+                                            </td>
+                                            <td>
+                                                <input style="text-align:right" type="text" value="@expenses[@i].Litros" name="ExpenseFinancialSettlements[@i].Litros" id="ExpenseFinancialSettlements[@i].Litros" class="form-control" readonly required />
+                                            </td>
+                                            <td class="invert" style="text-align:right">
 
-                                                    @if (@expenses[@i].Desconto > 0)
-                                                    {
-                                                        decimal totalcdesc = Convert.ToDecimal(@expenses[@i].Valor_Total);
-                                                        <input style="text-align:right" type="text" value=" @totalcdesc" name="ExpenseFinancialSettlements[@i].Valor_Total" id="ExpenseFinancialSettlements[@i].Valor_Total" class="form-control" readonly required />
+                                                @if (@expenses[@i].Desconto > 0)
+                                                        {
+                                                            decimal totalcdesc = Convert.ToDecimal(@expenses[@i].Valor_Total);
+                                                <input style="text-align:right" type="text" value=" @totalcdesc" name="ExpenseFinancialSettlements[@i].Valor_Total" id="ExpenseFinancialSettlements[@i].Valor_Total" class="form-control" readonly required />
 
-                                                    }
-                                                    else
-                                                    {
-                                                        <input style="text-align:right" type="text" value="@expenses[@i].Valor_Total" name="ExpenseFinancialSettlements[@i].Valor_Total" id="ExpenseFinancialSettlements[@i].Valor_Total" class="form-control" readonly required />
-                                                    }
+                                                }
+                                                else
+                                                {
+                                                <input style="text-align:right" type="text" value="@expenses[@i].Valor_Total" name="ExpenseFinancialSettlements[@i].Valor_Total" id="ExpenseFinancialSettlements[@i].Valor_Total" class="form-control" readonly required />
+                                                }
 
-                                                    <span id="cspam">
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <input style="text-align:right" type="text" value="@expenses[@i].Desconto" name="ExpenseFinancialSettlements[@i].Desconto" id="ExpenseFinancialSettlements[@i].Desconto" class="form-control" readonly />
-                                                </td>
-                                                <td style="display:none">
-                                                    <input style="text-align:left" type="text" value="@expenses[@i].Arquivo" name="ExpenseFinancialSettlements[@i].Arquivo" id="ExpenseFinancialSettlements[@i].Arquivo" class="form-control" readonly />
-                                                </td>
+                                                <span id="cspam">
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <input style="text-align:right" type="text" value="@expenses[@i].Desconto" name="ExpenseFinancialSettlements[@i].Desconto" id="ExpenseFinancialSettlements[@i].Desconto" class="form-control" readonly />
+                                            </td>
+                                            <td style="display:none">
+                                                <input style="text-align:left" type="text" value="@expenses[@i].Arquivo" name="ExpenseFinancialSettlements[@i].Arquivo" id="ExpenseFinancialSettlements[@i].Arquivo" class="form-control" readonly />
+                                            </td>
 
-                                                <td><a href="javascript:void(0)" onclick="javascript:deleteRow(this)" class="btn btn-sm btn-danger"><i class="fa fa-times"></i> Remover</a></td>
-                                                <td><a href="javascript:void(0)" onclick="javascript:EditaRow(this)" class="btn btn-sm btn-success"><i class="fa fa-pencil fa-fw"></i> Editar</a></td>
+                                            <td><a href="javascript:void(0)" onclick="javascript:deleteRow(this)" class="btn btn-sm btn-danger"><i class="fa fa-times"></i> Remover</a></td>
+                                            <td><a href="javascript:void(0)" onclick="javascript:EditaRow(this)" class="btn btn-sm btn-success"><i class="fa fa-pencil fa-fw"></i> Editar</a></td>
 
-                                            </tr>
+                                        </tr>
 
 
-                                            @*}*@
-                                        }
+                                        @*}*@
+}
                                     </tbody>
                                 </table>
                             </div>
@@ -579,12 +579,12 @@
                                         {
 
 
-                                            <h4 id="infmotor" style="color:blue;">R$ Valor a Receber do Motorista </h4>
-                                            <span style="color:blue" id="totalReceiverLabel">@Model.Incoming</span> }
+                                        <h4 id="infmotor" style="color:blue;">R$ Valor a Receber do Motorista </h4>
+                                        <span style="color:blue" id="totalReceiverLabel">@Model.Incoming</span> }
                                         else
                                         {
-                                            <h4 id="infmotor" style="color:red;">R$ Valor a pagar ao Motorista </h4>
-                                            <span style="color:red" id="totalReceiverLabel">@Model.Incoming</span>}
+                                        <h4 id="infmotor" style="color:red;">R$ Valor a pagar ao Motorista </h4>
+                                        <span style="color:red" id="totalReceiverLabel">@Model.Incoming</span>}
 
                                     </div>
                                 </div>
@@ -592,12 +592,12 @@
 
                                     @if (@Model.Incoming > 0)
                                     {
-                                        <h5 style="color:blue">R$ Valor a receber do Motorista</h5>
-                                        <h1 style="color:blue" id="totalLabel">R$ @Model.Incoming</h1> }
+                                    <h5 style="color:blue">R$ Valor a receber do Motorista</h5>
+                                    <h1 style="color:blue" id="totalLabel">R$ @Model.Incoming</h1> }
                                     else
                                     {
-                                        <h5 style="color:red">R$ Valor a pagar ao Motorista</h5>
-                                        <h1 style="color:red" id="totalLabel">R$ @Model.Incoming</h1>}
+                                    <h5 style="color:red">R$ Valor a pagar ao Motorista</h5>
+                                    <h1 style="color:red" id="totalLabel">R$ @Model.Incoming</h1>}
 
                                 </div>
                             </div>
@@ -1242,6 +1242,7 @@
             }
         }
 
+
         var amount = $("#despesaValor").val();
 
         var Valor_Total = $("#valtotal").val();
@@ -1273,7 +1274,8 @@
         document.getElementById('ExpenseFinancialSettlements[' + idregparam + '].ExpenseDate').value = document.getElementById('ExpenseDate').value;
         document.getElementById('ExpenseFinancialSettlements[' + idregparam + '].Amount').value = document.getElementById('despesaValor').value;
 
-        //if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
+
+        //        if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
         if (descricao_segmento == "C") {
             document.getElementById('ExpenseFinancialSettlements[' + idregparam + '].Valor_Total').value = document.getElementById('valtotal').value;
         }
@@ -1289,34 +1291,36 @@
 
         var indexDespesa = financialSettlements.Expenses.map(x => {
 
+            //var result = vvalor_total - ddesconto;
 
             if (x.id == regsel) {
+
 
                 //              if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
                 if (descricao_segmento == "C") {
 
-                    var result = vvalor_total;
+                        x.TotalConsumod = litros;
+                        x.litros = Litros;
 
-                    x.TotalConsumod = litros;
-                    x.litros = Litros;
-                    x.Desconto = desconto;
-                    x.Valor_Total = result;
-                    x.Arquivo = arquivo;
-                    x.Desconto = $("#desconto").val();
+                    var result = vvalor_total - ddesconto;
+
+                        x.Valor_Total = result;
+                        x.Arquivo = arquivo;
+                        x.Desconto = desconto;
+                        x.Desconto = $("#desconto").val();
 
                 } else {
-
                     x.amount = Valor_Total; /// Outras despesas
                     x.Valor_Total = Valor_Total; /// Despesas com Diesel
                     x.Arquivo = arquivo;
                     x.litros = 0;
                 }
-
-                x.Valor_Total = x.Valor_Total - ddesconto;
-
-
-
             }
+
+            //alert(x.Desconto);
+
+            //x.Valor_Total = result;
+
 
 
             return x.id;
@@ -1341,9 +1345,13 @@
             $("#totalConsumoLabel").text(litross + ' KM/L ');
         }
 
+        //calcular_despesas_lista();
+        $("#totalLabel").text("R$ " + converteFloatMoeda(financialSettlements.GetTotal()).replace('.', ','));
+        $("#totalReceiverLabel").text(converteFloatMoeda(financialSettlements.GetTotal()).replace('.', ','));
 
+        
         ///--- Atualizo total apos edição
-        var tottal = $("#Advance").val().replace('.', '').replace(',', '.');
+        var tottal = $("#Advance").val().replace('.','').replace(',','.');
         var ttravel = $("#TravelValue").val().replace('.', '').replace(',', '.');
         var ddespesa = financialSettlements.GetExpenseTotal();
 
@@ -1451,12 +1459,11 @@
         var arquivo = document.getElementById('ImagemUpload').value;
 
         if (descricao_segmento == "C") {
-            if (Litros == "0" || Litros == "" || Litros == "0,00" || Litros  == "0.00") {
+            if (Litros == "0" || Litros == "" || Litros == "0,00" || Litros == "0.00") {
                 alert('Informe a Litragem');
                 return;
             }
         }
-
 
         if (Litros == "")
             Litros = 0.00;

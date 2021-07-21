@@ -8,6 +8,6 @@ namespace Transportadora.Business.Interfaces
     public interface IFinancialSettlementRepository : IRepository<FinancialSettlement>
     {
         Task<IEnumerable<FinancialSettlement>> GetByCompanyId(Guid companyId);
-
+        Task<IEnumerable<FinancialSettlement>> GetByCode(string code);
     }
 }

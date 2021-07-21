@@ -66,6 +66,8 @@ namespace Transportadora.UI.Site.Areas.Financeiro.Controllers
             var companyId = Guid.Parse(identityManager.CompanyID);
             expenseTypeViewModel.Company_Id = companyId;
 
+            expenseTypeViewModel.Description = expenseTypeViewModel.Description.ToUpper();
+
             if (!ModelState.IsValid) return View(expenseTypeViewModel);
 
             var expenseType = _mapper.Map<ExpenseType>(expenseTypeViewModel);
@@ -101,6 +103,8 @@ namespace Transportadora.UI.Site.Areas.Financeiro.Controllers
             IdentityManager identityManager = new IdentityManager(User);
             var companyId = Guid.Parse(identityManager.CompanyID);
             expenseTypeViewModel.Company_Id = companyId;
+
+            expenseTypeViewModel.Description = expenseTypeViewModel.Description.ToUpper();
 
             if (id != expenseTypeViewModel.Id) return NotFound();
 

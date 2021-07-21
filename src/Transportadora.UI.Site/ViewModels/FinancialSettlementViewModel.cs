@@ -131,11 +131,15 @@ namespace Transportadora.UI.Site.ViewModels
             get
             {
                 vresultado = 0;
-                foreach (var item in ExpenseFinancialSettlements)
+
+                if (ExpenseFinancialSettlements != null)
                 {
-                    if (item.Arquivo != "Performance Motorista")
+                    foreach (var item in ExpenseFinancialSettlements)
                     {
-                        vresultado += Math.Round(item.Valor_Total - item.Desconto, 2);
+                        if (item.Arquivo != "Performance Motorista")
+                        {
+                            vresultado += Math.Round(item.Valor_Total - item.Desconto, 2);
+                        }
                     }
                 }
                 return vresultado; //(ExpenseFinancialSettlements == null ? 0 : Math.Round(ExpenseFinancialSettlements.Sum(x => x.Valor_Total), 2)); 

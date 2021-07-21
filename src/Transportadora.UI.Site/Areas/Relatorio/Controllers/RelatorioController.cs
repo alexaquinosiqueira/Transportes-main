@@ -247,19 +247,12 @@ namespace Transportadora.UI.Site.Areas.Relatorio.Controllers
             var valores = await _expenseFinancialSettlementRepository.GetAll();
 
             var valuesReturn = (from t in valores
-                                group t by new { t.FinancialSettlement.TravelDate.Month, uf_origem =  t.FinancialSettlement.CityOrigin.State.Name,
-                                    cidade_origem = t.FinancialSettlement.CityOrigin.Name,
-                                    uf_destino = t.FinancialSettlement.DestinationCity.State.Name,
-                                    cidade_destino = t.FinancialSettlement.DestinationCity.Name, 
+                                group t by new { t.FinancialSettlement.TravelDate.Month,  
                                     placa_veiculo = t.FinancialSettlement.Vehicle.VehicleLicensePlate, t.Arquivo
                                 }
                          into grp
                                 select new
                                 {
-                                    grp.Key.uf_origem,
-                                    grp.Key.cidade_origem,
-                                    grp.Key.uf_destino,
-                                    grp.Key.cidade_destino,
                                     valor = grp.Sum(t => t.Valor_Total),
                                     mes = grp.Key.Month,
                                     placa_veiculo = grp.Key.placa_veiculo,
@@ -296,7 +289,7 @@ namespace Transportadora.UI.Site.Areas.Relatorio.Controllers
                                     grp.Key.Name,
                                     nome = grp.Key.Name,
                                     cargo = grp.Key.Description
-                                }).Where(w => w.cargo == "Motorista").OrderBy(o => o.Name);
+                                }).Where(w => w.cargo == "MOTORISTA" || w.cargo == "MOTORISTA CARRETEIRO" || w.cargo == "MOTORISTA CEGONHEIRO").OrderBy(o => o.Name);
             return Json(valuesReturn);
         }
 
@@ -404,7 +397,6 @@ namespace Transportadora.UI.Site.Areas.Relatorio.Controllers
             return Json(valuesReturn);
         }
 
-
         public async Task<IActionResult> GetLiqFornecedoresId(DateTime data_ini, DateTime data_fim, Guid fornecedor)
         {
             var valores = await _expenseFinancialSettlementRepository.GetAll();
@@ -423,7 +415,5 @@ namespace Transportadora.UI.Site.Areas.Relatorio.Controllers
 
             return Json(valuesReturn);
         }
-
-
     }
 }

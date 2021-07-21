@@ -1,7 +1,6 @@
 ﻿@model IEnumerable<Transportadora.UI.Site.ViewModels.ExpenseViewModel>
 
 
-
 @{
     ViewData["Title"] = "Listagem de Despesas";
 }
@@ -28,12 +27,12 @@
             <div class="panel-body">
                 @if (TempData.ContainsKey("message"))
                 {
-                    <div class="alert alert-@TempData["cls"]">
-                        <i class="fa fa-exclamation-circle"></i><small> @TempData["Message"]</small>
-                        <button type="button" class="close" data-dismiss="alert">
-                            ×
-                        </button>
-                    </div>
+                <div class="alert alert-@TempData["cls"]">
+                    <i class="fa fa-exclamation-circle"></i><small> @TempData["Message"]</small>
+                    <button type="button" class="close" data-dismiss="alert">
+                        ×
+                    </button>
+                </div>
                     TempData.Remove("message");
                     TempData.Remove("cls");
                 }
@@ -67,55 +66,71 @@
                             </tr>
                         </thead>
                         <tbody>
+
+
                             @if (Model != null)
                             {
                                 foreach (var item in Model)
                                 {
-                                    <tr>
-                                        <td>
-                                            @if (item.Status == Transportadora.UI.Site.ViewModels.StatusViewModel.closed)
-                                            {
-                                                <span class="label label-success">Fechado</span>
-                                            }
-                                            @if (item.Status == Transportadora.UI.Site.ViewModels.StatusViewModel.inProgress)
-                                            {
-                                                <span class="label label-warning">Em Andamento</span>
-                                            }
-                                            @if (item.Status == Transportadora.UI.Site.ViewModels.StatusViewModel.opened)
-                                            {
-                                                <span class="label label-danger">Aberto</span>
-                                            }
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Date)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Description)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Supplier.Name)
-                                        </td>
+                            <tr>
+                                <td>
+                                    @if (item.Status == Transportadora.UI.Site.ViewModels.StatusViewModel.closed)
+                                    {
+                                    <span class="label label-success">Fechado</span>}
+                                    @if (item.Status == Transportadora.UI.Site.ViewModels.StatusViewModel.inProgress)
+                                    {
+                                    <span class="label label-warning">Em Andamento</span>}
+                                    @if (item.Status == Transportadora.UI.Site.ViewModels.StatusViewModel.opened)
+                                    {
+                                    <span class="label label-danger">Aberto</span>}
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Date)
+                                </td>
 
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Amount)
-                                        </td>
 
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.CostCenter.Description)
-                                        </td>
+                                @if (item.Description.Contains("-"))
+                                {
+                            <td onclick=" " style="cursor:pointer;">
 
-                                        <td>
-                                            <a asp-action="Edit" asp-route-id="@item.Id">
-                                                <i class="fa fa-pencil"></i>
-                                            </a>
-                                            <a asp-action="Details" asp-route-id="@item.Id">
-                                                <i class="fa fa-search"></i>
-                                            </a>
-                                            <a asp-action="Delete" asp-route-id="@item.Id" data-confirm="Deseja remover o item?">
-                                                <i class="fa fa-trash-o"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                <span class="pull-right">@Html.ActionLink("Ver Acerto...", "Visualizacao", "FinancialSettlements", new { @code=item.Observation }, null )</span>
+                                @Html.DisplayFor(modelItem => item.Description)
+
+
+                            </td>
+
+                                }
+                                else
+                                 {
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                  }
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Supplier.Name)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Amount)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CostCenter.Description)
+                                </td>
+
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@item.Id">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    <a asp-action="Details" asp-route-id="@item.Id">
+                                        <i class="fa fa-search"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" data-confirm="Deseja remover o item?">
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
+                                </td>
+                            </tr>
 
                                 }
                             }
@@ -158,5 +173,56 @@
                 }
             }
         });
+
     });
+
+    function selLinha(linha, multiplos) {
+        if (!multiplos) {
+            var linhas = linha.parentElement.getElementsByTagName("tr");
+            for (var i = 0; i < linhas.length; i++) {
+                var linha_ = linhas[i];
+                linha_.classList.remove("selecionado");
+            }
+        }
+        linha.classList.toggle("selecionado");
+
+    }
+
+
+    function selecionado() {
+
+        var tabela = document.getElementById("expensesTable");
+        var linhas = tabela.getElementsByTagName("tr");
+
+        for (var i = 0; i < linhas.length; i++) {
+            var linha = linhas[i];
+            linha.addEventListener("click", function () {
+                //Adicionar ao atual
+                selLinha(this, false); //Selecione apenas um
+                //selLinha(this, true); //Selecione quantos quiser
+            });
+        }
+
+        var selecionados = tabela.getElementsByClassName("selecionado");
+        //Verificar se eestá selecionado
+        if (selecionados.length < 1) {
+            alert("Selecione pelo menos uma linha");
+            return false;
+        }
+
+        var dados = "";
+
+        for (var i = 0; i < selecionados.length; i++) {
+            var selecionado = selecionados[i];
+            selecionado = selecionado.getElementsByTagName("td");
+            dados += "ID: " + selecionado[0].innerHTML + " - Nome: " + selecionado[1].innerHTML + " - Idade: " + selecionado[2].innerHTML + "\n";
+        }
+
+        alert(dados);
+
+
+    }
+
+
+
 </script>

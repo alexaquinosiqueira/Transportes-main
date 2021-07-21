@@ -31,6 +31,7 @@ namespace Transportadora.UI.Site.Areas.Financeiro.Controllers
         private readonly IExpenseRepository _ExpenseRepository;
         private readonly IExpenseTypeRepository _expenseTypeRepository;
         private readonly ICustomerRepository _customerRepository;
+        private readonly IExpenseSupplierRepository _expenseSupplierRepository;
         private readonly IMapper _mapper;
 
         public FinancialSettlementsController(IFinancialSettlementRepository financialSettlementRepository,
@@ -46,6 +47,7 @@ namespace Transportadora.UI.Site.Areas.Financeiro.Controllers
                                 IExpenseRepository expenseRepository,
                                 IExpenseTypeRepository expenseTypeRepository,
                                 ICustomerRepository customerRepository,
+                                IExpenseSupplierRepository expenseSupplierRepository,
                                 IMapper mapper)
         {
             _financialSettlementRepository = financialSettlementRepository;
@@ -60,6 +62,7 @@ namespace Transportadora.UI.Site.Areas.Financeiro.Controllers
             _InvoiceRepository = invoiceRepository;
             _ExpenseRepository = expenseRepository;
             _expenseTypeRepository = expenseTypeRepository;
+            _expenseSupplierRepository = expenseSupplierRepository;
             _customerRepository = customerRepository;
             _mapper = mapper;
         }
@@ -196,6 +199,9 @@ namespace Transportadora.UI.Site.Areas.Financeiro.Controllers
             TempData["cls"] = "success";
             TempData["message"] = "Criado com sucesso !!";
 
+
+
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -308,7 +314,8 @@ namespace Transportadora.UI.Site.Areas.Financeiro.Controllers
                         PaidAmount = financialSettlement.Advance,
                         Vehicle_Id = financialSettlement.Vehicle_Id,
                         ExpensePayment = expensesPaymentsViewModels,
-                        Company_Id = companyId
+                        Company_Id = companyId,
+                        Id_Acerto = financialSettlement.Id
 
                     };
 
@@ -320,6 +327,74 @@ namespace Transportadora.UI.Site.Areas.Financeiro.Controllers
             }
 
         }
+
+        private async Task AtualizarDespesa(FinancialSettlementViewModel financialSettlement)
+        {
+            IdentityManager identityManager = new IdentityManager(User);
+            var companyId = Guid.Parse(identityManager.CompanyID);
+            var parameter = await _parameterRepository.GetByCompanyId(companyId);
+            var parameterViewModel = _mapper.Map<IEnumerable<ParameterViewModel>>(parameter).FirstOrDefault();
+
+            string Cdesc = string.Empty;
+            string Cdesc2 = string.Empty;
+
+            if (parameterViewModel != null && financialSettlement != null && financialSettlement.ExpenseFinancialSettlements != null)
+            {
+                foreach (var expenseFinancial in financialSettlement.ExpenseFinancialSettlements)
+                {
+
+                    if (expenseFinancial.Litros > 0)
+                        Cdesc = "Combustivel - Diesel ";
+                    if (expenseFinancial.Litros == 0 && expenseFinancial.Arquivo != "Performance Motorista")
+                        Cdesc = "Outras despesas ";
+                    if (expenseFinancial.Litros == 0 && expenseFinancial.Arquivo == "Performance Motorista")
+                        Cdesc = "Performance do Motorista ";
+
+                    ExpensePaymentViewModel expensePayment = new ExpensePaymentViewModel()
+                    {
+                        AmountExpensePayment = expenseFinancial.Valor_Total,
+                        ConcludedDate = financialSettlement.TravelDate,
+                        DueDateExpensePayment = financialSettlement.TravelDate,
+                        StatusExpensePayment = StatusViewModel.closed
+                    };
+
+                    List<ExpensePaymentViewModel> expensesPaymentsViewModels = new List<ExpensePaymentViewModel>
+                    {
+                        expensePayment
+                    };
+                    ExpenseViewModel expenseViewModel = new ExpenseViewModel()
+                    {
+
+
+                        Id = new Guid(),
+                        Description = Cdesc + " - " + financialSettlement.Code,
+                        Observation = financialSettlement.Code,
+                        Amount = expenseFinancial.Valor_Total - expenseFinancial.Desconto,
+                        Date = financialSettlement.TravelDate,
+                        DueDate = financialSettlement.TravelDate,
+                        CostCenter_Id = parameterViewModel.Id_CostCenter,
+                        BankAccount_Id = parameterViewModel.Id_BankAccount,
+                        DocumentType_Id = parameterViewModel.Id_DocumentType,
+                        PaymentForm_Id = parameterViewModel.Id_PaymentForm,
+                        //DocumentNumber =Convert.ToInt32(financialSettlement.Code),
+                        Supplier_Id = expenseFinancial.Supplier_Id,
+                        PaidAmount = financialSettlement.Advance,
+                        Vehicle_Id = financialSettlement.Vehicle_Id,
+                        ExpensePayment = expensesPaymentsViewModels,
+                        Company_Id = companyId,
+                        Id_Acerto = financialSettlement.Id
+
+                    };
+
+                    var expense = _mapper.Map<Expense>(expenseViewModel);
+
+                    await _ExpenseRepository.Update(expense);
+                }
+
+            }
+
+        }
+
 
         // GET: Financeiro/FinancialSettlements/Edit/5
         [Authorize(Roles = RolesConfig.GestaoAcertosEditar)]
@@ -358,6 +433,67 @@ namespace Transportadora.UI.Site.Areas.Financeiro.Controllers
             return View(financialSettlementViewModel);
         }
 
+
+        [Authorize(Roles = RolesConfig.GestaoAcertosEditar)]
+        public async Task<IActionResult> Visualizacao(string code)
+        {
+            IdentityManager identityManager = new IdentityManager(User);
+
+            var companyId = Guid.Parse(identityManager.CompanyID);
+            var vehicles = await _vehicleRepository.GetByCompanyId(companyId);
+            ViewData["Vehicles"] = _mapper.Map<IEnumerable<VehicleViewModel>>(vehicles);
+            var fleets = await _fleetRepository.GetByCompanyId(companyId);
+            ViewData["Fleets"] = _mapper.Map<IEnumerable<FleetViewModel>>(fleets);
+            var employees = await _employeeRepository.GetByCompanyId(companyId);
+            ViewData["Employees"] = _mapper.Map<IEnumerable<EmployeeViewModel>>(employees);
+            var states = await _stateRepository.GetAll();
+            ViewData["States"] = _mapper.Map<IEnumerable<StateViewModel>>(states);
+            var suppliers = await _supplierRepository.GetByCompanyId(companyId);
+            ViewData["Suppliers"] = _mapper.Map<IEnumerable<SupplierViewModel>>(suppliers);
+            var expenseType = await _expenseTypeRepository.GetByCompanyId(companyId);
+            ViewData["ExpenseTypes"] = _mapper.Map<IEnumerable<ExpenseTypeViewModel>>(expenseType);
+            var customers = await _customerRepository.GetByCompanyId(companyId);
+            ViewData["Customers"] = _mapper.Map<IEnumerable<CustomerViewModel>>(customers);
+
+            var acertos = await _financialSettlementRepository.GetAll();
+
+            acertos.ToList();
+            Guid id = default(Guid);
+
+            foreach (var item in acertos)
+            {
+                if (item.Company_Id == companyId)
+                {
+                    if (item.Code == code)
+                    {
+                        id = item.Id;
+                    }
+                }
+            }
+
+            var financialSettlementViewModel = _mapper.Map<FinancialSettlementViewModel>(await _financialSettlementRepository.GetByIdDetached(id));
+
+            var CitiesOrigin = await _cityRepository.Search(c => c.Uf == financialSettlementViewModel.CityOrigin.State.Id);
+            ViewData["CitiesOrigin"] = _mapper.Map<IEnumerable<CityViewModel>>(CitiesOrigin);
+
+            var DestinationCities = await _cityRepository.Search(c => c.Uf == financialSettlementViewModel.DestinationCity.State.Id);
+            ViewData["DestinationCities"] = _mapper.Map<IEnumerable<CityViewModel>>(DestinationCities);
+
+            if (financialSettlementViewModel == null)
+            {
+                return NotFound();
+            }
+            return View(financialSettlementViewModel);
+        }
+
+
+
+
+
+
+
+
+
         // POST: Financeiro/FinancialSettlements/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -376,10 +512,14 @@ namespace Transportadora.UI.Site.Areas.Financeiro.Controllers
 
             var Expense = _mapper.Map<FinancialSettlement>(financialSettlementViewModel);
 
+
             if (Expense.Description == null)
                 Expense.Description = " ";
 
             await _financialSettlementRepository.Update(Expense);
+
+            await AtualizarDespesa(financialSettlementViewModel);
+
 
             var vehicles = await _vehicleRepository.GetByCompanyId(companyId);
             ViewData["Vehicles"] = _mapper.Map<IEnumerable<VehicleViewModel>>(vehicles);
@@ -537,16 +677,29 @@ namespace Transportadora.UI.Site.Areas.Financeiro.Controllers
         }
         public async Task<IActionResult> GetFornecedor_Tipo(Guid Id_Tipo_Despesa)
         {
-            var fornecedor = await _supplierRepository.Search(c => c.ExpenseType_Id == Id_Tipo_Despesa);
+
+            var fornecedor = await _expenseSupplierRepository.Search(c => c.ExpenseType_Id == Id_Tipo_Despesa);
             var valuesReturn = fornecedor.Select(c =>
                 new
                 {
-                    id = c.Id,
-                    text = c.Name
+                    id = c.Supplier_Id,
+                    text = c.Supplier.Name
                 }
-            ).OrderBy(o => o.text);
+            ).OrderBy(o => o.text).Distinct();
             return Json(valuesReturn);
         }
+        public async Task<IActionResult> GetSegmento(Guid Id_Tipo_Despesa)
+        {
+            var segmento = await _expenseTypeRepository.Search(c => c.Id == Id_Tipo_Despesa);
+            var valuesReturn = segmento.Select(c =>
+                new
+                {
+                    segmento = c.Segmento
+                }
+            );
+            return Json(valuesReturn);
+        }
+
         public async Task<IActionResult> Getempl()
         {
             var veiculo = await _vehicleRepository.GetAll();

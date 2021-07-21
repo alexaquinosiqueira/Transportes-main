@@ -33,7 +33,7 @@ namespace Transportadora.Business.Models
 
         public string CNH { get; set; }
         public int TipoCNH { get; set; }
-        public DateTime DataCNH { get; set; }
+        public DateTime? DataCNH { get; set; }
         public string RG { get; set; }
         public string OrgaoExpedidor { get; set; }
         public string UFRG { get; set; }

@@ -20,6 +20,8 @@ namespace Transportadora.Data.Mappings
             builder.Property(x => x.Active)
                 .IsRequired();
 
+            builder.Property(x => x.Segmento);
+
             builder.HasOne(p => p.Company)
                 .WithMany()
                 .HasForeignKey(x => x.Company_Id);

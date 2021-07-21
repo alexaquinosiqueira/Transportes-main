@@ -119,7 +119,6 @@
                 function (jsonData) {
 
                     var arry0 = [
-                        [0, 0],
                         [1, 0],
                         [2, 0],
                         [3, 0],
@@ -130,10 +129,10 @@
                         [8, 0],
                         [9, 0],
                         [10, 0],
-                        [11, 0]
+                        [11, 0],
+                        [12, 0]
                     ];
                     var arry1 = [
-                        [0, 0],
                         [1, 0],
                         [2, 0],
                         [3, 0],
@@ -144,10 +143,10 @@
                         [8, 0],
                         [9, 0],
                         [10, 0],
-                        [11, 0]
+                        [11, 0],
+                        [12, 0]
                     ];
                     var arry2 = [
-                        [0, 0],
                         [1, 0],
                         [2, 0],
                         [3, 0],
@@ -158,10 +157,10 @@
                         [8, 0],
                         [9, 0],
                         [10, 0],
-                        [11, 0]
+                        [11, 0],
+                        [12, 0]
                     ];
                     var arry3 = [
-                        [0, 0],
                         [1, 0],
                         [2, 0],
                         [3, 0],
@@ -172,10 +171,10 @@
                         [8, 0],
                         [9, 0],
                         [10, 0],
-                        [11, 0]
+                        [11, 0],
+                        [12, 0]
                     ];
                     var arry4 = [
-                        [0, 0],
                         [1, 0],
                         [2, 0],
                         [3, 0],
@@ -186,10 +185,10 @@
                         [8, 0],
                         [9, 0],
                         [10, 0],
-                        [11, 0]
+                        [11, 0],
+                        [12, 0]
                     ];
                     var arry5 = [
-                        [0, 0],
                         [1, 0],
                         [2, 0],
                         [3, 0],
@@ -200,10 +199,10 @@
                         [8, 0],
                         [9, 0],
                         [10, 0],
-                        [11, 0]
+                        [11, 0],
+                        [12, 0]
                     ];
                     var arry6 = [
-                        [0, 0],
                         [1, 0],
                         [2, 0],
                         [3, 0],
@@ -214,10 +213,10 @@
                         [8, 0],
                         [9, 0],
                         [10, 0],
-                        [11, 0]
+                        [11, 0],
+                        [12, 0]
                     ];
                     var arry7 = [
-                        [0, 0],
                         [1, 0],
                         [2, 0],
                         [3, 0],
@@ -228,10 +227,10 @@
                         [8, 0],
                         [9, 0],
                         [10, 0],
-                        [11, 0]
+                        [11, 0],
+                        [12, 0]
                     ];
                     var arry8 = [
-                        [0, 0],
                         [1, 0],
                         [2, 0],
                         [3, 0],
@@ -242,10 +241,10 @@
                         [8, 0],
                         [9, 0],
                         [10, 0],
-                        [11, 0]
+                        [11, 0],
+                        [12, 0]
                     ];
                     var arry9 = [
-                        [0, 0],
                         [1, 0],
                         [2, 0],
                         [3, 0],
@@ -256,7 +255,8 @@
                         [8, 0],
                         [9, 0],
                         [10, 0],
-                        [11, 0]
+                        [11, 0],
+                        [12, 0]
                     ];
 
                     var nomem0 = "";
@@ -278,6 +278,7 @@
 
                             $.each(jsonData, function (k, v) {
 
+
                                 if (arry_moto[0] == v.nome) {
 
                                     for (var i = 0; i < arry0.length; i++) {
@@ -293,6 +294,8 @@
                         }
 
                         if (i == 1) {
+                            mes = 2;
+
                             $.each(jsonData, function (k, v) {
                                 if (arry_moto[1] == v.nome) {
 
@@ -311,9 +314,13 @@
                         }
 
                         if (i == 2) {
+
+                            mes = 3;
+
                             $.each(jsonData, function (k, v) {
                                 if (arry_moto[2] == v.nome) {
                                     for (var i = 0; i < arry2.length; i++) {
+
 
                                         if (arry2[i][0] == v.mes) {
                                             arry2[i][1] = v.valor;
@@ -327,9 +334,12 @@
                         }
 
                         if (i == 3) {
+
+                            mes = 4;
                             $.each(jsonData, function (k, v) {
                                 if (arry_moto[3] == v.nome) {
                                     for (var i = 0; i < arry3.length; i++) {
+
 
                                         if (arry3[i][0] == v.mes) {
                                             arry3[i][1] = v.valor;
@@ -343,9 +353,12 @@
                         }
 
                         if (i == 4) {
+
+                            mes = 5;
                             $.each(jsonData, function (k, v) {
                                 if (arry_moto[4] == v.nome) {
                                     for (var i = 0; i < arry4.length; i++) {
+
 
                                         if (arry4[i][0] == v.mes) {
                                             arry4[i][1] = v.valor;
@@ -359,6 +372,9 @@
                         }
 
                         if (i == 5) {
+
+                            mes = 6;
+
                             $.each(jsonData, function (k, v) {
                                 if (arry_moto[5] == v.nome) {
                                     for (var i = 0; i < arry5.length; i++) {
@@ -376,6 +392,9 @@
 
 
                         if (i == 6) {
+
+                            mes = 7;
+
                             $.each(jsonData, function (k, v) {
                                 if (arry_moto[6] == v.nome) {
                                     for (var i = 0; i < arry6.length; i++) {
@@ -392,6 +411,9 @@
                         }
 
                         if (i == 7) {
+
+                            mes = 8;
+
                             $.each(jsonData, function (k, v) {
                                 if (arry_moto[7] == v.nome) {
                                     for (var i = 0; i < arry7.length; i++) {
@@ -409,6 +431,8 @@
 
 
                         if (i == 8) {
+
+                            mes = 9;
                             $.each(jsonData, function (k, v) {
                                 if (arry_moto[8] == v.nome) {
                                     for (var i = 0; i < arry8.length; i++) {
@@ -426,6 +450,9 @@
 
 
                         if (i == 9) {
+
+                            mes = 10;
+
                             $.each(jsonData, function (k, v) {
                                 if (arry_moto[9] == v.nome) {
                                     for (var i = 0; i < arry9.length; i++) {
@@ -440,6 +467,46 @@
                                 }
                             });
                         }
+
+                        if (i == 10) {
+
+                            mes = 11;
+
+                            $.each(jsonData, function (k, v) {
+                                if (arry_moto[10] == v.nome) {
+                                    for (var i = 0; i < arry9.length; i++) {
+
+                                        if (arry9[i][0] == v.mes) {
+                                            arry9[i][1] = v.valor;
+
+                                            break;
+                                        }
+                                    }
+                                    nomem9 = arry_moto[10];
+                                }
+                            });
+                        }
+
+                        if (i == 11) {
+
+                            mes = 12;
+
+                            $.each(jsonData, function (k, v) {
+                                if (arry_moto[11] == v.nome) {
+                                    for (var i = 0; i < arry9.length; i++) {
+
+                                        if (arry9[i][0] == v.mes) {
+                                            arry9[i][1] = v.valor;
+
+                                            break;
+                                        }
+                                    }
+                                    nomem9 = arry_moto[11];
+                                }
+                            });
+                        }
+
+
                     }
 
                     for (var i = 0; i < jsonData.length; i++) {

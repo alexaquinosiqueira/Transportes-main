@@ -38,6 +38,7 @@ namespace Transportadora.Data.Mappings
 				.WithMany(u => u.Expense)
 				.HasForeignKey(x => x.Vehicle_Id);
 
+
 			builder.HasOne(p => p.BankAccount)
 				.WithMany(u => u.Expenses)
 				.HasForeignKey(x => x.BankAccount_Id);
@@ -57,6 +58,8 @@ namespace Transportadora.Data.Mappings
 			builder.HasOne(p => p.Company)
 				.WithMany()
 				.HasForeignKey(x => x.Company_Id);
+
+			builder.Property(x => x.Id_Acerto);
 
 			builder.ToTable("Expense", "dbo.Financeiro");
 		}

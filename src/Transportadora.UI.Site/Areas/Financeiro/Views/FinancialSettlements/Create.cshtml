@@ -80,10 +80,10 @@
                                 <option></option>
                                 @if (ViewData["Fleets"] != null)
                                 {
-                                @foreach (var fleet in (ViewData["Fleets"] as List<FleetViewModel>))
+                    @foreach (var fleet in (ViewData["Fleets"] as List<FleetViewModel>))
                     {
 
-                                <option value="@fleet.Id">@fleet.Description</option>
+    <option value="@fleet.Id">@fleet.Description</option>
 }}
                             </select>
                             @*<span asp-validation-for="Fleet_Id" class="text-danger"></span>*@
@@ -132,9 +132,9 @@
                                 <option></option>
                                 @if (ViewData["Customers"] != null)
                                 {
-                                @foreach (var customer in (ViewData["Customers"] as List<CustomerViewModel>))
-                                {
-                                <option value="@customer.Id">@customer.Name</option>
+                    @foreach (var customer in (ViewData["Customers"] as List<CustomerViewModel>))
+                    {
+    <option value="@customer.Id">@customer.Name</option>
 }}
                             </select>
                         </div>
@@ -168,9 +168,9 @@
                                             <option></option>
                                             @if (ViewData["States"] != null)
                                             {
-                                            @foreach (var state in (ViewData["States"] as List<StateViewModel>))
-                                            {
-                                            <option value="@state.Id">@state.Uf - @state.Name</option>
+                                @foreach (var state in (ViewData["States"] as List<StateViewModel>))
+                                {
+                <option value="@state.Id">@state.Uf - @state.Name</option>
 }}
                                         </select>
                                     </div>
@@ -192,9 +192,9 @@
                                             <option></option>
                                             @if (ViewData["States"] != null)
                                             {
-                                            @foreach (var state in (ViewData["States"] as List<StateViewModel>))
-                                            {
-                                            <option value="@state.Id">@state.Uf - @state.Name</option>
+                                @foreach (var state in (ViewData["States"] as List<StateViewModel>))
+                                {
+                <option value="@state.Id">@state.Uf - @state.Name</option>
 }}
                                         </select>
                                     </div>
@@ -229,7 +229,7 @@
                                 <div class="form-group col-md-3 col-sm-3">
                                     <label class="control-label">% Viagem</label> <b style="color:red"> *</b>
                                     <input required asp-for="TravelPercentage" value="" id="TravelPercentage" class="form-control" value="0" maxlength="3" onkeyup="somenteNumeros(this);" />
-                                    <span asp-validation-for="TravelPercentage"  class="text-danger"></span>
+                                    <span asp-validation-for="TravelPercentage" class="text-danger"></span>
                                 </div>
                             </div>
 
@@ -274,7 +274,7 @@
                                             </label>
                                         </fieldset>
                                     </div>
-                                            
+
                                     <div id="divopcao_barras" style="display:none">
                                         <label class="control-label">Ler Código de Barras</label>
                                         <input name="txtbarras" id="txtbarras" placeholder="Códgo de barras" class="form-control" />
@@ -304,9 +304,9 @@
                                         <option></option>
                                         @if (ViewData["ExpenseTypes"] != null)
                                         {
-                                        @foreach (var expenseType in (ViewData["ExpenseTypes"] as List<ExpenseTypeViewModel>))
-                                            {
-                                        <option value="@expenseType.Id">@expenseType.Description</option>
+                            @foreach (var expenseType in (ViewData["ExpenseTypes"] as List<ExpenseTypeViewModel>))
+                            {
+            <option value="@expenseType.Id">@expenseType.Description</option>
 }}
                                     </select>
                                 </div>
@@ -464,6 +464,7 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 <script type="text/javascript">
+
     class FinancialSettlements {
         constructor() {
             this.TotalShipping = 0;
@@ -496,11 +497,11 @@
             this.Expenses.forEach((item) => {
 
                 if (item.id != 99) {
-                    if (item.Valor_Total != 0) {        
+                    if (item.Valor_Total != 0) {
                         ///alert(item.Valor_Total);
                         total += parseFloat(item.Valor_Total);
                     }
-                        
+
                 }
             })
 
@@ -518,7 +519,6 @@
             })
             return total;
         }
-
 
         GetExpenseTotalLitros() {
 
@@ -563,23 +563,26 @@
 
             return idmotorista;
         }
+
         GetExibeIdMotorista() {
             return this.GetTemCadastro();
         }
         ////
 
-
-
         GetExpenseTotalDieselConsumo2() {
             var vtotalConsumo = 0;
 
+            
+
             this.Expenses.forEach((item) => {
+
 
                 if (item.litros != 0) {
                     if (item.id != 99) {
                         var ll = item.litros.replace('.', '');
                         var lll = ll.replace(',', '.');
                         vtotalConsumo = (parseFloat(vtotalConsumo) + parseFloat(lll));
+
                     }
                 }
 
@@ -671,6 +674,7 @@
     var financialSettlements = new FinancialSettlements();
 
     $(document).ready(function () {
+        descricao_segmento = "";
 
         $('input[type=file]').fileinput({
             showUpload: false
@@ -706,6 +710,7 @@
         })
 
         $('#ExpenseType_Id').change(function () {
+
             $('#Supplier_Id').select2({
                 ajax: {
                     placeholder: 'Selecione o Fornecedor',
@@ -732,6 +737,9 @@
                     minimumInputLength: 3
                 }
             });
+
+            recebeSegmento();
+
         })
 
         $("#TravelDate").val("");
@@ -883,6 +891,12 @@
 
         })
 
+        async function recebeSegmento() {
+            const url = await pegaSegmentoDespesa();
+            descricao_segmento = url.replace('[{"segmento":"', '').replace('"}]', '').replace('[{"segmento":', '').replace('}]', ''); 
+
+            PegaValor();
+        }
 
         async function recebeVeiculos() {
             const url = await pegaConteudoVeiculo();
@@ -915,6 +929,7 @@
             //return await fetch('@Url.Content("~/Financeiro")/FinancialSettlements/GetVehicleId/?frota=' + $('#Fleet_Id').val() ).then(result => result.text());
             return await fetch('@Url.Content("~/Financeiro")/FinancialSettlements/GetVehicleIdP/?frota=' + parametro).then(result => result.text());
         }
+
         async function recebeMotorista() {
             const url = await pegaConteudoMotorista();
 
@@ -943,6 +958,10 @@
 
             $('#Employee_Id').select2('data', { id: idMot, text: moto3 });
         }
+
+        async function pegaSegmentoDespesa() {
+                return await fetch('@Url.Content("~/Financeiro")/FinancialSettlements/GetSegmento/?Id_Tipo_Despesa=' + $('#ExpenseType_Id').val()).then(result => result.text());
+         }
 
         async function pegaConteudoMotorista() {
             return await fetch('@Url.Content("~/Financeiro")/FinancialSettlements/GetMotoristaId/?idmoto=' + idmotorista_veiculo).then(result => result.text());
@@ -1000,7 +1019,7 @@
         $('#TravelPercAdiantamento').focusout(function () {
             //aas
             $("#Advance").val(converteFloatMoeda(financialSettlements.GetTravelPercAdiantamentoValue()));
-            
+
 
         })
 
@@ -1044,9 +1063,7 @@
             }
         })
 
-
     });
-
 
     function validarArquivo() {
 
@@ -1094,7 +1111,8 @@
 
     function PegaValor() {
 
-        if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
+        //if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
+        if (descricao_segmento == "C") {
             $('#clitros').show();
             $('#cvaltotal').show();
             //$('#cconsumo').show();
@@ -1146,7 +1164,14 @@
         var row = btn.parentNode.parentNode;
         var idDespesaRemovida = row.getElementsByClassName("number")[0].textContent;
 
+        var conta = 0;
+
         var indexDespesa = financialSettlements.Expenses.map(x => {
+
+            if (x.Valor_Total > 0) {
+                conta = conta + 1;
+            }
+
             return x.id;
         }).indexOf(idDespesaRemovida);
 
@@ -1157,13 +1182,14 @@
         $("#despesaTotal").val(converteFloatMoeda(expenseTotal))
         $("#despesaTotalLabel").text("-" + converteFloatMoeda(expenseTotal));
 
+
         $("#totalLabel").text("R$ " + (converteFloatMoeda(financialSettlements.GetTotal())));
         $("#totalReceiverLabel").text(converteFloatMoeda(financialSettlements.GetTotal()));
 
 
         row.parentNode.removeChild(row);
         $('.number').each(function (i) {
-            $(this).text(i + 1);
+            $(this).text(i + 1);            
         });
 
         document.getElementById('ExpenseDate').value = "";
@@ -1184,23 +1210,37 @@
         $("#totalConsumoLabel").text(consumoD + ' KM/L ');
 
         var expenseTotal = financialSettlements.GetExpenseTotal();
+
+
         $("#despesaTotal").val(financialSettlements.GetTotalDesp());
-        $("#despesaTotalLabel").text("-" + expenseTotal);
+        $("#despesaTotalLabel").text("-" + expenseTotal.toFixed(2).replace('.', ','));
+
+        $("#despesaTotal").val(financialSettlements.GetTotalDesp().toFixed(2).replace('.', ','));
+
 
         $("#Supplier_Id").attr('selectedIndex', '-1');
         $("#ExpenseType_Id").attr('selectedIndex', '-1');
 
-        $("#totalLabel").text("R$ " + financialSettlements.GetTotal());
-        $("#totalReceiverLabel").text(financialSettlements.GetTotal());
+        $("#totalLabel").text("R$ " + financialSettlements.GetTotal().replace('.', ','));
 
-        if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
+        $("#totalReceiverLabel").text(financialSettlements.GetTotal().replace('.', ','));
+
+//        if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
+        if (descricao_segmento == "C") {
+
             var distancia = $("#distance").val();
             var litross = (distancia / financialSettlements.GetExibe()).toFixed(2);
             $("#totalConsumoLabel").text(litross + ' KM/L ');
         }
 
-
-
+        if (conta == 1) {
+            $("#totalLabel").text("R$ 0,00 ");
+            $("#despesaTotal").val("0,00 ");
+            $("#despesaTotalLabel").text("0,00 ");
+            $("#totalReceiverLabel").text("0,00 ");
+            $("#totalConsumoLabel").text("0,00 KM/L ");
+            financialSettlements.Expenses.length = 0;
+        }
         LimparDados();
     }
 
@@ -1219,7 +1259,7 @@
         var  cdespesa_descricao = document.getElementById('ExpenseFinancialSettlements[' + idreg + '].ExpenseType_Name').value;
         var cdespesa_codigo = document.getElementById('ExpenseFinancialSettlements[' + idreg + '].ExpenseType_Id').value;
         var cdespesa_indice = document.getElementById('ExpenseFinancialSettlements[' + idreg + '].ExpenseType_Index').value;
-         
+
         var cfornecedor_name = document.getElementById('ExpenseFinancialSettlements[' + idreg + '].Supplier_Name').value;
         var cfornecedor_codigo = document.getElementById('ExpenseFinancialSettlements[' + idreg + '].Supplier_Id').value;
         var cfornecedor_indice = document.getElementById('ExpenseFinancialSettlements[' + idreg + '].Supplier_Index').value;
@@ -1233,7 +1273,8 @@
 
         document.getElementById('despesaValor').value = cvalor;
 
-        if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
+//        if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
+        if (descricao_segmento == "C") {
             document.getElementById('despesaValor').value = cvalor;
         } else {
             document.getElementById('despesaValor').value = cvalor;
@@ -1310,10 +1351,10 @@
 
         var vvalor_total = Valor_Total.replace(',', '.');
 
-
         var arquivo = $("#arquivo").val();
 
-        if ($('#ExpenseType_Id option:selected').text() != "Diesel") {
+//      if ($('#ExpenseType_Id option:selected').text() != "Diesel") {
+        if (descricao_segmento != "C") {
             var Valor_Total = $("#despesaValor").val();
         }
 
@@ -1323,12 +1364,21 @@
 
         var Litros = document.getElementById('litros').value;
 
+        if (descricao_segmento == "C") {
+            if (Litros == "0" || Litros == "" || Litros == "0,00" || Litros == "0.00") {
+                alert('Informe a Litragem');
+                return;
+            }
+        }
+
+
         var indexDespesa = financialSettlements.Expenses.map(x => {
 
             if (x.id == regsel) {
 
 
-                if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
+//              if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
+                if (descricao_segmento == "C") {
 
                     if (x.TotalConsumod != 0) {
                         //x.amount = ValorTotal; /// Despesas com Diesel
@@ -1356,7 +1406,6 @@
 
         var expenseTotal = financialSettlements.GetExpenseTotal();
         $("#despesaTotal").val(financialSettlements.GetTotalDesp());
-
         $("#despesaTotalLabel").text("-" + expenseTotal.toFixed(2).replace('.', ','));
 
         $("#despesaTotal").val(financialSettlements.GetTotalDesp().toFixed(2).replace('.',','));
@@ -1368,7 +1417,9 @@
         $("#totalLabel").text("R$ " + financialSettlements.GetTotal().replace('.',','));
         $("#totalReceiverLabel").text(financialSettlements.GetTotal().replace('.',','));
 
-        if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
+//        if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
+        if (descricao_segmento == "C") {
+
             var distancia = $("#distance").val();
             var litross = (distancia / financialSettlements.GetExibe()).toFixed(2);
             $("#totalConsumoLabel").text(litross.replace('.',',') + ' KM/L ');
@@ -1447,7 +1498,8 @@
         var amount = $("#despesaValor").val();
         var Valor_Total = $("#valtotal").val();
 
-        if ($('#ExpenseType_Id option:selected').text() != "Diesel") {
+//      if ($('#ExpenseType_Id option:selected').text() != "Diesel") {
+        if (descricao_segmento != "C") {
             var Valor_Total = $("#despesaValor").val();
         }
 
@@ -1459,6 +1511,13 @@
         var Litros = $("#litros").val();
         var desconto = $("#desconto").val();
         var arquivo = document.getElementById('ImagemUpload').value;
+
+        if (descricao_segmento == "C") {
+            if (Litros == "0" || Litros == "" || Litros == "0,00" || Litros == "0.00") {
+                alert('Informe a Litragem');
+                return;
+            }
+        }
 
         var comboTipoDespesa = document.getElementById("ExpenseType_Id");
         var tipoDespesaIndice = comboTipoDespesa.selectedIndex;
@@ -1538,8 +1597,7 @@
 
         var vvalor_total = Valor_Total.replace(',', '.');
 
-
-        if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
+        if (descricao_segmento == "C") {
 
             var result = vvalor_total - ddesconto;
 
@@ -1561,11 +1619,7 @@
 
         var expenseTotal = financialSettlements.GetExpenseTotal();
 
-
-
         $("#despesaTotal").val(financialSettlements.GetTotalDesp().toFixed(2).replace('.', ','));
-
-
 
         $("#despesaTotalLabel").text("-" + expenseTotal.toFixed(2).replace('.',','));
 
@@ -1575,7 +1629,9 @@
         $("#totalLabel").text("R$ " + financialSettlements.GetTotal().replace('.', ','));
         $("#totalReceiverLabel").text(financialSettlements.GetTotal().replace('.', ','));
 
-        if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
+//        if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
+        if (descricao_segmento == "C") {
+
             var distancia = $("#distance").val();
             var litross = (distancia / financialSettlements.GetExibe()).toFixed(2);
             $("#totalConsumoLabel").text(litross.replace('.',',') + ' KM/L ');
@@ -1599,7 +1655,7 @@
                 row = index + 1;
             }
 
-            var Valor_Viagem = $("#TravelValue").val().replace('.', ','); 
+            var Valor_Viagem = $("#TravelValue").val().replace('.', ',');
 
             var html = '<tr id="' + row + '" style="Display:none" class="index">';
             html += "<td class='number'>" + (row + 1) + "</td>";
@@ -1618,8 +1674,6 @@
             $('#TData tbody').append(html);
         }
 
-
-
         LimparDados();
     }
 
@@ -1636,12 +1690,12 @@
         if ($("#KmInitial").val() == "0") {
             $("#KmInitial").val("");
         }
-        
+
         if ($("#FinalKm").val() == "0") {
             $("#FinalKm").val("");
         }
-        
-            
+
+
 
         $('input[type=file]').fileinput({
             showUpload: false

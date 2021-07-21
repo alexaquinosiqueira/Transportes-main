@@ -1,0 +1,3585 @@
+﻿@model IEnumerable<Transportadora.UI.Site.ViewModels.ResponsibilityViewModel>
+
+@{ ViewData["Title"] = "Importação dados "; }
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/jszip.js"></script>
+
+<script language="javascript" type="text/javascript" src="@Url.Content("~/")assets/js/jquery.tabletojson.min.js"></script>
+
+<style type="text/css">
+    #loading {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: rgba(0,0,0,0.3);
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        padding: 50% 0;
+        margin: 0;
+        text-align: center;
+    }
+
+        #loading img {
+            display: inline-block;
+            margin: -8px 0;
+        }
+
+    #img {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-left: -110px;
+        margin-top: -40px;
+    }
+</style>
+
+
+
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                <div class="pull-right">
+                    <a asp-action="Index" data-toggle="tooltip" title="Voltar Para lista" class="btn btn-primary"><i class="fa fa-arrow-left "></i> Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Importação Cargos</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-action="Create">
+
+                    <div class="col-md-4">
+                        <label class="control-label">Selecione arquivo XLS</label>
+                        <input style="margin-top:10px;" type="file" id="arquivos_xls_cargos" name="arquivos_xls_cargos" multiple />
+                    </div>
+                    <div class="col-md-4">
+                        <div id="btnxml" class="form-group col-md-1 col-sm-1">
+                            <a id="btnxml" href="javascript:void(0)" style="margin: 0 16px 0px 0; margin-top:31px; margin-left:-24px;" onclick="validarArquivo_xls_cargos()" title="Carregar informações xls" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Carregar XLS</a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div id="dvExcelcargo">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Importação Funcionário</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-action="Create">
+
+                    <div class="col-md-4">
+                        <label class="control-label">Selecione arquivo XLS</label>
+                        <input style="margin-top:10px;" type="file" id="arquivos_xls_func" name="arquivos_xls_func" multiple />
+                    </div>
+                    <div class="col-md-4">
+                        <div id="btnxml" class="form-group col-md-1 col-sm-1">
+                            <a id="btnxml" href="javascript:void(0)" style="margin: 0 16px 0px 0; margin-top:31px; margin-left:-24px;" onclick="validarArquivo_xls_func()" title="Carregar informações xls" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Carregar XLS</a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div id="dvExcelfunc">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Importação Tipo de Veículos</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-action="Create">
+
+                    <div class="col-md-4">
+                        <label class="control-label">Selecione arquivo XLS</label>
+                        <input style="margin-top:10px;" type="file" id="arquivos_xls_tipo_vei" name="arquivos_xls_tipo_vei" multiple />
+                    </div>
+                    <div class="col-md-4">
+                        <div id="btnxml" class="form-group col-md-1 col-sm-1">
+                            <a id="btnxml" href="javascript:void(0)" style="margin: 0 16px 0px 0; margin-top:31px; margin-left:-24px;" onclick="validarArquivo_xls_tipo_vei()" title="Carregar informações xls" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Carregar XLS</a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div id="dvExcelTipo_vei">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Importação Veículos</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-action="Create">
+
+                    <div class="col-md-4">
+                        <label class="control-label">Selecione arquivo XLS</label>
+                        <input style="margin-top:10px;" type="file" id="arquivos_xls_vei" name="arquivos_xls_vei" multiple />
+                    </div>
+                    <div class="col-md-4">
+                        <div id="btnxml" class="form-group col-md-1 col-sm-1">
+                            <a id="btnxml" href="javascript:void(0)" style="margin: 0 16px 0px 0; margin-top:31px; margin-left:-24px;" onclick="validarArquivo_xls_vei()" title="Carregar informações xls" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Carregar XLS</a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div id="dvExcelvei">
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label id="lblconsist_veiculo" class="control-label"></label>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Importação Frota</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-action="Create">
+
+                    <div class="col-md-4">
+                        <label class="control-label">Selecione arquivo XLS</label>
+                        <input style="margin-top:10px;" type="file" id="arquivos_xls_frota" name="arquivos_xls_frota" multiple />
+                    </div>
+                    <div class="col-md-4">
+                        <div id="btnxml" class="form-group col-md-1 col-sm-1">
+                            <a id="btnxml" href="javascript:void(0)" style="margin: 0 16px 0px 0; margin-top:31px; margin-left:-24px;" onclick="validarArquivo_xls_frota()" title="Carregar informações xls" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Carregar XLS</a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div id="dvExcelFrota">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Importação Forncedor</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-action="Create">
+
+                    <div class="col-md-4">
+                        <label class="control-label">Selecione arquivo XLS</label>
+                        <input style="margin-top:10px;" type="file" id="arquivos_xls_fornec" name="arquivos_xls_fornec" multiple />
+                    </div>
+                    <div class="col-md-4">
+                        <div id="btnxml" class="form-group col-md-1 col-sm-1">
+                            <a id="btnxml" href="javascript:void(0)" style="margin: 0 16px 0px 0; margin-top:31px; margin-left:-24px;" onclick="validarArquivo_xls_fornec()" title="Carregar informações xls" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Carregar XLS</a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div id="dvExcelfor">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Importação Código Banco</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-action="Create">
+
+                    <div class="col-md-4">
+                        <label class="control-label">Selecione arquivo XLS</label>
+                        <input style="margin-top:10px;" type="file" id="arquivos_xls_codigo_banco" name="arquivos_xls_codigo_banco" multiple />
+                    </div>
+                    <div class="col-md-4">
+                        <div id="btnxml" class="form-group col-md-1 col-sm-1">
+                            <a id="btnxml" href="javascript:void(0)" style="margin: 0 16px 0px 0; margin-top:31px; margin-left:-24px;" onclick="validarArquivo_xls_codigo_banco()" title="Carregar informações xls" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Carregar XLS</a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div id="dvExcelbanco">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Importação Contas a Pagar</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-action="Create">
+
+                    <div class="col-md-4">
+                        <label class="control-label">Selecione arquivo XLS</label>
+                        <input style="margin-top:10px;" type="file" id="arquivos_contas_pagar" name="arquivos_contas_pagar" multiple />
+                    </div>
+                    <div class="col-md-4">
+                        <div id="btnxml" class="form-group col-md-1 col-sm-1">
+                            <a id="btnxml" href="javascript:void(0)" style="margin: 0 16px 0px 0; margin-top:31px; margin-left:-24px;" onclick="validarArquivo_conta_pagar()" title="Carregar informações xls" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Carregar XLS</a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div id="dvExcelcontasPagar">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label id="lblconsist_conta_pagar" class="control-label"></label>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Importação Acertos</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-action="Create">
+
+                    <div class="col-md-4">
+                        <label class="control-label">Selecione arquivo XLS</label>
+                        <input style="margin-top:10px;" type="file" id="arquivo_acertos" name="arquivo_acertos" multiple />
+                    </div>
+                    <div class="col-md-4">
+                        <div id="btnxml" class="form-group col-md-1 col-sm-1">
+                            <a id="btnxml" href="javascript:void(0)" style="margin: 0 16px 0px 0; margin-top:31px; margin-left:-24px;"
+                               onclick="validarArquivo_acertos()" title="Carregar informações xls" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Carregar XLS</a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div id="dvExcelAcertos">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label id="lblconsist_acertos" class="control-label"></label>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Importação despesas Acertos</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-action="Create">
+
+                    <div class="col-md-4">
+                        <label class="control-label">Selecione arquivo XLS</label>
+                        <input style="margin-top:10px;" type="file" id="arquivo_despesas_acertos" name="arquivo_despesas_acertos" multiple />
+                    </div>
+                    <div class="col-md-4">
+                        <div id="btnxml" class="form-group col-md-1 col-sm-1">
+                            <a id="btnxml" href="javascript:void(0)" style="margin: 0 16px 0px 0; margin-top:31px; margin-left:-24px;"
+                               onclick="validarArquivo_xls_despesas_acerto()" title="Carregar informações xls" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Carregar XLS</a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div id="dvExcelDespesaAcerto">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label id="lblconsist_despesa_acertos" class="control-label"></label>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="loading">
+        <img src="@Url.Content("~/")imagens/ajax-loader.gif" alt="Carregando..." title="Carregando...">
+    </div>
+
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script type="text/javascript">
+
+    class Responsability {
+        constructor() {
+            this.Description = "";
+            this.Company_Id = "";
+            this.Active = "1";
+            this.Arry_responsa = [];
+        }
+    }
+
+    class Arry_responsa {
+        constructor() {
+            this.Description = "";
+            this.Active = 1;
+            this.Empresa_Id = "";
+        }
+    }
+
+    responsability = new Responsability();
+
+    $(document).ready(function () {
+        $('select').select2();
+        $('.dates').datetimepicker({
+            pickTime: false,
+            format: 'DD/MM/YYYY'
+        });
+
+
+
+    });
+
+    //-- IMPORTAÇÃO CARGOS
+    function validarArquivo_xls_cargos() {
+
+        var arquivoInput = document.getElementById('arquivos_xls_cargos');
+        var caminhoArquivo = arquivoInput.value;
+
+        if (arquivoInput.value == '') {
+            return false;
+        }
+
+        var extensoesPermitidas = /(.XLSX)$/i;
+        if (!extensoesPermitidas.exec(caminhoArquivo)) {
+            alert('AVISO: Somente arquivos permitidos com as extensões.XLS');
+            return false;
+        } else {
+
+            Upload_cargos();
+        }
+    }
+    function Upload_cargos() {
+        //Reference the FileUpload element.
+        var fileUpload = document.getElementById("arquivos_xls_cargos");
+
+        //Validate whether File is valid Excel file.
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
+        if (regex.test(fileUpload.value.toLowerCase())) {
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+
+                //For Browsers other than IE.
+                if (reader.readAsBinaryString) {
+                    reader.onload = function (e) {
+                        ProcessExcel_cargos(e.target.result);
+                    };
+
+
+                    reader.readAsBinaryString(fileUpload.files[0]);
+                } else {
+                    //For IE Browser.
+
+                    reader.onload = function (e) {
+                        var data = "";
+                        var bytes = new Uint8Array(e.target.result);
+                        for (var i = 0; i < bytes.byteLength; i++) {
+                            data += String.fromCharCode(bytes[i]);
+                        }
+                        ProcessExcel_cargos(data);
+                    };
+                    reader.readAsArrayBuffer(fileUpload.files[0]);
+                }
+            } else {
+                alert("This browser does not support HTML5.");
+            }
+        } else {
+            alert("Please upload a valid Excel file.");
+        }
+    };
+    function ProcessExcel_cargos(data) {
+
+        try {
+
+            $("#loading").fadeIn('fast');
+
+        //Read the Excel File data.
+        var workbook = XLSX.read(data, {
+            type: 'binary'
+        });
+
+        //Fetch the name of First Sheet.
+        var firstSheet = workbook.SheetNames[0];
+
+        //Read all rows from First Sheet into an JSON array.
+        var excelRows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[firstSheet]);
+
+        //Create a HTML Table element.
+        var table = document.createElement("table");
+        table.border = "1";
+
+        //Add the header row.
+        var row = table.insertRow(-1);
+
+        //Add the header cells.
+        var headerCell = document.createElement("TH");
+        headerCell.innerHTML = "DESCRICAO";
+        row.appendChild(headerCell);
+
+        headerCell = document.createElement("TH");
+        headerCell.innerHTML = "EMPRESA";
+        row.appendChild(headerCell);
+
+        headerCell = document.createElement("TH");
+        headerCell.innerHTML = "TIPO";
+        row.appendChild(headerCell);
+
+            var aaa = [];
+            var eerro = "";
+
+        for (var i = 0; i < excelRows.length; i++) {
+
+            var row = table.insertRow(-1);
+
+            var cell = row.insertCell(-1);
+            cell.innerHTML = excelRows[i].DESCRICAO;
+
+            if (excelRows[i].DESCRICAO === undefined) {
+                $("#loading").fadeOut('fast');
+                alert("Erro ao processar a Planilha: Verifique o arquivo de importação dos cargos!");
+                eerro = "S";
+
+                break;
+                return;
+            }
+
+            cell = row.insertCell(-1);
+            cell.innerHTML = excelRows[i].EMPRESA;
+            if (excelRows[i].EMPRESA === undefined) {
+                $("#loading").fadeOut('fast');
+                alert("Erro ao processar a Planilha: Verifique o arquivo de importação dos cargos!");
+                eerro = "S";
+
+                break;
+                return;
+            }
+
+            cell = row.insertCell(-1);
+            cell.innerHTML = excelRows[i].TIPO;
+            if (excelRows[i].TIPO === undefined) {
+                $("#loading").fadeOut('fast');
+                alert("Erro ao processar a Planilha: Verifique o arquivo de importação dos cargos!");
+                eerro = "S";
+
+                break;
+                return;
+            }
+
+            aaa.push([excelRows[i].DESCRICAO, '864284F5-83E6-467D-17FC-08D881DC64DC', excelRows[i].TIPO]);
+        }
+
+            if (eerro != "") {
+
+                $("#loading").fadeOut('fast');
+                return;
+            }
+
+        for (var i = 0; i < aaa.length; i++) {
+            //responsability.Arry_responsa.push(cargos);
+            //Arry_responsa.Description = aaa[i];
+        }
+
+        var dvExcel = document.getElementById("dvExcelcargo");
+        dvExcel.innerHTML = "";
+        dvExcel.appendChild(table);
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Content("~/Cadastro")/Importacoes/Importacao_cargos/',
+            data: $.param({ data: aaa }, true),
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                $("#loading").fadeOut('fast');
+                alert('Planilha processada, verifique se ocorreram consistencias!');
+            },
+            error: function (xxhr, ajaxOptions, thrownError) {
+                $("#loading").fadeOut('fast');
+                alert("ERRO - Verifique o formatado da planilha cargos e seu conteúdo!" + error);
+            }
+        });
+
+
+        }
+        catch (err) {
+            $("#loading").fadeOut('fast');
+            alert("ERRO: Verifique o formato da Planilha! " + err.message);
+        }
+
+    };
+
+    //-- IMPORTAÇÃO DE FROTAS
+    function validarArquivo_xls_frota() {
+
+        var arquivoInput = document.getElementById('arquivos_xls_frota');
+        var caminhoArquivo = arquivoInput.value;
+
+        if (arquivoInput.value == '') {
+            return false;
+        }
+
+        var extensoesPermitidas = /(.XLSX)$/i;
+        if (!extensoesPermitidas.exec(caminhoArquivo)) {
+            alert('AVISO: Somente arquivos permitidos com as extensões.XLS');
+            return false;
+        } else {
+
+            Upload_frotas();
+        }
+    }
+    function Upload_frotas() {
+        //Reference the FileUpload element.
+        var fileUpload = document.getElementById("arquivos_xls_frota");
+
+        //Validate whether File is valid Excel file.
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
+        if (regex.test(fileUpload.value.toLowerCase())) {
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+
+                //For Browsers other than IE.
+                if (reader.readAsBinaryString) {
+                    reader.onload = function (e) {
+                        ProcessExcel_frotas(e.target.result);
+                    };
+                    reader.readAsBinaryString(fileUpload.files[0]);
+                } else {
+                    //For IE Browser.
+
+                    reader.onload = function (e) {
+                        var data = "";
+                        var bytes = new Uint8Array(e.target.result);
+                        for (var i = 0; i < bytes.byteLength; i++) {
+                            data += String.fromCharCode(bytes[i]);
+                        }
+                        ProcessExcel_frotas(data);
+                    };
+                    reader.readAsArrayBuffer(fileUpload.files[0]);
+                }
+            } else {
+                alert("This browser does not support HTML5.");
+            }
+        } else {
+            alert("Please upload a valid Excel file.");
+        }
+    };
+    function ProcessExcel_frotas(data) {
+
+        try {
+
+            $("#loading").fadeIn('fast');
+
+        //Read the Excel File data.
+        var workbook = XLSX.read(data, {
+            type: 'binary'
+        });
+
+        //Fetch the name of First Sheet.
+        var firstSheet = workbook.SheetNames[0];
+
+        //Read all rows from First Sheet into an JSON array.
+        var excelRows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[firstSheet]);
+
+        //Create a HTML Table element.
+        var table = document.createElement("table");
+        table.border = "1";
+
+        //Add the header row.
+        var row = table.insertRow(-1);
+
+        //Add the header cells.
+        var headerCell = document.createElement("TH");
+        headerCell.innerHTML = "FROTA";
+        row.appendChild(headerCell);
+
+        headerCell = document.createElement("TH");
+        headerCell.innerHTML = "ATIVO";
+        row.appendChild(headerCell);
+
+            var aaa = [];
+
+            var lok = "";
+
+        for (var i = 0; i < excelRows.length; i++) {
+
+            var row = table.insertRow(-1);
+
+            //Add the data cells.
+            var cell = row.insertCell(-1);
+            cell.innerHTML = remover_acentos(excelRows[i].FROTA);
+
+            if (excelRows[i].FROTA === undefined) {
+                alert("Erro ao processar plani: Verifique o arquivo de importação das frotas ");
+                $("#loading").fadeOut('fast');
+
+                lok = "N";
+                break;
+            }
+
+            cell = row.insertCell(-1);
+            cell.innerHTML = remover_acentos(excelRows[i].ATIVO);
+            if (excelRows[i].ATIVO === undefined) {
+                alert("Erro ao processar plani: Verifique o arquivo de importação das frotas ");
+                $("#loading").fadeOut('fast');
+                lok = "N";
+                break;
+            }
+
+            aaa.push([remover_acentos(excelRows[i].FROTA), remover_acentos(excelRows[i].ATIVO)]);
+        }
+
+            if (lok != "") {
+
+                $("#loading").fadeOut('fast');
+                return;
+            }
+
+
+
+        var dvExcelfr = document.getElementById("dvExcelFrota");
+        dvExcelfr.innerHTML = "";
+        dvExcelfr.appendChild(table);
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Content("~/Cadastro")/Importacoes/Importacao_frotas/',
+            data: $.param({ data: aaa }, true),
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                $("#loading").fadeOut('fast');
+                alert('Planilha processada, verifique se ocorreram consistencias!');
+            },
+            error: function (xxhr, ajaxOptions, thrownError) {
+                $("#loading").fadeOut('fast');
+                alert("ERRO - Verifique o formatado da planilha Frotas e seu conteúdo!" + error);
+            }
+        });
+
+        }
+        catch (err) {
+            $("#loading").fadeOut('fast');
+            alert("ERRO: Verifique o formato da Planilha!" + err.message);
+        }
+
+    };
+
+    //-- IMPORTAÇÃO DE TIPO DE VEICULOS
+    function validarArquivo_xls_tipo_vei() {
+
+        var arquivoInput = document.getElementById('arquivos_xls_tipo_vei');
+        var caminhoArquivo = arquivoInput.value;
+
+        if (arquivoInput.value == '') {
+            return false;
+        }
+
+        var extensoesPermitidas = /(.XLSX)$/i;
+        if (!extensoesPermitidas.exec(caminhoArquivo)) {
+            alert('AVISO: Somente arquivos permitidos com as extensões.XLS');
+            return false;
+        } else {
+
+            Upload_tipo_vei();
+        }
+    }
+    function Upload_tipo_vei() {
+        //Reference the FileUpload element.
+        var fileUpload = document.getElementById("arquivos_xls_tipo_vei");
+
+        //Validate whether File is valid Excel file.
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
+        if (regex.test(fileUpload.value.toLowerCase())) {
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+
+                //For Browsers other than IE.
+                if (reader.readAsBinaryString) {
+                    reader.onload = function (e) {
+                        ProcessExcel_tipo_vei(e.target.result);
+                    };
+                    reader.readAsBinaryString(fileUpload.files[0]);
+                } else {
+                    //For IE Browser.
+
+                    reader.onload = function (e) {
+                        var data = "";
+                        var bytes = new Uint8Array(e.target.result);
+                        for (var i = 0; i < bytes.byteLength; i++) {
+                            data += String.fromCharCode(bytes[i]);
+                        }
+                        ProcessExcel_tipo_vei(data);
+                    };
+                    reader.readAsArrayBuffer(fileUpload.files[0]);
+                }
+            } else {
+                alert("This browser does not support HTML5.");
+            }
+        } else {
+            alert("Please upload a valid Excel file.");
+        }
+    };
+    function ProcessExcel_tipo_vei(data) {
+
+        try {
+            $("#loading").fadeIn('fast');
+
+
+        //Read the Excel File data.
+        var workbook = XLSX.read(data, {
+            type: 'binary'
+        });
+
+        //Fetch the name of First Sheet.
+        var firstSheet = workbook.SheetNames[0];
+
+        //Read all rows from First Sheet into an JSON array.
+        var excelRows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[firstSheet]);
+
+        //Create a HTML Table element.
+        var table = document.createElement("table");
+        table.border = "1";
+
+        //Add the header row.
+        var row = table.insertRow(-1);
+
+        //Add the header cells.
+        var headerCell = document.createElement("TH");
+        headerCell.innerHTML = "TIPO_VEICULO";
+            row.appendChild(headerCell);
+
+        headerCell = document.createElement("TH");
+        headerCell.innerHTML = "CLASSE";
+        row.appendChild(headerCell);
+
+            var aaa = [];
+            var lok = "";
+
+        for (var i = 0; i < excelRows.length; i++) {
+
+            var row = table.insertRow(-1);
+
+            //Add the data cells.
+            var cell = row.insertCell(-1);
+            cell.innerHTML = excelRows[i].TIPO_VEICULO;
+
+            if (excelRows[i].TIPO_VEICULO === undefined) {
+                alert("Erro ao processar planilha: Verifique o arquivo de importação Tipo Veículo");
+                $("#loading").fadeOut('fast');
+
+                lok = "N";
+                return;
+            }
+
+            cell = row.insertCell(-1);
+            cell.innerHTML = excelRows[i].CLASSE;
+
+            if (excelRows[i].CLASSE === undefined) {
+                alert("Erro ao processar planilha: Verifique o arquivo de importação Tipo Veículo");
+                $("#loading").fadeOut('fast');
+
+                lok = "N";
+                return;
+            }
+
+
+            aaa.push([
+                remover_acentos(excelRows[i].TIPO_VEICULO),
+                remover_acentos(excelRows[i].CLASSE)]);
+        }
+
+            if (lok != "") {
+                $("#loading").fadeOut('fast');
+
+                return;
+            }
+
+        var dvExcelTipo_vei = document.getElementById("dvExcelTipo_vei");
+        dvExcelTipo_vei.innerHTML = "";
+        dvExcelTipo_vei.appendChild(table);
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Content("~/Cadastro")/Importacoes/Importacao_tipo_vei/',
+            data: $.param({ data: aaa }, true),
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                $("#loading").fadeOut('fast');
+                alert('Planilha processada, verifique se ocorreram consistencias!');
+            },
+            error: function (xxhr, ajaxOptions, thrownError) {
+                $("#loading").fadeOut('fast');
+                alert("ERRO - Verifique o formatado da planilha Tipo de Veículo e seu conteúdo!" + error);
+            }
+        });
+
+        }
+        catch (err) {
+            $("#loading").fadeOut('fast');
+            alert("ERRO: Verifique o formato da Planilha!" + err.message);
+        }
+    };
+
+    //-- IMPORTAÇÃO DE VEICULOS
+    function validarArquivo_xls_vei() {
+
+        var arquivoInput = document.getElementById('arquivos_xls_vei');
+        var caminhoArquivo = arquivoInput.value;
+
+        if (arquivoInput.value == '') {
+            return false;
+        }
+
+        var extensoesPermitidas = /(.XLSX)$/i;
+        if (!extensoesPermitidas.exec(caminhoArquivo)) {
+            alert('AVISO: Somente arquivos permitidos com as extensões.XLS');
+            return false;
+        } else {
+
+            Upload_vei();
+        }
+    }
+    function Upload_vei() {
+        //Reference the FileUpload element.
+        var fileUpload = document.getElementById("arquivos_xls_vei");
+
+        //Validate whether File is valid Excel file.
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
+        if (regex.test(fileUpload.value.toLowerCase())) {
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+
+                //For Browsers other than IE.
+                if (reader.readAsBinaryString) {
+                    reader.onload = function (e) {
+                        ProcessExcel_vei(e.target.result);
+                    };
+                    reader.readAsBinaryString(fileUpload.files[0]);
+                } else {
+                    //For IE Browser.
+
+                    reader.onload = function (e) {
+                        var data = "";
+                        var bytes = new Uint8Array(e.target.result);
+                        for (var i = 0; i < bytes.byteLength; i++) {
+                            data += String.fromCharCode(bytes[i]);
+                        }
+                        ProcessExcel_vei(data);
+                    };
+                    reader.readAsArrayBuffer(fileUpload.files[0]);
+                }
+            } else {
+                alert("This browser does not support HTML5.");
+            }
+        } else {
+            alert("Please upload a valid Excel file.");
+        }
+    };
+    function ProcessExcel_vei(data) {
+
+        try {
+
+            $("#loading").fadeIn('fast');
+
+            //Read the Excel File data.
+            var workbook = XLSX.read(data, {
+                type: 'binary'
+            });
+
+            //Fetch the name of First Sheet.
+            var firstSheet = workbook.SheetNames[0];
+
+            //Read all rows from First Sheet into an JSON array.
+            var excelRows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[firstSheet]);
+
+            //Create a HTML Table element.
+            var table = document.createElement("table");
+            table.border = "1";
+
+            //Add the header row.
+            var row = table.insertRow(-1);
+
+            //Add the header cells.
+            var headerCell = document.createElement("TH");
+            headerCell.innerHTML = "TIPO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "FROTA";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "MOTORISTA";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "UF";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "CIDADE";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "DESCRICAO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "PLACA";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "ANO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "COR";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "MARCA";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "MODELO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "CHASSI";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "RENAVAM";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "TANQUE";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "MEDIA";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "LITRAGEM";
+            row.appendChild(headerCell);
+
+            var aaa = [];
+            var lok = "";
+
+            for (var i = 0; i < excelRows.length; i++) {
+
+                var row = table.insertRow(-1);
+
+                //Add the data cells.
+                var cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].TIPO);
+                if (excelRows[i].TIPO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Veículos TIPO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].FROTA);
+                if (excelRows[i].FROTA === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Veículos FROTA");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].MOTORISTA);
+                if (excelRows[i].MOTORISTA === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Veículos MOTORISTA");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].UF;
+                if (excelRows[i].UF === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Veículos UF");
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].CIDADE);
+                if (excelRows[i].CIDADE === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Veículos CIDADE");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].DESCRICAO);
+                if (excelRows[i].DESCRICAO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Veículos DESCRICAO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].PLACA);
+                if (excelRows[i].PLACA === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Veículos PLACA");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].ANO;
+                if (excelRows[i].ANO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Veículos ANO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].COR);
+                if (excelRows[i].COR === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Veículos COR");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].MARCA);
+                if (excelRows[i].MARCA === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Veículos MARCA");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].MODELO);
+                if (excelRows[i].FROTA === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Veículos MODELO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].CHASSI;
+                if (excelRows[i].CHASSI === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Veículos CHASSI");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].RENAVAM;
+                if (excelRows[i].RENAVAM === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Veículos RENAVAM");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].TANQUE;
+                if (excelRows[i].TANQUE === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Veículos TANQUE");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].MEDIA;
+                if (excelRows[i].MEDIA === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Veículos MEDIA");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].LITRAGEM;
+                if (excelRows[i].LITRAGEM === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Veículos LITRAGEM");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                aaa.push(
+                    [
+                        remover_acentos(excelRows[i].TIPO),
+                        remover_acentos(excelRows[i].FROTA),
+                        remover_acentos(excelRows[i].MOTORISTA),
+                        excelRows[i].UF,
+                        remover_acentos(excelRows[i].CIDADE),
+                        remover_acentos(excelRows[i].DESCRICAO),
+                        remover_acentos(excelRows[i].PLACA),
+                        remover_acentos(excelRows[i].ANO),
+                        remover_acentos(excelRows[i].COR),
+                        remover_acentos(excelRows[i].MARCA),
+                        remover_acentos(excelRows[i].MODELO),
+                        excelRows[i].CHASSI,
+                        excelRows[i].RENAVAM,
+                        excelRows[i].TANQUE,
+                        excelRows[i].MEDIA,
+                        excelRows[i].LITRAGEM]);
+            }
+
+            if (lok != "") {
+                $("#loading").fadeOut('fast');
+                return;
+            }
+
+
+            var dvExcelvei = document.getElementById("dvExcelvei");
+
+
+            dvExcelvei.innerHTML = "";
+            dvExcelvei.appendChild(table);
+
+
+            $.ajax({
+                dataType: 'json',
+                type: 'POST',
+                url: '@Url.Content("~/Cadastro")/Importacoes/Importacao_veiculos/',
+                data: $.param({ sVeiculoList: aaa }, true), //sVeiculoList, parametro metodo lá no controller. (veiculo)
+                success: function (data) {
+
+                    $("#loading").fadeOut('fast');
+                    alert('Planilha processada, verifique se ocorreram consistencias!');
+                },
+                error: function (xxhr, ajaxOptions, thrownError) {
+                    $("#loading").fadeOut('fast');
+
+                    alert(xxhr.responseText);
+                    document.getElementById("lblconsist_veiculo").innerHTML = xxhr.responseText;
+                }
+            });
+
+
+        }
+        catch (err) {
+            $("#loading").fadeOut('fast');
+            alert("ERRO: Verifique o formato da Planilha!" + err.message);
+        }
+
+    };
+
+    //-- IMPORTAÇÃO DE FUNCIONARIOS
+    function validarArquivo_xls_func() {
+
+        var arquivoInput = document.getElementById('arquivos_xls_func');
+        var caminhoArquivo = arquivoInput.value;
+
+        if (arquivoInput.value == '') {
+            return false;
+        }
+
+        var extensoesPermitidas = /(.XLSX)$/i;
+        if (!extensoesPermitidas.exec(caminhoArquivo)) {
+            alert('AVISO: Somente arquivos permitidos com as extensões.XLS');
+            return false;
+        } else {
+
+            Upload_func();
+        }
+    }
+    function Upload_func() {
+        //Reference the FileUpload element.
+        var fileUpload = document.getElementById("arquivos_xls_func");
+
+        //Validate whether File is valid Excel file.
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
+        if (regex.test(fileUpload.value.toLowerCase())) {
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+
+                //For Browsers other than IE.
+                if (reader.readAsBinaryString) {
+                    reader.onload = function (e) {
+                        ProcessExcel_func(e.target.result);
+                    };
+                    reader.readAsBinaryString(fileUpload.files[0]);
+                } else {
+                    //For IE Browser.
+
+                    reader.onload = function (e) {
+                        var data = "";
+                        var bytes = new Uint8Array(e.target.result);
+                        for (var i = 0; i < bytes.byteLength; i++) {
+                            data += String.fromCharCode(bytes[i]);
+                        }
+                        ProcessExcel_func(data);
+                    };
+                    reader.readAsArrayBuffer(fileUpload.files[0]);
+                }
+            } else {
+                alert("This browser does not support HTML5.");
+            }
+        } else {
+            alert("Please upload a valid Excel file.");
+        }
+    };
+    function ProcessExcel_func(data) {
+
+
+        try {
+            $("#loading").fadeIn('fast');
+
+            //Read the Excel File data.
+            var workbook = XLSX.read(data, {
+                type: 'binary'
+            });
+
+            //Fetch the name of First Sheet.
+            var firstSheet = workbook.SheetNames[0];
+
+            //Read all rows from First Sheet into an JSON array.
+            var excelRows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[firstSheet]);
+
+            //Create a HTML Table element.
+            var table = document.createElement("table");
+            table.border = "1";
+
+            //Add the header row.
+            var row = table.insertRow(-1);
+
+            //Add the header cells.
+            var headerCell = document.createElement("TH");
+            headerCell.innerHTML = "NOME";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "APELIDO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "TELEFONE";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "SEXO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "NASCIMENTO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "CIVIL";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "CARGO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "ADMISSAO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "SALARIO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "ATIVO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "ENDERECO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "NUMERO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "BAIRRO";
+            row.appendChild(headerCell);
+
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "ESTADO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "CIDADE";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "CEP";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "CNH";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "CATEGORIA";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "DATACNH";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "RG";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "EXPEDITOR";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "EMISSAO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "CPF";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "PIS";
+            row.appendChild(headerCell);
+
+
+                var aaa = [];
+                var lok = "";
+
+            for (var i = 0; i < excelRows.length; i++) {
+
+                var row = table.insertRow(-1);
+
+
+                //Add the data cells.
+                var cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].NOME;
+                if (excelRows[i].NOME === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcioários coluna NOME");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].APELIDO;
+                if (excelRows[i].APELIDO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcionários coluna APELIDO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].TELEFONE;
+                if (excelRows[i].TELEFONE === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcionários TELEFONE");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].SEXO;
+                if (excelRows[i].SEXO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcionários SEXO ");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].NASCIMENTO;
+                if (excelRows[i].NASCIMENTO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcionários NASCIMENTO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].CIVIL;
+                if (excelRows[i].CIVIL === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcionários ESTADO CIVIL");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].CARGO;
+                if (excelRows[i].CARGO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcionários CARGO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].ADMISSAO;
+                if (excelRows[i].ADMISSAO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcionários ADMISSAO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].SALARIO;
+                if (excelRows[i].SALARIO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcionários SALARIO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].ATIVO;
+                if (excelRows[i].ATIVO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcionários ATIVO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].ENDERECO;
+                if (excelRows[i].ENDERECO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcionários ENDERECO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].NUMERO;
+                if (excelRows[i].NUMERO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcionários NUMERO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].BAIRRO;
+                if (excelRows[i].BAIRRO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcionários BAIRRO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].ESTADO;
+                if (excelRows[i].ESTADO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcionários ESTADO ");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].CIDADE;
+                if (excelRows[i].CIDADE === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcionários CIDADE");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].CEP;
+                if (excelRows[i].CEP === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcionários CEP");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].CNH;
+                if (excelRows[i].CNH === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcionários CNH");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].CATEGORIA;
+                if (excelRows[i].CATEGORIA === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcionários CATEGORIA");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].DATACNH;
+                if (excelRows[i].DATACNH === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcionários DATA CNH");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].RG;
+                if (excelRows[i].RG === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcionários RG");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].EXPEDITOR;
+                if (excelRows[i].EXPEDITOR === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcionários DATA EXPEDIÇÃO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].EMISSAO;
+                if (excelRows[i].EMISSAO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcionários DATA EMISSAO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].CPF;
+                if (excelRows[i].CPF === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcionários CPF");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].PIS;
+                if (excelRows[i].PIS === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Funcionários PIS");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                aaa.push(
+                    [
+                      remover_acentos(excelRows[i].NOME),
+                      remover_acentos(excelRows[i].APELIDO),
+                      remover_acentos(excelRows[i].TELEFONE),
+                      remover_acentos(excelRows[i].SEXO),
+                      excelRows[i].NASCIMENTO,
+                      remover_acentos(excelRows[i].CIVIL),
+                      remover_acentos(excelRows[i].CARGO),
+                      excelRows[i].ADMISSAO,
+                      remover_acentos(excelRows[i].SALARIO),
+                        remover_acentos(excelRows[i].ATIVO),
+                      remover_acentos(excelRows[i].ENDERECO),
+                      remover_acentos(excelRows[i].NUMERO),
+                      remover_acentos(excelRows[i].BAIRRO),
+                      remover_acentos(excelRows[i].ESTADO),
+                      remover_acentos(excelRows[i].CIDADE),
+                      remover_acentos(excelRows[i].CEP),
+                      remover_acentos(excelRows[i].CNH),
+                      remover_acentos(excelRows[i].CATEGORIA),
+                      excelRows[i].DATACNH,
+                      remover_acentos(excelRows[i].RG),
+                        excelRows[i].EXPEDITOR,
+                        excelRows[i].EMISSOR,
+                      remover_acentos(excelRows[i].CPF),
+                      remover_acentos(excelRows[i].PIS)
+                    ]
+                );
+            }
+                if (lok != "") {
+                    return;
+
+                }
+
+                var dvExcelfunc = document.getElementById("dvExcelfunc");
+                dvExcelfunc.innerHTML = "";
+                dvExcelfunc.appendChild(table);
+
+
+                $.ajax({
+                    dataType: 'json',
+                    type: 'POST',
+                    url: '@Url.Content("~/Cadastro")/Importacoes/Importacao_funcionarios/',
+                    data: $.param({ sFuncList: aaa }, true), //sFuncList, parametro metodo lá no controller. (funcinário)
+                    success: function (data) {
+
+                        $("#loading").fadeOut('fast');
+                        alert('Planilha processada, verifique se ocorreram consistencias!');
+                    },
+                    error: function (xxhr, ajaxOptions, thrownError) {
+                        $("#loading").fadeOut('fast');
+
+                        alert(xxhr.responseText);
+                    }
+                });
+
+
+        }
+        catch (err) {
+            $("#loading").fadeOut('fast');
+            alert("ERRO: Verifique o formato da Planilha!" + err.message);
+        }
+    };
+
+    //-- IMPORTAÇÃO DE FORNECEDORES
+    function validarArquivo_xls_fornec() {
+
+        var arquivoInput = document.getElementById('arquivos_xls_fornec');
+        var caminhoArquivo = arquivoInput.value;
+
+        if (arquivoInput.value == '') {
+            return false;
+        }
+
+        var extensoesPermitidas = /(.XLSX)$/i;
+        if (!extensoesPermitidas.exec(caminhoArquivo)) {
+            alert('AVISO: Somente arquivos permitidos com as extensões.XLS');
+            return false;
+        } else {
+
+            Upload_fornec();
+        }
+    }
+    function Upload_fornec() {
+        //Reference the FileUpload element.
+        var fileUpload = document.getElementById("arquivos_xls_fornec");
+
+        //Validate whether File is valid Excel file.
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
+        if (regex.test(fileUpload.value.toLowerCase())) {
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+
+                //For Browsers other than IE.
+                if (reader.readAsBinaryString) {
+                    reader.onload = function (e) {
+                        ProcessExcel_fornec(e.target.result);
+                    };
+                    reader.readAsBinaryString(fileUpload.files[0]);
+                } else {
+                    //For IE Browser.
+
+                    reader.onload = function (e) {
+                        var data = "";
+                        var bytes = new Uint8Array(e.target.result);
+                        for (var i = 0; i < bytes.byteLength; i++) {
+                            data += String.fromCharCode(bytes[i]);
+                        }
+                        ProcessExcel_fornec(data);
+                    };
+                    reader.readAsArrayBuffer(fileUpload.files[0]);
+                }
+            } else {
+                alert("This browser does not support HTML5.");
+            }
+        } else {
+            alert("Please upload a valid Excel file.");
+        }
+    };
+    function ProcessExcel_fornec(data) {
+        try {
+
+            $("#loading").fadeIn('fast');
+
+            //Read the Excel File data.
+            var workbook = XLSX.read(data, {
+                type: 'binary'
+            });
+
+
+            //Fetch the name of First Sheet.
+            var firstSheet = workbook.SheetNames[0];
+
+            //Read all rows from First Sheet into an JSON array.
+            var excelRows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[firstSheet]);
+
+            //Create a HTML Table element.
+            var table = document.createElement("table");
+            table.border = "1";
+
+            //Add the header row.
+            var row = table.insertRow(-1);
+
+            //Add the header cells.
+            var headerCell = document.createElement("TH");
+            headerCell.innerHTML = "NOME";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "PESSOA";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "CNPJ";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "SERVICO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "DESDE";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "OBS";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "LIMITE";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "TELEFONE";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "ENDERECO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "NUMERO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "BAIRRO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "ESTADO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "CIDADE";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "CEP";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "RG";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "EXPEDITOR";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "UFRG";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "EMISSAO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "NASCIMENTO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "GENERO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "CIVIL";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "INSCRICAO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "MUNICIPAL";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "EMAIL";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "CONTATO";
+            row.appendChild(headerCell);
+
+            var aaa = [];
+            var lok = "";
+            var fornecedores = [];
+
+            for (var i = 0; i < excelRows.length; i++) {
+
+                var row = table.insertRow(-1);
+
+                //Add the data cells.
+                var cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].NOME;
+
+                if (excelRows[i].NOME === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna NOME");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].PESSOA;
+                if (excelRows[i].PESSOA === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna PESSOA");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].CNPJ;
+                if (excelRows[i].CNPJ === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna CNPJ");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].SERVICO;
+                if (excelRows[i].SERVICO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna SERVICO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].DESDE;
+                if (excelRows[i].DESDE === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna DESDE");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].OBS;
+                if (excelRows[i].OBS === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna OBS");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].LIMITE;
+
+
+                if (excelRows[i].LIMITE === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna LIMITE");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].TELEFONE;
+                if (excelRows[i].TELEFONE === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna TELEFONE");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].ENDERECO;
+                if (excelRows[i].ENDERECO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna ENDERECO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].NUMERO;
+                if (excelRows[i].NUMERO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna NUMERO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].BAIRRO;
+                if (excelRows[i].BAIRRO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna BAIRRO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].ESTADO;
+                if (excelRows[i].ESTADO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna ESTADO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].CIDADE;
+                if (excelRows[i].CIDADE === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna CIDADE");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].CEP;
+                if (excelRows[i].CEP === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna CEP");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].RG;
+                if (excelRows[i].RG === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna RG");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].EXPEDITOR;
+                if (excelRows[i].EXPEDITOR === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna EXPEDITOR");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].UFRG;
+                if (excelRows[i].UFRG === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna UFRG");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].EMISSAO;
+                if (excelRows[i].EMISSAO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna EMISSAO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].NASCIMENTO;
+                if (excelRows[i].NASCIMENTO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna NASCIMENTO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].GENERO;
+                if (excelRows[i].GENERO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna GENERO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].CIVIL;
+                if (excelRows[i].CIVIL === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna ESTADO CIVIL");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].INSCRICAO;
+                if (excelRows[i].INSCRICAO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna INSCRICAO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].MUNICIPAL;
+                if (excelRows[i].MUNICIPAL === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna INSCRICAO MUNICIPAL");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].EMAIL;
+                if (excelRows[i].EMAIL === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna EMAIL");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].CONTATO;
+                if (excelRows[i].CONTATO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Fornecedores coluna CONTATO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                aaa.push(
+                    [
+                        remover_acentos(excelRows[i].NOME),
+                        remover_acentos(excelRows[i].PESSOA),
+                        remover_acentos(excelRows[i].CNPJ),
+                        remover_acentos(excelRows[i].SERVICO),
+                        excelRows[i].DESDE,
+                        remover_acentos(excelRows[i].OBS),
+                        remover_acentos(excelRows[i].LIMITE),
+                        remover_acentos(excelRows[i].TELEFONE),
+                        remover_acentos(excelRows[i].ENDERECO),
+                        remover_acentos(excelRows[i].NUMERO),
+                        remover_acentos(excelRows[i].BAIRRO),
+                        remover_acentos(excelRows[i].ESTADO),
+                        remover_acentos(excelRows[i].CIDADE),
+                        remover_acentos(excelRows[i].CEP),
+                        remover_acentos(excelRows[i].RG),
+                        excelRows[i].EXPEDITOR,
+                        remover_acentos(excelRows[i].UFRG),
+                        excelRows[i].EMISSAO,
+                        excelRows[i].NASCIMENTO,
+                        remover_acentos(excelRows[i].GENERO),
+                        remover_acentos(excelRows[i].CIVIL),
+                        remover_acentos(excelRows[i].INSCRICAO),
+                        remover_acentos(excelRows[i].MUNICIPAL),
+                        excelRows[i].EMAIL,
+                        excelRows[i].CONTATO
+                    ]
+                );
+            }
+
+            var dvExcelfor = document.getElementById("dvExcelfor");
+            dvExcelfor.innerHTML = "";
+            dvExcelfor.appendChild(table);
+
+            $.ajax({
+                dataType: 'json',
+                type: 'POST',
+                url: '@Url.Content("~/Cadastro")/Importacoes/Process/',
+                data: $.param({ sForneceList: aaa }, true), //Fornecedores, metodo sForneceList lá no controller
+                success: function (data) {
+
+                    $("#loading").fadeOut('fast');
+                    alert('Planilha processada, verifique se ocorreram consistencias!');
+                },
+                error: function (xxhr, ajaxOptions, thrownError) {
+                    $("#loading").fadeOut('fast');
+
+                    alert(xxhr.responseText);
+                }
+            });
+
+        }
+        catch (err) {
+            $("#loading").fadeOut('fast');
+            alert("ERRO: Verifique o formato da Planilha!" + err.message);
+        }
+    };
+
+    //-- IMPORTAÇÃO DE BANCOS
+    function validarArquivo_xls_codigo_banco() {
+
+        var arquivoInput = document.getElementById('arquivos_xls_codigo_banco');
+        var caminhoArquivo = arquivoInput.value;
+
+        if (arquivoInput.value == '') {
+            return false;
+        }
+
+        var extensoesPermitidas = /(.XLSX)$/i;
+        if (!extensoesPermitidas.exec(caminhoArquivo)) {
+            alert('AVISO: Somente arquivos permitidos com as extensões.XLS');
+            return false;
+        } else {
+
+            Upload_codigo_banco();
+        }
+    }
+    function Upload_codigo_banco() {
+        //Reference the FileUpload element.
+        var fileUpload = document.getElementById("arquivos_xls_codigo_banco");
+
+        //Validate whether File is valid Excel file.
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
+        if (regex.test(fileUpload.value.toLowerCase())) {
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+
+                //For Browsers other than IE.
+                if (reader.readAsBinaryString) {
+                    reader.onload = function (e) {
+                        ProcessExcel_codigo_banco(e.target.result);
+                    };
+                    reader.readAsBinaryString(fileUpload.files[0]);
+                } else {
+                    //For IE Browser.
+
+                    reader.onload = function (e) {
+                        var data = "";
+                        var bytes = new Uint8Array(e.target.result);
+                        for (var i = 0; i < bytes.byteLength; i++) {
+                            data += String.fromCharCode(bytes[i]);
+                        }
+                        ProcessExcel_codigo_banco(data);
+                    };
+                    reader.readAsArrayBuffer(fileUpload.files[0]);
+                }
+            } else {
+                alert("This browser does not support HTML5.");
+            }
+        } else {
+            alert("Please upload a valid Excel file.");
+        }
+    };
+    function ProcessExcel_codigo_banco(data) {
+
+
+        try {
+
+
+            $("#loading").fadeIn('fast');
+
+
+        //Read the Excel File data.
+        var workbook = XLSX.read(data, {
+            type: 'binary'
+        });
+
+
+        //Fetch the name of First Sheet.
+        var firstSheet = workbook.SheetNames[0];
+
+        //Read all rows from First Sheet into an JSON array.
+        var excelRows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[firstSheet]);
+
+        //Create a HTML Table element.
+        var table = document.createElement("table");
+        table.border = "1";
+
+        //Add the header row.
+        var row = table.insertRow(-1);
+
+        //Add the header cells.
+        var headerCell = document.createElement("TH");
+        headerCell.innerHTML = "CODIGO";
+        row.appendChild(headerCell);
+
+        headerCell = document.createElement("TH");
+        headerCell.innerHTML = "BANCO";
+        row.appendChild(headerCell);
+
+            var aaa = [];
+
+            var lok = "";
+
+        for (var i = 0; i < excelRows.length; i++) {
+
+            var row = table.insertRow(-1);
+
+            //Add the data cells.
+            var cell = row.insertCell(-1);
+
+            cell.innerHTML = remover_acentos(excelRows[i].CODIGO);
+            if (excelRows[i].CODIGO === undefined) {
+                alert("Erro ao processar planilha: Verifique o arquivo de importação Código Banco");
+
+                $("#loading").fadeOut('fast');
+                lok = "N";
+                return;
+            }
+
+
+
+            cell = row.insertCell(-1);
+            cell.innerHTML = remover_acentos(excelRows[i].BANCO);
+            if (excelRows[i].BANCO === undefined) {
+                alert("Erro ao processar planilha: Verifique o arquivo de importação Código Banco");
+
+                $("#loading").fadeOut('fast');
+                lok = "N";
+                return;
+            }
+
+            aaa.push(
+                [
+                    remover_acentos(excelRows[i].CODIGO),
+                    remover_acentos(excelRows[i].BANCO)
+                ]
+            );
+        }
+
+            if (lok != "") {
+                $("#loading").fadeOut('fast');
+
+                return;
+            }
+
+            var dvExcelbanco = document.getElementById("dvExcelbanco");
+            dvExcelbanco.innerHTML = "";
+            dvExcelbanco.appendChild(table);
+
+
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Content("~/Cadastro")/Importacoes/Importacao_codigo_banco/',
+            data: $.param({ data: aaa }, true),
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+
+                $("#loading").fadeOut('fast');
+                alert('Planilha processada, verifique se ocorreram consistencias!');
+            },
+            error: function (xxhr, ajaxOptions, thrownError) {
+                alert("ERRO - Verifique o formatado da planilha! " + error);
+            }
+        });
+
+        }
+        catch (err) {
+            $("#loading").fadeOut('fast');
+            alert(err.message);
+        }
+
+    };
+
+    //-- IMPORTAÇÃO CONTAS A PAGAR
+    function validarArquivo_conta_pagar() {
+
+        var arquivoInput = document.getElementById('arquivos_contas_pagar');
+        var caminhoArquivo = arquivoInput.value;
+
+        if (arquivoInput.value == '') {
+            return false;
+        }
+
+        var extensoesPermitidas = /(.XLSX)$/i;
+        if (!extensoesPermitidas.exec(caminhoArquivo)) {
+            alert('AVISO: Somente arquivos permitidos com as extensões.XLS');
+            return false;
+        } else {
+
+            Upload_contas_pagar();
+        }
+    }
+    function Upload_contas_pagar() {
+        //Reference the FileUpload element.
+        var fileUpload = document.getElementById("arquivos_contas_pagar");
+
+        //Validate whether File is valid Excel file.
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
+        if (regex.test(fileUpload.value.toLowerCase())) {
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+
+                //For Browsers other than IE.
+                if (reader.readAsBinaryString) {
+                    reader.onload = function (e) {
+                        ProcessExcel_contas_pagar(e.target.result);
+                    };
+                    reader.readAsBinaryString(fileUpload.files[0]);
+                } else {
+                    //For IE Browser.
+
+                    reader.onload = function (e) {
+                        var data = "";
+                        var bytes = new Uint8Array(e.target.result);
+                        for (var i = 0; i < bytes.byteLength; i++) {
+                            data += String.fromCharCode(bytes[i]);
+                        }
+                        ProcessExcel_contas_pagar(data);
+                    };
+                    reader.readAsArrayBuffer(fileUpload.files[0]);
+                }
+            } else {
+                alert("This browser does not support HTML5.");
+            }
+        } else {
+            alert("Please upload a valid Excel file.");
+        }
+    };
+    function ProcessExcel_contas_pagar(data) {
+
+        try {
+
+            $("#loading").fadeIn('fast');
+
+            //Read the Excel File data.
+            var workbook = XLSX.read(data, {
+                type: 'binary'
+            });
+
+            //Fetch the name of First Sheet.
+            var firstSheet = workbook.SheetNames[0];
+
+            //Read all rows from First Sheet into an JSON array.
+            var excelRows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[firstSheet]);
+
+            //Create a HTML Table element.
+            var table = document.createElement("table");
+            table.border = "1";
+
+            //Add the header row.
+            var row = table.insertRow(-1);
+
+            //Add the header cells.
+            var headerCell = document.createElement("TH");
+            headerCell.innerHTML = "EMPRESA";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "FORNECEDOR";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "VEICULO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "DOCUMENTO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "DATA";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "VALOR";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "PAGO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "FORMA_PAGTO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "DATA_PAGTO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "VALOR_PAGO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "JUROS";
+            row.appendChild(headerCell);
+
+            var aaa = [];
+            var lok = "";
+
+            for (var i = 0; i < excelRows.length; i++) {
+
+                var row = table.insertRow(-1);
+
+                //Add the data cells.
+                var cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].EMPRESA);
+                if (excelRows[i].EMPRESA === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação EMPRESA");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].FORNECEDOR);
+                if (excelRows[i].FORNECEDOR === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação FORNECEDOR");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].VEICULO);
+                if (excelRows[i].VEICULO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação VEICULO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].DOCUMENTO;
+                if (excelRows[i].DOCUMENTO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação DOCUMENTO");
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].DATA);
+                if (excelRows[i].DATA === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação DATA");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].VALOR);
+                if (excelRows[i].VALOR === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação VALOR");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].PAGO);
+                if (excelRows[i].PAGO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação PAGO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].FORMA_PAGTO;
+                if (excelRows[i].FORMA_PAGTO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação FORMA_PAGTO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].DATA_PAGTO);
+                if (excelRows[i].DATA_PAGTO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação DATA PAGTO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].VALOR_PAGO);
+                if (excelRows[i].VALOR === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação VALOR PAGO ");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].JUROS);
+                if (excelRows[i].JUROS === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação JUROS");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                aaa.push(
+                    [
+                        remover_acentos(excelRows[i].EMPRESA),
+                        remover_acentos(excelRows[i].FORNECEDOR),
+                        remover_acentos(excelRows[i].VEICULO),
+                        remover_acentos(excelRows[i].DOCUMENTO),
+                        excelRows[i].DATA,
+                        excelRows[i].VALOR,
+                        remover_acentos(excelRows[i].PAGO),
+                        remover_acentos(excelRows[i].FORMA_PAGTO),
+                        excelRows[i].DATA_PAGTO,
+                        excelRows[i].VALOR_PAGO,
+                        excelRows[i].JUROS]);
+            }
+
+            if (lok != "") {
+                $("#loading").fadeOut('fast');
+                return;
+            }
+
+            var dvExcelcontasPagar = document.getElementById("dvExcelcontasPagar");
+            dvExcelcontasPagar.innerHTML = "";
+            dvExcelcontasPagar.appendChild(table);
+
+
+            $.ajax({
+                dataType: 'json',
+                type: 'POST',
+                url: '@Url.Content("~/Cadastro")/Importacoes/Importacao_contas_pagar/',
+                data: $.param({ sContasPagarList: aaa }, true), //sContasPagarList, parametro metodo lá no controller. (contas a pagar)
+                success: function (data) {
+
+                    $("#loading").fadeOut('fast');
+                    alert('Planilha processada, verifique se ocorreram consistencias!');
+                },
+                error: function (xxhr, ajaxOptions, thrownError) {
+                    $("#loading").fadeOut('fast');
+
+                    alert(xxhr.responseText);
+                    document.getElementById("lblconsist_conta_pagar").innerHTML = xxhr.responseText;
+                }
+            });
+
+        }
+        catch (err) {
+            $("#loading").fadeOut('fast');
+            alert("ERRO: Verifique o formato da Planilha!" + err.message);
+        }
+
+    };
+
+
+    //-- IMPORTAÇÃO ACERTOS
+    function validarArquivo_acertos() {
+
+        var arquivoInput = document.getElementById('arquivo_acertos');
+        var caminhoArquivo = arquivoInput.value;
+
+        if (arquivoInput.value == '') {
+            return false;
+        }
+
+        var extensoesPermitidas = /(.XLSX)$/i;
+        if (!extensoesPermitidas.exec(caminhoArquivo)) {
+            alert('AVISO: Somente arquivos permitidos com as extensões.XLS');
+            return false;
+        } else {
+
+            Upload_acertos();
+        }
+    }
+    function Upload_acertos() {
+        //Reference the FileUpload element.
+        var fileUpload = document.getElementById("arquivo_acertos");
+
+        //Validate whether File is valid Excel file.
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
+        if (regex.test(fileUpload.value.toLowerCase())) {
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+
+                //For Browsers other than IE.
+                if (reader.readAsBinaryString) {
+                    reader.onload = function (e) {
+                        ProcessExcel_acertos(e.target.result);
+                    };
+                    reader.readAsBinaryString(fileUpload.files[0]);
+                } else {
+                    //For IE Browser.
+
+                    reader.onload = function (e) {
+                        var data = "";
+                        var bytes = new Uint8Array(e.target.result);
+                        for (var i = 0; i < bytes.byteLength; i++) {
+                            data += String.fromCharCode(bytes[i]);
+                        }
+                        ProcessExcel_acertos(data);
+                    };
+                    reader.readAsArrayBuffer(fileUpload.files[0]);
+                }
+            } else {
+                alert("This browser does not support HTML5.");
+            }
+        } else {
+            alert("Please upload a valid Excel file.");
+        }
+    };
+    function ProcessExcel_acertos(data) {
+
+        try {
+
+            $("#loading").fadeIn('fast');
+
+            //Read the Excel File data.
+            var workbook = XLSX.read(data, {
+                type: 'binary'
+            });
+
+            //Fetch the name of First Sheet.
+            var firstSheet = workbook.SheetNames[0];
+
+            //Read all rows from First Sheet into an JSON array.
+            var excelRows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[firstSheet]);
+
+            //Create a HTML Table element.
+            var table = document.createElement("table");
+            table.border = "1";
+
+            //Add the header row.
+            var row = table.insertRow(-1);
+
+            //Add the header cells.
+            var headerCell = document.createElement("TH");
+            headerCell.innerHTML = "MOTORISTA";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "CAVALO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "CARRETA";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "VIAGEM";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "VIAGEM";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "ORIGEM";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "UF";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "DESTINO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "UFDESTINO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "FRETE";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "ADIANTAMENTO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "PERFORMANCE";
+            row.appendChild(headerCell);
+
+            var aaa = [];
+            var lok = "";
+
+            for (var i = 0; i < excelRows.length; i++) {
+
+                var row = table.insertRow(-1);
+
+                //Add the data cells.
+                var cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].MOTORISTA);
+                if (excelRows[i].MOTORISTA === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação MOTORISTA");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].CAVALO);
+                if (excelRows[i].CAVALO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação CAVALO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].CARRETA);
+                if (excelRows[i].CARRETA === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação CARRETA");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].VIAGEM;
+                if (excelRows[i].VIAGEM === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação VIAGEM");
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].DTVIAGEM);
+                if (excelRows[i].DTVIAGEM === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação DTVIAGEM");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].ORIGEM);
+                if (excelRows[i].ORIGEM === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação ORIGEM");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].UF);
+                if (excelRows[i].UF === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação UF ORIGEM");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].DESTINO);
+                if (excelRows[i].DESTINO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação DESTINO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].UFDESTINO);
+                if (excelRows[i].UFDESTINO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação UF DESTINO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].FRETE;
+                if (excelRows[i].FRETE === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação FRETE");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].ADIANTAMENTO);
+                if (excelRows[i].ADIANTAMENTO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação ADIANTAMENTO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].PERFORMANCE);
+                if (excelRows[i].PERFORMANCE === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação PERFORMANCE ");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                aaa.push(
+                    [
+                        remover_acentos(excelRows[i].MOTORISTA),
+                        remover_acentos(excelRows[i].CAVALO),
+                        remover_acentos(excelRows[i].CARRETA),
+                        remover_acentos(excelRows[i].VIAGEM),
+                        excelRows[i].DTVIAGEM,
+                        remover_acentos(excelRows[i].ORIGEM),
+                        remover_acentos(excelRows[i].UF),
+                        remover_acentos(excelRows[i].DESTINO),
+                        remover_acentos(excelRows[i].UFDESTINO),
+                        excelRows[i].FRETE.replace('.','').replace(',','.'),
+                        excelRows[i].ADIANTAMENTO.replace('.', '').replace(',', '.'),
+                        excelRows[i].PERFORMANCE.replace('.', '').replace(',', '.')
+                    ]);
+
+
+                    if (lok != "") {
+                        $("#loading").fadeOut('fast');
+                        return;
+                    }
+
+                    var dvExcelAcertos = document.getElementById("dvExcelAcertos");
+                    dvExcelAcertos.innerHTML = "";
+                    dvExcelAcertos.appendChild(table);
+
+                    aaa_itens = [];
+
+            }
+
+            $.ajax({
+                dataType: 'json',
+                type: 'POST',
+                url: '@Url.Content("~/Cadastro")/Importacoes/Importacao_acertos/',
+                data: $.param({ sAcertoList: aaa }, true), //sAcertoList, parametro metodo lá no controller. (Acertos)
+                success: function (data) {
+
+                    $("#loading").fadeOut('fast');
+                    alert('Planilha processada, verifique se ocorreram consistencias!');
+                },
+                error: function (xxhr, ajaxOptions, thrownError) {
+                    $("#loading").fadeOut('fast');
+
+                    alert(xxhr.responseText);
+                    document.getElementById("lblconsist_acertos").innerHTML = xxhr.responseText;
+                }
+            });
+
+            $("#loading").fadeOut('fast');
+
+        }
+        catch (err) {
+            $("#loading").fadeOut('fast');
+            alert("ERRO: Verifique o formato da Planilha!" + err.message);
+        }
+    };
+
+
+    //-- IMPORTAÇÃO DESPESAS DO ACERTO
+    function validarArquivo_xls_despesas_acerto() {
+
+        var arquivoInput = document.getElementById('arquivo_despesas_acertos');
+        var caminhoArquivo = arquivoInput.value;
+
+        if (arquivoInput.value == '') {
+            return false;
+        }
+
+        var extensoesPermitidas = /(.XLSX)$/i;
+        if (!extensoesPermitidas.exec(caminhoArquivo)) {
+            alert('AVISO: Somente arquivos permitidos com as extensões.XLS');
+            return false;
+        } else {
+
+            Upload_despesas_acerto();
+        }
+    }
+    function Upload_despesas_acerto() {
+        //Reference the FileUpload element.
+        var fileUpload = document.getElementById("arquivo_despesas_acertos");
+
+        //Validate whether File is valid Excel file.
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
+        if (regex.test(fileUpload.value.toLowerCase())) {
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+
+                //For Browsers other than IE.
+                if (reader.readAsBinaryString) {
+                    reader.onload = function (e) {
+                        ProcessExcel_despesas_acerto(e.target.result);
+                    };
+                    reader.readAsBinaryString(fileUpload.files[0]);
+                } else {
+                    //For IE Browser.
+
+                    reader.onload = function (e) {
+                        var data = "";
+                        var bytes = new Uint8Array(e.target.result);
+                        for (var i = 0; i < bytes.byteLength; i++) {
+                            data += String.fromCharCode(bytes[i]);
+                        }
+                        ProcessExcel_despesas_acerto(data);
+                    };
+                    reader.readAsArrayBuffer(fileUpload.files[0]);
+                }
+            } else {
+                alert("This browser does not support HTML5.");
+            }
+        } else {
+            alert("Please upload a valid Excel file.");
+        }
+    };
+    function ProcessExcel_despesas_acerto(data) {
+
+        try {
+
+            $("#loading").fadeIn('fast');
+
+            //Read the Excel File data.
+            var workbook = XLSX.read(data, {
+                type: 'binary'
+            });
+
+            //Fetch the name of First Sheet.
+            var firstSheet = workbook.SheetNames[0];
+
+            //Read all rows from First Sheet into an JSON array.
+            var excelRows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[firstSheet]);
+
+            //Create a HTML Table element.
+            var table = document.createElement("table");
+            table.border = "1";
+
+            //Add the header row.
+            var row = table.insertRow(-1);
+
+            //Add the header cells.
+            var headerCell = document.createElement("TH");
+            headerCell.innerHTML = "NVIAGEM";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "DATADESP";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "DESCRICAO";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "FORNECEDOR";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "VALOR";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "LITROS";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "VALORTOT";
+            row.appendChild(headerCell);
+
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "DESCONTO";
+            row.appendChild(headerCell);
+
+            var aaa = [];
+
+            var lok = "";
+
+            for (var i = 0; i < excelRows.length; i++) {
+
+                var row = table.insertRow(-1);
+
+                //Add the data cells.
+                var cell = row.insertCell(-1);
+
+                cell.innerHTML = remover_acentos(excelRows[i].NVIAGEM);
+                if (excelRows[i].NVIAGEM === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Código NVIAGEM");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].DATADESP);
+                if (excelRows[i].DATADESP === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Código DATADESP");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].DESCRICAO);
+                if (excelRows[i].DESCRICAO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Código DESCRICAO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].FORNECEDOR);
+                if (excelRows[i].FORNECEDOR === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Código FORNECEDOR");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+
+                cell.innerHTML = excelRows[i].VALOR;
+                if (excelRows[i].VALOR === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Código VALORUNIT");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].LITROS;
+                if (excelRows[i].LITROS === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Código LITROS");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].VALORTOT;
+                if (excelRows[i].VALORTOT === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Código VALORTOT");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                cell = row.insertCell(-1);
+                cell.innerHTML = excelRows[i].DESCONTO;
+                if (excelRows[i].DESCONTO === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação Código DESCONTO");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
+                aaa.push(
+                    [
+                        remover_acentos(excelRows[i].NVIAGEM),
+                        excelRows[i].DATADESP,
+                        remover_acentos(excelRows[i].DESCRICAO),
+                        remover_acentos(excelRows[i].FORNECEDOR),
+                        excelRows[i].VALOR.replace('.','').replace(',','.'),
+                        excelRows[i].LITROS.replace('.', '').replace(',', '.'),
+                        excelRows[i].VALORTOT.replace('.', '').replace(',', '.'),
+                        excelRows[i].DESCONTO.replace('.', '').replace(',', '.')
+                    ]
+                );
+            }
+
+            if (lok != "") {
+                $("#loading").fadeOut('fast');
+
+                return;
+            }
+
+            var dvExcelDespesaAcerto = document.getElementById("dvExcelDespesaAcerto");
+            dvExcelDespesaAcerto.innerHTML = "";
+            dvExcelDespesaAcerto.appendChild(table);
+
+            $.ajax({
+                dataType: 'json',
+                type: 'POST',
+                url: '@Url.Content("~/Cadastro")/Importacoes/Importacao_despesas_acertos/',
+                data: $.param({ sADesp_certoList: aaa }, true), //sADesp_certoList, parametro metodo lá no controller. (Despesas Acertos)
+                success: function (data) {
+
+                    $("#loading").fadeOut('fast');
+                    alert('Planilha processada, verifique se ocorreram consistencias!');
+                },
+                error: function (xxhr, ajaxOptions, thrownError) {
+                    $("#loading").fadeOut('fast');
+
+                    alert(xxhr.responseText);
+                    document.getElementById("lblconsist_despesa_acertos").innerHTML = xxhr.responseText;
+                }
+            });
+            //////-----------------------------
+
+            $("#loading").fadeOut('fast');
+
+
+        }
+        catch (err) {
+            $("#loading").fadeOut('fast');
+            alert(err.message);
+        }
+
+    };
+
+    function AddItems_Despesas_Acerto() {
+
+
+
+
+
+
+
+
+        var datav = $("#TravelDate").val();
+        var datad = $("#ExpenseDate").val()
+
+        if (datad < datav) {
+            alert('Data não pode ser menor que a data do acerto');
+            return;
+        }
+
+        //------
+
+        var amount = $("#despesaValor").val();
+        var Valor_Total = $("#valtotal").val();
+
+        //      if ($('#ExpenseType_Id option:selected').text() != "Diesel") {
+        if (descricao_segmento != "C") {
+            var Valor_Total = $("#despesaValor").val();
+        }
+
+        var data = $("#ExpenseDate").val();
+
+        var tipoDespesa = $("#ExpenseType_Id").val();
+        var tipoDespesaNome = $('#ExpenseType_Id option:selected').text();
+
+        var Litros = $("#litros").val();
+        var desconto = $("#desconto").val();
+        var arquivo = document.getElementById('ImagemUpload').value;
+
+        if (descricao_segmento == "C") {
+            if (Litros == "0" || Litros == "" || Litros == "0,00" || Litros == "0.00") {
+                alert('Informe a Litragem');
+                return;
+            }
+        }
+
+        var comboTipoDespesa = document.getElementById("ExpenseType_Id");
+        var tipoDespesaIndice = comboTipoDespesa.selectedIndex;
+
+        var fornecedor = $("#Supplier_Id").val();
+
+        var dados = $('#Supplier_Id').select2('data');
+        fornecedorNome = dados.text;
+
+        var comboFornecedor = document.getElementById("Supplier_Id");
+        var forncedorIndice = comboFornecedor.selectedIndex;
+
+        if (tipoDespesa === "" || amount === "" || data === "" || fornecedor === "") {
+            alert("Dados incompletoss.");
+            return;
+        }
+
+        var row = $('#TData tbody tr').length;
+
+        if (row > 0) {
+            var index = $('.index').last().attr('id');
+            index = parseInt(index);
+            row = parseInt(row);
+            row = index + 1;
+        }
+
+
+
+        var arquivoInput = document.getElementById('ImagemUpload');
+        //financialSettlements.Imagem = arquivoInput.value;
+
+
+        var html = '<tr id="' + row + '" class="index">';
+        html += "<td class='number'>" + (row + 1) + "</td>";
+        html += '<td><input type="text" value="' + data + '" name="ExpenseFinancialSettlements[' + row + '].ExpenseDate" id="ExpenseFinancialSettlements[' + row + '].ExpenseDate" class="form-control" readonly="true" /></td>';
+
+        html += '<td><input type="text" value="' + fornecedorNome + '" name="ExpenseFinancialSettlements[' + row + '].Supplier_Name" id="ExpenseFinancialSettlements[' + row + '].Supplier_Name" class="form-control" readonly="true" />';
+        html += '<input type="hidden" value="' + fornecedor + '" name="ExpenseFinancialSettlements[' + row + '].Supplier_Id" id="ExpenseFinancialSettlements[' + row + '].Supplier_Id" class="form-control" readonly="true" required/></td>';
+        html += '<input type="hidden" value="' + forncedorIndice + '" name="ExpenseFinancialSettlements[' + row + '].Supplier_Index" id="ExpenseFinancialSettlements[' + row + '].Supplier_Index" class="form-control" readonly="true" /></td>';
+
+        html += '<td><input type="text" value="' + tipoDespesaNome + '" name="ExpenseFinancialSettlements[' + row + '].ExpenseType_Name" id="ExpenseFinancialSettlements[' + row + '].ExpenseType_Name" class="form-control" readonly="true" />';
+        html += '<input type="hidden" value="' + tipoDespesa + '" name="ExpenseFinancialSettlements[' + row + '].ExpenseType_Id" id="ExpenseFinancialSettlements[' + row + '].ExpenseType_Id" class="form-control" readonly="true" required/></td>';
+        html += '<input type="hidden" value="' + tipoDespesaIndice + '" name="ExpenseFinancialSettlements[' + row + '].ExpenseType_Index" id="ExpenseFinancialSettlements[' + row + '].ExpenseType_Index" class="form-control" readonly="true" /></td>';
+
+        html += '<td class="despesaitem"><input type="text" value="' + amount + '"name="ExpenseFinancialSettlements[' + row + '].amount" id="ExpenseFinancialSettlements[' + row + '].amount" style="text-align: right" class="form-control" readonly="true" /></td>';
+
+        html += '<td><input type="text" value="' + Litros + '" name="ExpenseFinancialSettlements[' + row + '].Litros" id="ExpenseFinancialSettlements[' + row + '].Litros" style="text-align: right" class="form-control" readonly="true"/>';
+
+        html += '<td><input type="text" value="' + Valor_Total + '" name="ExpenseFinancialSettlements[' + row + '].Valor_Total" id="ExpenseFinancialSettlements[' + row + '].Valor_Total" style="text-align: right" class="form-control" readonly="true" />';
+
+        html += '<td><input type="text" value="' + desconto + '" name="ExpenseFinancialSettlements[' + row + '].desconto" id="ExpenseFinancialSettlements[' + row + '].desconto" style="text-align: right" class="form-control" readonly="true" />';
+
+        html += '<td style="Display:none" ><input type="text" value="' + arquivo + '" name="ExpenseFinancialSettlements[' + row + '].arquivo" id="ExpenseFinancialSettlements[' + row + '].arquivo" class="form-control" readonly="true"/>';
+
+        html += '<td><input type="hidden" value="' + $("#Employee_Id").val() + '" name="ExpenseFinancialSettlements[' + row + '].Employee_Id" id="ExpenseFinancialSettlements[' + row + '].Employee_Id" class="form-control" readonly="true" />';
+        html += '<td><input type="hidden" value="' + arquivoInput.value + '" name="ExpenseFinancialSettlements[' + row + '].Imagem" id="ExpenseFinancialSettlements[' + row + '].Imagem" class="form-control" readonly="true" />';
+
+        html += '<td><a href="javascript:void(0)" onclick="javascript:deleteRow(this)" class="btn btn-danger"><i class="fa fa-times"></i> Remover</a></td>';
+        html += '<td><a href="javascript:void(0)" id="change-select2-trigger" onclick="javascript:EditaRow(this)" class="btn btn-success"><i class="fa fa-pencil fa-fw"></i> Editar</a></td>';
+        html += '</tr>';
+        $('#TData tbody').append(html);
+
+        var expense = new Expense();
+        ///expense.id = row + 1;
+
+        financialSettlements.Expenses.push(expense);
+        expense.id = row + 1;
+
+        var ddesconto = 0;
+
+        if (desconto == "") {
+            desconto = 0;
+        }
+        else {
+            ddesconto = desconto.replace(',', '.');
+        }
+
+        var vvalor_total = Valor_Total.replace(',', '.');
+
+        if (descricao_segmento == "C") {
+
+            var result = vvalor_total - ddesconto;
+
+            expense.amount = converteMoedaFloat(amount);
+            expense.litros = Litros;
+            expense.Valor_Total = result;
+            expense.Arquivo = arquivo;
+            expense.Desconto = desconto;
+            expense.Distancia = $("#distance").val();
+
+        } else {
+
+            expense.amount = converteMoedaFloat(amount); /// Outras despesas
+            expense.Valor_Total = vvalor_total;
+            expense.Arquivo = arquivo;
+        }
+        financialSettlements.Imagem = arquivoInput.value;
+        expense.Imagem = arquivoInput.value;
+
+        var expenseTotal = financialSettlements.GetExpenseTotal();
+
+        $("#despesaTotal").val(financialSettlements.GetTotalDesp().toFixed(2).replace('.', ','));
+
+        $("#despesaTotalLabel").text("-" + expenseTotal.toFixed(2).replace('.', ','));
+
+        $("#Supplier_Id").attr('selectedIndex', '-1');
+        $("#ExpenseType_Id").attr('selectedIndex', '-1');
+
+        $("#totalLabel").text("R$ " + financialSettlements.GetTotal().replace('.', ','));
+        $("#totalReceiverLabel").text(financialSettlements.GetTotal().replace('.', ','));
+
+        //        if ($('#ExpenseType_Id option:selected').text() == "Diesel") {
+        if (descricao_segmento == "C") {
+
+            var distancia = $("#distance").val();
+            var litross = (distancia / financialSettlements.GetExibe()).toFixed(2);
+            $("#totalConsumoLabel").text(litross.replace('.', ',') + ' KM/L ');
+        }
+
+        var cod = financialSettlements.GetExibeIdMotorista();
+
+        if (cod != 99) { // adiciono as informações contas a pagar do motorista.
+
+            // inclusão valor do motorista contas a pagar
+            var expense = new Expense();
+            financialSettlements.Expenses.push(expense);
+
+            expense.id = 99;
+            var Arquivo = "Performance Motorista";
+            var row = $('#TData tbody tr').length;
+
+            if (row > 0) {
+                var index = $('.index').last().attr('id');
+                index = parseInt(index);
+                row = index + 1;
+            }
+
+            var Valor_Viagem = $("#TravelValue").val().replace('.', ',');
+
+            var html = '<tr id="' + row + '" style="Display:none" class="index">';
+            html += "<td class='number'>" + (row + 1) + "</td>";
+            html += '<td><input type="text" value="' + $("#ExpenseDate").val() + '" name="ExpenseFinancialSettlements[' + row + '].ExpenseDate" id="ExpenseFinancialSettlements[' + row + '].ExpenseDate" class="form-control" readonly="true" /></td>';
+
+            html += '<input type="hidden" value="' + $("#Supplier_Id").val() + '" name="ExpenseFinancialSettlements[' + row + '].Supplier_Id" id="ExpenseFinancialSettlements[' + row + '].Supplier_Id" class="form-control" readonly="true"/></td>';
+            html += '<input type="hidden" value="' + $("#ExpenseType_Id").val() + '" name="ExpenseFinancialSettlements[' + row + '].ExpenseType_Id" id="ExpenseFinancialSettlements[' + row + '].ExpenseType_Id" class="form-control" readonly="true"/></td>';
+            html += '<input value="' + $("#Employee_Id").val() + '" name="ExpenseFinancialSettlements[' + row + '].Employee_Id" id="ExpenseFinancialSettlements[' + row + '].Employee_Id" class="form-control" readonly="true"/></td>';
+
+            html += '<td><input type="text" value="' + Valor_Viagem + '"name="ExpenseFinancialSettlements[' + row + '].amount" id="ExpenseFinancialSettlements[' + row + '].amount" style="text-align: right" class="form-control" readonly="true" /></td>';
+            html += '<td><input type="text" value="' + Valor_Viagem + '" name="ExpenseFinancialSettlements[' + row + '].Valor_Total" id="ExpenseFinancialSettlements[' + row + '].Valor_Total" style="text-align: right" class="form-control" readonly="true" />';
+            html += '<td><input type="text" value="' + Arquivo + '" name="ExpenseFinancialSettlements[' + row + '].arquivo" id="ExpenseFinancialSettlements[' + row + '].arquivo" class="form-control" readonly="true"/>';
+
+            html += '</tr>';
+
+            $('#TData tbody').append(html);
+        }
+
+        LimparDados();
+    }
+
+
+    function ChangeParcel() {
+
+        if ($("#NumParcel").val() != "") {
+
+            $('#TData tbody tr').remove();
+
+            var num = parseInt($("#NumParcel").val())
+            var vv = $("#Amount").val().replace('.', '').replace(',', '.');
+
+            //var num = parseInt($("#NumParcel").val())
+            var value = vv / num;
+            var from = $("#DueDate").val().split("/")
+            var d = new Date(from[2], from[1] - 1, from[0]);
+            for (var i = 0; i < num; i++) {
+
+                AddItems(value, d.toLocaleDateString());
+                d.setMonth(d.getMonth() + 1)
+            }
+        }
+    }
+
+    function AddItems(value, date) {
+        var row = $('#TData tbody tr').length;
+        if (row > 0) {
+            var index = $('.index').last().attr('id');
+            index = parseInt(index);
+            row = parseInt(row);
+            row = index + 1;
+        }
+        var html = '<tr id="' + row + '" class="index">';
+        html += "<td class='number'>" + (row + 1) + "</td>";
+
+        var val_formatado = numberToReal(value)
+
+
+        html += '<td><input type="text" value="' + val_formatado + '" name="ExpensePayment[' + row + '].AmountExpensePayment" id="ExpensePayment[' + row + '].AmountExpensePayment" class="form-control" readonly="true" required/></td>';
+        html += '<td><input type="text" value="' + date + '" name="ExpensePayment[' + row + '].DueDateExpensePayment" id="ExpensePayment[' + row + '].DueDateExpensePayment" class="form-control dates" required/></td>';
+        //html += '<td><input type="text" value="2" name="ExpensePayment[' + row + '].StatusExpensePayment" id="ExpensePayment[' + row + '].StatusExpensePayment" class="form-control" readonly="true" required/></td>';
+        html += '<td><select name="ExpensePayment[' + row + '].StatusExpensePayment" id="ExpensePayment[' + row + '].StatusExpensePayment" class="form-control">';
+        html += '    <option value="0">Aberto</option>';
+        html += '    <option value="2">Fechado</option>';
+        html += '</select></td>';
+        //html += '<td><input type="text" value="" name="ExpensePayment[' + row + '].ConcludedDate" id="ExpensePayment[' + row + '].ConcludedDate" class="form-control" /></td>';
+        html += '</tr>';
+        $('#TData tbody').append(html);
+
+
+        $('#qty' + row).on('propertychange change', function () {
+            var price = parseInt($("#price" + row).val()) || 0;
+            var qty = parseInt($(this).val()) || 0;
+            var total = parseInt(price * qty) || 0;
+            $("#total" + row).val(total);
+        });
+
+        $('.dates').datetimepicker({
+            pickTime: false,
+            format: 'DD/MM/YYYY'
+        });
+
+    }
+
+    function numberToReal(numero) {
+        var numero = numero.toFixed(2).split('.');
+        numero[0] = numero[0].split(/(?=(?:...)*$)/).join('.');
+        return numero.join(',');
+    }
+
+    function remover_acentos(str) {
+        return str.normalize('NFD').replace(/([\u0300-\u036f]|[^0-9a-zA-Z\s])/g, '');
+    }
+
+</script>
+
+
+

@@ -16,5 +16,7 @@ namespace Transportadora.Data.Repository
         {
             return Search(x => x.Company_Id == companyId);
         }
+
+
     }
 }

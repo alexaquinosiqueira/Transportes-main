@@ -199,6 +199,8 @@
                                     <th>Número</th>
                                     <th>Valor Original</th>
                                     <th>Vencimento</th>
+                                    <th>Valor Pago</th>
+                                    <th>Juros</th>
                                     <th>Status</th>
                                     @*<th>Data Pagamento</th>*@
 
@@ -210,27 +212,33 @@
                                 }
                                 @for (int i = 0; i < expensePaymentViewModels.Count; i++)
                                 {
-                                    <tr id="@i" class="index">
+                                <tr id="@i" class="index">
 
-                                        <td class='number'>
-                                            @Html.Raw(i + 1)
-                                            <input type="hidden" value="@expensePaymentViewModels[@i].Id" name="ExpensePayment[@i].Id" id="ExpensePayment[@i].Id" class="form-control" readonly required />
-                                        </td>
-                                        <td>
-                                            <input type="text" value="@expensePaymentViewModels[@i].AmountExpensePayment" name="ExpensePayment[@i].AmountExpensePayment" id="ExpensePayment[@i].AmountExpensePayment" class="form-control" readonly required />
-                                        </td>
-                                        <td>
-                                            <input type="text" value="@expensePaymentViewModels[@i].DueDateExpensePayment" name="ExpensePayment[@i].DueDateExpensePayment" id="ExpensePayment[@i].DueDateExpensePayment" class="form-control dates" required />
-                                        </td>
-                                        <td>
-                                            <select name="ExpensePayment[@i].StatusExpensePayment" id="ExpensePayment[@i].StatusExpensePayment" class="form-control">
+                                    <td class='number'>
+                                        @Html.Raw(i + 1)
+                                        <input type="hidden" value="@expensePaymentViewModels[@i].Id" name="ExpensePayment[@i].Id" id="ExpensePayment[@i].Id" class="form-control" readonly required />
+                                    </td>
+                                    <td>
+                                        <input type="text" value="@expensePaymentViewModels[@i].AmountExpensePayment" name="ExpensePayment[@i].AmountExpensePayment" id="ExpensePayment[@i].AmountExpensePayment" class="form-control" readonly required />
+                                    </td>
+                                    <td>
+                                        <input type="text" value="@expensePaymentViewModels[@i].DueDateExpensePayment" name="ExpensePayment[@i].DueDateExpensePayment" id="ExpensePayment[@i].DueDateExpensePayment" class="form-control dates" required />
+                                    </td>
+                                    <td>
+                                        <input type="text" value="@expensePaymentViewModels[@i].Valor_Pago" name="ExpensePayment[@i].Valor_Pago" onfocusout="calcula(this)" onkeyup="formatarMoeda(this);" id="ExpensePayment[@i].Valor_Pago" class="form-control" />
+                                    </td>
+                                    <td>
+                                        <input type="text" value="@expensePaymentViewModels[@i].Valor_Juros" name="ExpensePayment[@i].Valor_Juros" id="ExpensePayment[@i].Valor_Juros" class="form-control" readonly />
+                                    </td>
+                                    <td>
+                                        <select name="ExpensePayment[@i].StatusExpensePayment" id="ExpensePayment[@i].StatusExpensePayment" class="form-control">
 
-                                                <option value="0" selected="@(expensePaymentViewModels[@i].StatusExpensePayment == StatusViewModel.opened)">Aberto</option>
+                                            <option value="0" selected="@(expensePaymentViewModels[@i].StatusExpensePayment == StatusViewModel.opened)">Aberto</option>
 
-                                                <option value="2" selected="@(expensePaymentViewModels[@i].StatusExpensePayment == StatusViewModel.closed)">Fechado</option>
-                                            </select>
-                                        </td>
-                                    </tr>
+                                            <option value="2" selected="@(expensePaymentViewModels[@i].StatusExpensePayment == StatusViewModel.closed)">Fechado</option>
+                                        </select>
+                                    </td>
+                                </tr>
 
                                 }
                             </tbody>
@@ -268,6 +276,9 @@
     }
     $(document).ready(function () {
 
+
+
+
         $('#DueDate').change(function () {
             EnableDisableNumParcel()
         });
@@ -297,4 +308,30 @@
             }
         }
 
-    });</script>
+    });
+
+    function calcula(btn) {
+
+        var row = btn.parentNode.parentNode;
+        var idPesq = row.getElementsByClassName("number")[0].textContent;
+        var idreg = idPesq - 1;
+
+        var valorpg = document.getElementById('ExpensePayment[' + idreg + '].Valor_Pago').value;
+        var valorog = document.getElementById('ExpensePayment[' + idreg + '].AmountExpensePayment').value;
+
+        valorpg = valorpg.replace('.', '').replace(',', '.');
+        valorog = valorog.replace('.', '').replace(',', '.');
+
+
+
+        if (valorpg > 0) {
+
+            var vjuros = parseFloat(valorpg - valorog).toFixed(2);
+
+            vjuros = vjuros.replace('.', ',');            
+
+            document.getElementById('ExpensePayment[' + idreg + '].Valor_Juros').value = vjuros;
+        }
+    }
+
+</script>

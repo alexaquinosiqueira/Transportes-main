@@ -8,7 +8,6 @@
 <script language="javascript" type="text/javascript" src="@Url.Content("~/")assets/js/jquery.tabletojson.min.js"></script>
 
 
-
 <div class="container-fluid">
     <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
         <div class="panel-body">
@@ -51,22 +50,6 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4">
-                        <label class="control-label">Selecione arquivo XLS</label>
-                        <input style="margin-top:10px;" onchange="validarArquivo_xls()" type="file" id="arquivos_xls" name="arquivos_xls" multiple />
-                    </div>
-                    <div class="col-md-4">
-                        <div id="btnxml" class="form-group col-md-1 col-sm-1">
-                            <a id="btnxml" href="javascript:void(0)" style="margin: 0 16px 0px 0; margin-top:31px; margin-left:-24px;" onclick="validarArquivo_xls()" title="Carregar informações xls" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Carregar XLS</a>
-                        </div>
-                    </div>
-
-                    <div class="col-md-12">
-                        <div id="dvExcel">
-                        </div>
-                    </div>
-
-
                     <div class="pull-right">
                         <button type="reset" data-toggle="tooltip" title="Limpar Formulário" class="btn btn-warning">
                             <i class="fa fa-eraser "></i> Limpar
@@ -87,27 +70,6 @@
 }
 <script type="text/javascript">
 
-    class Responsability {
-        constructor() {
-            this.Description = "";
-            this.Company_Id = "";
-            this.Active = "1";
-            this.Arry_responsa = [];
-        }
-    }
-
-
-    class Arry_responsa {
-        constructor() {
-            this.Description = "";
-            this.Active = 1;
-            this.Empresa_Id = "";
-        }
-    }
-
-    responsability = new Responsability();
-
-
     $(document).ready(function () {
         $('select').select2();
         $('.dates').datetimepicker({
@@ -117,172 +79,5 @@
 
 
     });
-
-
-
-    function validarArquivo_xls() {
-
-        var arquivoInput = document.getElementById('arquivos_xls');
-        var caminhoArquivo = arquivoInput.value;
-
-        if (arquivoInput.value == '') {
-            return false;
-        }
-
-        var extensoesPermitidas = /(.XLSX)$/i;
-        if (!extensoesPermitidas.exec(caminhoArquivo)) {
-            alert('AVISO: Somente arquivos permitidos com as extensões.XLS');
-            return false;
-        } else {
-
-            Upload();
-
-
-
-
-
-        }
-    }
-
-
-    function Upload() {
-        //Reference the FileUpload element.
-        var fileUpload = document.getElementById("arquivos_xls");
-
-        //Validate whether File is valid Excel file.
-        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
-        if (regex.test(fileUpload.value.toLowerCase())) {
-            if (typeof (FileReader) != "undefined") {
-                var reader = new FileReader();
-
-                //For Browsers other than IE.
-                if (reader.readAsBinaryString) {
-                    reader.onload = function (e) {
-                        ProcessExcel(e.target.result);
-                    };
-
-
-                    reader.readAsBinaryString(fileUpload.files[0]);
-                } else {
-                    //For IE Browser.
-
-                    reader.onload = function (e) {
-                        var data = "";
-                        var bytes = new Uint8Array(e.target.result);
-                        for (var i = 0; i < bytes.byteLength; i++) {
-                            data += String.fromCharCode(bytes[i]);
-                        }
-                        ProcessExcel(data);
-                    };
-                    reader.readAsArrayBuffer(fileUpload.files[0]);
-                }
-            } else {
-                alert("This browser does not support HTML5.");
-            }
-        } else {
-            alert("Please upload a valid Excel file.");
-        }
-    };
-    function ProcessExcel(data) {
-        //Read the Excel File data.
-        var workbook = XLSX.read(data, {
-            type: 'binary'
-        });
-
-        //Fetch the name of First Sheet.
-        var firstSheet = workbook.SheetNames[0];
-
-        //Read all rows from First Sheet into an JSON array.
-        var excelRows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[firstSheet]);
-
-        //Create a HTML Table element.
-        var table = document.createElement("table");
-        table.border = "1";
-
-        //Add the header row.
-        var row = table.insertRow(-1);
-
-        //Add the header cells.
-        var headerCell = document.createElement("TH");
-        headerCell.innerHTML = "DESCRICAO";
-        row.appendChild(headerCell);
-
-        headerCell = document.createElement("TH");
-        headerCell.innerHTML = "EMPRESA";
-        row.appendChild(headerCell);
-
-        headerCell = document.createElement("TH");
-        headerCell.innerHTML = "TIPO";
-        row.appendChild(headerCell);
-
-        cargos = new Arry_responsa();
-
-
-        var aaa = [];
-
-        //Add the data rows from Excel file.
-        for (var i = 0; i < excelRows.length; i++) {
-            //Add the data row.
-            responsability.Arry_responsa.push(cargos);
-
-            var row = table.insertRow(-1);
-
-            //Add the data cells.
-            var cell = row.insertCell(-1);
-            cell.innerHTML = excelRows[i].DESCRICAO;
-
-            Arry_responsa.Description = excelRows[i].DESCRICAO;
-            aaa.push([excelRows[i].DESCRICAO]);
-
-            //alert(responsas.Description);
-
-            cell = row.insertCell(-1);
-            cell.innerHTML = excelRows[i].EMPRESA;
-
-            Arry_responsa.Company_Id = '864284F5-83E6-467D-17FC-08D881DC64DC';
-
-            cell = row.insertCell(-1);
-            cell.innerHTML = excelRows[i].TIPO;
-
-            Arry_responsa.Active = excelRows[i].TIPO;
-        }
-
-
-        for (var i = 0; i < aaa.length; i++) {
-            //alert(aaa[i]);
-            responsability.Arry_responsa.push(cargos);
-            Arry_responsa.Description = aaa[i];
-        }
-
-        var data =
-        {
-            Ids: [1, 22, 5, 200, 600, 784]
-        };
-
-        $.ajax({
-            url: '@Url.Content("~/Cadastro")/Responsibilities/Importacao/',
-            type: "POST",
-            data: data,
-            cache: false,
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            error: function (response) {
-                alert('ERRO AO EXECUTAR');
-            },
-            success: function (response) {
-                alert('fUNCIONONOU');
-            }
-        });
-
-        var dvExcel = document.getElementById("dvExcel");
-        dvExcel.innerHTML = "";
-        dvExcel.appendChild(table);
-
-        var table = $('#dvExcel').tableToJSON();
-
-        alert(JSON.stringify(table));
-
-    };
-
 
 </script>

@@ -65,14 +65,12 @@ namespace Transportadora.Data.Mappings
                 .WithMany()
                 .HasForeignKey(x => x.Company_Id);
 
-            builder.Property(x => x.CNH)
-                .IsRequired();
+            builder.Property(x => x.CNH);
 
-            builder.Property(x => x.TipoCNH)
-    .IsRequired();
+            builder.Property(x => x.TipoCNH);
 
-            builder.Property(x => x.DataCNH)
-    .IsRequired();
+            builder.Property(x => x.DataCNH);
+
             builder.Property(x => x.RG)
 .IsRequired();
             builder.Property(x => x.OrgaoExpedidor)
@@ -91,7 +89,6 @@ namespace Transportadora.Data.Mappings
 
             builder.Property(p => p.NomePai)
     .HasMaxLength(250);
-
 
             builder.Property(p => p.Filho1)
     .HasMaxLength(250);

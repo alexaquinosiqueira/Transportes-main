@@ -51,6 +51,7 @@ namespace Transportadora.UI.Site.Configurations
             services.AddScoped<IFinancialSettlementRepository, FinancialSettlementRepository>();
             services.AddScoped<IExpenseFinancialSettlementRepository, ExpenseFinancialSettlementRepository>();
             services.AddScoped<IExpenseTypeRepository, ExpenseTypeRepository>();
+            services.AddScoped<IExpenseSupplierRepository, ExpenseSupplierRepository>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
 
             services.AddScoped<IAuditLogRepository, AuditLogRepository>();

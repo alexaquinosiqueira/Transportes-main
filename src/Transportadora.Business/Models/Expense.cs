@@ -30,6 +30,7 @@ namespace Transportadora.Business.Models
 		public Guid? Vehicle_Id { get; set; }
 		public virtual Vehicle Vehicle { get; set; }
 
+
 		public DateTime? LastSettlementDate { get; set; }
 		public decimal PaidAmount { get; set; }
 
@@ -37,5 +38,7 @@ namespace Transportadora.Business.Models
 		public Guid Company_Id { get; set; }
 		public virtual Company Company { get; set; }
 
+		public Guid? Id_Acerto { get; set; }
+			
 	}
 }

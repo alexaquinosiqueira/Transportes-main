@@ -24,6 +24,7 @@ namespace Transportadora.Data.Mappings
                 .WithMany(u => u.ExpenseFinancialSettlements)
                 .HasForeignKey(x => x.ExpenseType_Id);
 
+
             builder.HasOne(p => p.Supplier)
                 .WithMany(u => u.ExpenseFinancialSettlements)
                 .HasForeignKey(x => x.Supplier_Id);

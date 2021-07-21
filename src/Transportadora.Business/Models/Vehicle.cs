@@ -17,7 +17,7 @@ namespace Transportadora.Business.Models
         public string Color { get; set; }
         public string Brand { get; set; }
         public string Model { get; set; }
-        public decimal chassi { get; set; }
+        public string chassi { get; set; }
         public decimal renavam { get; set; }
         public decimal km { get; set; }
         public decimal tank { get; set; }

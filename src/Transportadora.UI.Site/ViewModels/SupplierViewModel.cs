@@ -58,6 +58,8 @@ namespace Transportadora.UI.Site.ViewModels
 		public Guid Company_Id { get; set; }
 		public CompanyViewModel Company { get; set; }
 		public Guid? ExpenseType_Id { get; set; }
-		public ExpenseTypeViewModel ExpenseType { get; set; }
+
+		public ICollection<ExpenseSupplierViewModel> ExpenseSupplier { get; set; }
+
 	}
 }

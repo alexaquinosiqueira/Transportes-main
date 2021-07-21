@@ -35,5 +35,8 @@ namespace Transportadora.Business.Models
         public virtual ExpenseType ExpenseType { get; set; }
 
         public virtual ICollection<ExpenseFinancialSettlement> ExpenseFinancialSettlements { get; set; }
+
+        public virtual ICollection<ExpenseSupplier> ExpenseSupplier { get; set; }
+
     }
 }

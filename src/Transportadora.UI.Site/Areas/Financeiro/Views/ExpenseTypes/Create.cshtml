@@ -22,17 +22,40 @@
             </div>
             <div class="panel-body">
                 <form asp-action="Create">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="Description" class="control-label"></label>
-                        <input asp-for="Description" class="form-control" />
-                        <span asp-validation-for="Description" class="text-danger"></span>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <fieldset>
+                                <legend>Descrição</legend>
+                                <div class="form-group">
+                                    <input asp-for="Description" style="text-transform:uppercase" class="form-control" />
+                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="col-md-6" >
+                            <fieldset>
+                                <legend>Segmento </legend>
+                                <label class="radio-inline">
+                                    <input type="radio" name="Segmento" id="opttipo"  value="C">Combustíveis
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="Segmento" id="opttipo" value="C">Outros Serviços
+                                </label>
+                            </fieldset>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <div class="checkbox">
-                            <label>
-                                <input asp-for="Active" /> @Html.DisplayNameFor(model => model.Active)
-                            </label>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label>
+                                        <input asp-for="Active" /> @Html.DisplayNameFor(model => model.Active)
+                                    </label>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                     <div class="pull-right">

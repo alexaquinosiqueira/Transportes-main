@@ -73,12 +73,6 @@ namespace Transportadora.UI.Site.Areas.Cadastro.Controllers
             var companyId = Guid.Parse(identityManager.CompanyID);
             responsibilityViewModel.Company_Id = companyId;
 
-
-            foreach (var item in responsibilityViewModel.responsa)
-            {
-
-            }
-
             if (!ModelState.IsValid) return View(responsibilityViewModel);
 
             var responsibility = _mapper.Map<Responsibility>(responsibilityViewModel);
@@ -88,11 +82,41 @@ namespace Transportadora.UI.Site.Areas.Cadastro.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public void Importacao( [FromBody] int Ids)
+        //public void Importacao(List<string> data)
+        //public void Importacao(string[] data)
+        public async Task<IActionResult> Importacao(List<string> data)
         {
-            string result = Ids.ToString();
-            
-        } 
+
+            IdentityManager identityManager = new IdentityManager(User);
+            var companyId = Guid.Parse(identityManager.CompanyID);
+
+            foreach (var item in data)
+            {
+                ResponsibilityViewModel responsa = new ResponsibilityViewModel();
+                var responsibility = _mapper.Map<Responsibility>(responsa);
+
+                var dados = item.Split(',');
+                responsibility.Description = dados[0];
+
+                if (dados[2] == "1")
+                    responsibility.Active = true;
+                else
+                    responsibility.Active = false;
+
+                responsibility.Company_Id = companyId;
+
+                await _responsibilityRepository.Add(responsibility);
+
+            }
+
+            TempData["cls"] = "success";
+            TempData["message"] = "PLANILHA IMPORTADA !!";
+
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
 
         // GET: Cadastro/Responsibilities/Edit/5
         public async Task<IActionResult> Edit(Guid id)

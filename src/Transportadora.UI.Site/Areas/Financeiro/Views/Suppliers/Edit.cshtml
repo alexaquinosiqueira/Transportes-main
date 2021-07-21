@@ -48,6 +48,9 @@
                         <li>
                             <a href="#Documentos" data-toggle="tab">Documentos</a>
                         </li>
+                        <li>
+                            <a href="#Servicos" data-toggle="tab">Serviços</a>
+                        </li>
                     </ul>
                     <div class="tab-content ">
                         <div class='tab-pane active' id="Principal">
@@ -64,21 +67,19 @@
                                     {
                                         if (option == Model.KindPerson.ToString())
                                         {
-                        <option value="@option" selected>@option</option>
- }
-                    else
-                    {
+                        <option value="@option" selected>@option</option> }
+                                        else
+                                        {
 
-            <option value="@option">@option</option>
-}
-    }
+                        <option value="@option">@option</option>}
+                                    }
 
                                 </select>
 
                                 <span asp-validation-for="KindPerson" class="text-danger"></span>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" style="display:none">
                                 <label class="control-label"> Tipo de Serviço</label>
                                 <select required name="ExpenseType_Id" id="ExpenseType_Id" class="form-control">
                                     <option></option>
@@ -93,12 +94,14 @@
 
                                         if (ExpenseType.Id == Model.ExpenseType_Id)
                                         {
-                        <option value="@ExpenseType.Id" selected>@ExpenseType.Description</option> }
-                                        else
-                                        {
-                        <option value="@ExpenseType.Id">@ExpenseType.Description</option>}
+                        <option value="@ExpenseType.Id" selected>@ExpenseType.Description</option>
+ }
+                    else
+                    {
+                    <option value="@ExpenseType.Id">@ExpenseType.Description</option>
+}
 
-                                    }
+            }
 
 
                                     }
@@ -168,14 +171,12 @@
 
                                             if (state.Id == Model.Address.State.Id)
                                             {
-                            <option value="@state.Id" selected>@state.Uf - @state.Name</option>
- }
-                        else
-                        {
-            <option value="@state.Id">@state.Uf - @state.Name</option>
-}
+                            <option value="@state.Id" selected>@state.Uf - @state.Name</option> }
+                                            else
+                                            {
+                            <option value="@state.Id">@state.Uf - @state.Name</option>}
 
-    }
+                                        }
                                     </select>
                                     <span asp-validation-for="Address.State" class="text-danger"></span>
                                 </div>
@@ -191,14 +192,12 @@
 
                                             if (city.Id == Model.Address.City_Id)
                                             {
-                            <option value="@city.Id" selected>@city.Name</option>
- }
-                        else
-                        {
-            <option value="@city.Id">@city.Name</option>
-}
+                            <option value="@city.Id" selected>@city.Name</option> }
+                                            else
+                                            {
+                            <option value="@city.Id">@city.Name</option>}
 
-    }
+                                        }
                                     </select>
                                     <span asp-validation-for="Address.City" class="text-danger"></span>
                                 </div>
@@ -268,12 +267,14 @@
                                         {
                                             if (option == Model.Genre.ToString())
                                             {
-                            <option value="@option" selected>@option</option> }
-                                            else
-                                            {
+                            <option value="@option" selected>@option</option>
+ }
+                        else
+                        {
 
-                            <option value="@option">@option</option>}
-                                        }
+                    <option value="@option">@option</option>
+}
+            }
 
                                     </select>
                                 </div>
@@ -286,31 +287,113 @@
                                         {
                                             if (option == Model.MaritalStatus.ToString())
                                             {
-                            <option value="@option" selected>@option</option> }
-                                            else
-                                            {
+                            <option value="@option" selected>@option</option>
+ }
+                        else
+                        {
 
-                            <option value="@option">@option</option>}
-                                        }
+                    <option value="@option">@option</option>
+}
+            }
                                     </select>
                                 </div>
                             </div>
                         </div>
-                    </div>
+
+                        <div class='tab-pane' id="Servicos">
 
 
+                            <div class="row">
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+
+                                        <label class="control-label">Tipo Serviço</label><b style="color:red"> *</b>
+                                        <select required name="Supplier_ExpenseType_Id" id="Supplier_ExpenseType_Id" class="form-control">
+                                            <option></option>
+                                            @if (ViewData["ExpenseTypes"] != null)
+                                            {
+                                @foreach (var expenseType in (ViewData["ExpenseTypes"] as List<ExpenseTypeViewModel>))
+                                {
+                        <option value="@expenseType.Id">@expenseType.Description</option>
+}}
+                                        </select>
+
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6" style="margin-left:-50px; margin-top:22px;">
+                                    <div class="form-group">
+                                        <div class="form-group col-md-10 col-sm-10"></div>
+                                        <div style="text-align:left" class="form-group col-md-2 col-sm-2">
+                                            <a id="btnadd" href="javascript:void(0)" onclick="AtualizaDados()" title="Adicionar Serviço"
+                                               class="btn btn-danger"><i class="fa fa-plus"></i> Adicionar Serviço</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
 
-                    <div class="pull-right">
-                        <button type="reset" data-toggle="tooltip" title="Limpar Formulário" class="btn btn-warning">
-                            <i class="fa fa-eraser "></i> Limpar
-                        </button>
-                        <button type="submit" data-toggle="tooltip" title="Salvar" class="btn btn-primary">
-                            <i class="fa fa-save"></i> Salvar
-                        </button>
-                    </div>
+                            <div class="row">
 
-                </form>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-hover" id="TData">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Número</th>
+                                                        <th>Descrição</th>
+                                                        <th>Ação</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{ List<ExpenseSupplierViewModel> expenseSupplier = Model.ExpenseSupplier.ToList(); }
+
+                                                    @for (int i = 0; i < expenseSupplier.Count; i++)
+                                                    {
+
+                                        <tr id="@i" class="index">
+
+                                            <td class='number'>
+                                                @Html.Raw(i + 1)
+                                                <input type="hidden" value="@expenseSupplier[@i].Id" name="ExpenseSupplier[@i].Id" id="ExpenseSupplier[@i].Id" class="form-control" readonly required />
+                                                <input type="hidden" value="@expenseSupplier[@i].Supplier_Id" name="ExpenseSupplier[@i].Supplier_Id" id="ExpenseSupplier[@i].Supplier_Id" class="form-control" readonly />
+                                            </td>
+                                            <td>
+                                                @if (expenseSupplier[@i].ExpenseType != null)
+                                                {
+                                <input type="text" value="@expenseSupplier[@i].ExpenseType.Description" name="ExpenseSupplier[@i].ExpenseType_Name" id="ExpenseSupplier[@i].ExpenseType_Name" class="form-control" readonly />
+                                                    <input type="hidden" value="@expenseSupplier[@i].ExpenseType.Id" name="ExpenseSupplier[@i].ExpenseType_Id" id="ExpenseSupplier[@i].ExpenseType_Id" class="form-control" readonly />}
+                                            </td>
+                                            <td><a href="javascript:void(0)" onclick="javascript:deleteRow(this)" class="btn btn-sm btn-danger"><i class="fa fa-times"></i> Remover</a></td>
+                                            <td><a href="javascript:void(0)" onclick="javascript:EditaRow(this)" class="btn btn-sm btn-success"><i class="fa fa-pencil fa-fw"></i> Editar</a></td>
+
+                                        </tr>
+}
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        </div>
+                        <div class="pull-right">
+                            <button type="reset" data-toggle="tooltip" title="Limpar Formulário" class="btn btn-warning">
+                                <i class="fa fa-eraser "></i> Limpar
+                            </button>
+                            <button type="submit" data-toggle="tooltip" title="Salvar" class="btn btn-primary">
+                                <i class="fa fa-save"></i> Salvar
+                            </button>
+                        </div>
+
+</form>
             </div>
         </div>
     </div>
@@ -320,6 +403,23 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 <script type="text/javascript">
+
+    class Supplier {
+        constructor() {
+            this.ExpenseSuppliers = [];
+        }
+    }
+
+    class ExpenseSupplier {
+        constructor() {
+            this.id = 0;
+            this.ExpenseType_Id = 0;
+        }
+    }
+
+    var supplier = new Supplier();
+
+
     $(document).ready(function () {
         $('select').select2();
         $('.dates').datetimepicker({
@@ -344,5 +444,161 @@
                 $("#infoPessoaFisica").css("display", "none");
             }
         })
-    });</script>
+    });
+
+
+    function AddItems() {
+
+        var tipoDespesaNome = $('#Supplier_ExpenseType_Id option:selected').text();
+
+        if (tipoDespesaNome === "") {
+            alert("Selecione o tipo de Serviço!");
+            return;
+        }
+
+        var row = $('#TData tbody tr').length;
+
+        if (row > 0) {
+            var index = $('.index').last().attr('id');
+            index = parseInt(index);
+            row = parseInt(row);
+            row = index + 1;
+        }
+
+        var tipoDespesa = $("#Supplier_ExpenseType_Id").val();
+
+        var html = '<tr id="' + row + '" class="index">';
+        html += "<td class='number'>" + (row + 1) + "</td>";
+
+        html += '<td><input type="text" value="' + tipoDespesaNome + '" name="ExpenseSupplier[' + row + '].ExpenseType_Name" id="ExpenseSupplier[' + row + '].ExpenseType_Name" class="form-control" readonly="true" />';
+        html += '<input type="hidden" value="' + tipoDespesa + '" name="ExpenseSupplier[' + row + '].ExpenseType_Id" id="ExpenseSupplier[' + row + '].ExpenseType_Id" class="form-control" readonly="true" required/></td>';
+
+        html += '<td><a href="javascript:void(0)" onclick="javascript:deleteRow(this)" class="btn btn-danger"><i class="fa fa-times"></i> Remover</a></td>';
+        html += '<td><a href="javascript:void(0)" id="change-select2-trigger" onclick="javascript:EditaRow(this)" class="btn btn-success"><i class="fa fa-pencil fa-fw"></i> Editar</a></td>';
+        html += '</tr>';
+        $('#TData tbody').append(html);
+
+        var expense = new ExpenseSupplier();
+        ///expense.id = row + 1;
+
+        supplier.ExpenseSuppliers.push(expense);
+        expense.id = row + 1;
+        expense.ExpenseType_Id = tipoDespesa;
+
+        LimparDados();
+    }
+
+    function LimparDados() {
+
+
+        document.getElementById("Supplier_ExpenseType_Id").selectedIndex = 0;
+        document.getElementById("Supplier_ExpenseType_Id").text = " ";
+        document.getElementById("Supplier_ExpenseType_Id").value = " ";
+
+        $("#Supplier_ExpenseType_Id").select2({
+            text: ' ',
+            placeholder: 'Selecione serviço'
+        })
+
+        editado = false;
+    }
+
+    function AtualizaDados() {
+
+        if (typeof editado === "undefined") {
+            editado = false;
+        }
+
+        if (!editado) {
+            AddItems();
+        } else {
+            AtualizaItem();
+        }
+    }
+
+    function EditaRow(btn) {
+
+        var row = btn.parentNode.parentNode;
+        var idPesq = row.getElementsByClassName("number")[0].textContent;
+        var idreg = idPesq - 1;
+
+        regsel = idPesq;
+        idregparam = idreg;
+        editado = true;
+
+        var cdespesa_descricao = document.getElementById('ExpenseSupplier[' + idreg + '].ExpenseType_Name').value;
+        var cdespesa_codigo = document.getElementById('ExpenseSupplier[' + idreg + '].ExpenseType_Id').value;
+
+        document.getElementById("Supplier_ExpenseType_Id").text = cdespesa_descricao;
+        document.getElementById("Supplier_ExpenseType_Id").value = cdespesa_codigo;
+
+        this.$("#Supplier_ExpenseType_Id").select2("data", { id: cdespesa_codigo, text: cdespesa_descricao });
+
+    }
+
+    function AtualizaItem() {
+
+        document.getElementById('ExpenseSupplier[' + idregparam + '].ExpenseType_Name').value = $('#Supplier_ExpenseType_Id option:selected').text();
+        document.getElementById('ExpenseSupplier[' + idregparam + '].ExpenseType_Id').value = document.getElementById("Supplier_ExpenseType_Id").value;
+
+        var indexDespesa = supplier.ExpenseSuppliers.map(x => {
+
+            if (x.id == regsel) {
+                x.Descricao_Despesa = $('#Supplier_ExpenseType_Id option:selected').text();
+                x.expense_id = document.getElementById("Supplier_ExpenseType_Id").value;
+            }
+            return x.id;
+        }).indexOf(regsel);
+
+        LimparDados();
+    }
+
+    function deleteRow(btn) {
+
+        var row = btn.parentNode.parentNode;
+        var idServicoRemovido = row.getElementsByClassName("number")[0].textContent;
+        var idreg = idServicoRemovido - 1;
+
+        var cdespesa_codigo = document.getElementById('ExpenseSupplier[' + idreg + '].Id').value
+
+        $.ajax({
+            type: "GET",
+            //url: '@Url.Content("~/Financeiro")/Suppliers/RemoveServicoId/?id_despesa=' + document.getElementById('ExpenseSupplier[' + idreg + '].ExpenseType_Id').value,
+            url: '@Url.Content("~/Financeiro")/Suppliers/RemoveServicoId/',
+            data: $.param({ data: cdespesa_codigo }, true),
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+
+                var indexServico = supplier.ExpenseSuppliers.map(x => {
+                    return x.id;
+                }).indexOf(idServicoRemovido);
+
+                supplier.ExpenseSuppliers.splice(indexServico, 1);
+
+                row.parentNode.removeChild(row);
+                $('.number').each(function (i) {
+                    $(this).text(i + 1);
+                });
+
+                alert('Item excluído');
+            },
+            error: function (xxhr, ajaxOptions, thrownError) {
+                alert("ERRO - Ao exluir! " + error);
+            }
+        });
+
+
+
+
+
+
+
+
+
+        LimparDados();
+    }
+
+
+
+</script>
 

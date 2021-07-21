@@ -48,6 +48,7 @@ namespace Transportadora.UI.Site.AutoMapper
             CreateMap<State, StateViewModel>().ReverseMap();
             CreateMap<FinancialSettlement, FinancialSettlementViewModel>().ReverseMap();
             CreateMap<ExpenseFinancialSettlement, ExpenseFinancialSettlementViewModel>().ReverseMap();
+            CreateMap<ExpenseSupplier, ExpenseSupplierViewModel>().ReverseMap();
             CreateMap<Company, CompanyViewModel>().ReverseMap();
             CreateMap<AuditLog, AuditLogViewModel>().ReverseMap();
             CreateMap<UserCompany, UserCompanyViewModel>().ReverseMap();

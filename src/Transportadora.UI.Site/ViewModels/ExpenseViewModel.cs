@@ -88,7 +88,9 @@ namespace Transportadora.UI.Site.ViewModels
 
 		public ICollection<ExpensePaymentViewModel> ExpensePayment { get; set; }
 		public Guid Company_Id { get; set; }
-		public CompanyViewModel Company { get; set; }
+		public CompanyViewModel Company { get; set; }		
+
+		public Guid? Id_Acerto { get; set; }
 
 	}
 }

@@ -18,6 +18,8 @@ namespace Transportadora.Data.Mappings
 				.HasForeignKey(x => x.Expense_Id);
 
 			builder.Property(x => x.AmountExpensePayment);
+			builder.Property(x => x.Valor_Pago);
+			builder.Property(x => x.Valor_Juros);
 			builder.Property(x => x.ConcludedDate);
 			builder.Property(x => x.StatusExpensePayment);
 			builder.Property(x => x.DueDateExpensePayment);

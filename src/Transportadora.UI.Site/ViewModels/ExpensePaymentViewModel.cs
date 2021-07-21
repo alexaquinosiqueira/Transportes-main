@@ -12,6 +12,8 @@ namespace Transportadora.UI.Site.ViewModels
         public Guid Expense_Id { get; set; }
         public virtual ExpenseViewModel Expense { get; set; }
         public decimal AmountExpensePayment { get; set; }
+        public decimal Valor_Pago { get; set; }
+        public decimal Valor_Juros { get; set; }
         public DateTime? ConcludedDate { get; set; }
         public StatusViewModel StatusExpensePayment { get; set; }
         public DateTime DueDateExpensePayment { get; set; }

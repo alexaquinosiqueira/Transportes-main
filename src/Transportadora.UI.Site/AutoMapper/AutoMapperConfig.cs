@@ -30,6 +30,10 @@ namespace Transportadora.UI.Site.AutoMapper
             CreateMap<Insurance, InsuranceViewModel>().ReverseMap();
 
             CreateMap<Bank, BankViewModel>().ReverseMap();
+            CreateMap<RequisicaoCompra, RequisicaoCompraViewModel>().ReverseMap();
+            CreateMap<ItensRequisicaoCompra, ItensRequisicaoCompraViewModel>().ReverseMap();
+            CreateMap<Produto, ProdutoViewModel>().ReverseMap();
+
             CreateMap<BankAccount, BankAccountViewModel>().ReverseMap();
             CreateMap<PaymentMethod, PaymentMethodViewModel>().ReverseMap();
 

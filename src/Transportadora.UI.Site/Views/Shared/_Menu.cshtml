@@ -40,22 +40,22 @@
     <ul class="@(areaValue == "Cadastro" ? "collapse in" : "")">
         @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoCargosListagem)))
         {
-    <li>@Html.ActionLink("Cargo", "Index", "Responsibilities", new { Area = "Cadastro" }, (controllerValue == "Responsibilities" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
+<li>@Html.ActionLink("Cargo", "Index", "Responsibilities", new { Area = "Cadastro" }, (controllerValue == "Responsibilities" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
         @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoFuncionáriosListagem)))
         {
-    <li>@Html.ActionLink("Funcionário", "Index", "Employees", new { Area = "Cadastro" }, (controllerValue == "Employees" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
+<li>@Html.ActionLink("Funcionário", "Index", "Employees", new { Area = "Cadastro" }, (controllerValue == "Employees" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
         @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoFrotaListagem)))
         {
-    <li>@Html.ActionLink("Frota", "Index", "Fleets", new { Area = "Cadastro" }, (controllerValue == "Fleets" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
+<li>@Html.ActionLink("Frota", "Index", "Fleets", new { Area = "Cadastro" }, (controllerValue == "Fleets" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
         @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoTipoVeículoListagem)))
         {
-    <li>@Html.ActionLink("Tipo de veículo", "Index", "VehicleTypes", new { Area = "Cadastro" }, (controllerValue == "VehicleTypes" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
+<li>@Html.ActionLink("Tipo de veículo", "Index", "VehicleTypes", new { Area = "Cadastro" }, (controllerValue == "VehicleTypes" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
         @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoVeículoListagem)))
         {
-    <li>@Html.ActionLink("Veículo", "Index", "Vehicles", new { Area = "Cadastro" }, (controllerValue == "Vehicles" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
+<li>@Html.ActionLink("Veículo", "Index", "Vehicles", new { Area = "Cadastro" }, (controllerValue == "Vehicles" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
         @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoVeículoListagem)))
         {
-    <li>@Html.ActionLink("Importações", "Index", "Importacoes", new { Area = "Cadastro" }, (controllerValue == "Importacoes" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
+<li>@Html.ActionLink("Importações", "Index", "Importacoes", new { Area = "Cadastro" }, (controllerValue == "Importacoes" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
     </ul>
 </li>
 
@@ -88,6 +88,7 @@
         <i class="fa fa-money fa-fw"></i>
         <span>Financeiro</span>
     </a>
+
     <ul class="@(areaValue == "Financeiro" ? "collapse in" : "")">
         <li class="@(areaValue == "Financeiro" ? "open" : "")">
             <a class="parent">
@@ -105,7 +106,6 @@
                 @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoMeioPagamentoListagem)))
                 {
     <li>@Html.ActionLink("Meio de pagamento", "Index", "PaymentMethods", new { Area = "Financeiro" }, (controllerValue == "PaymentMethods" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
-
 
                 @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoClienteListagem)))
                 {
@@ -148,52 +148,89 @@
 <li>@Html.ActionLink("Acertos", "Index", "FinancialSettlements", new { Area = "Financeiro" }, (controllerValue == "FinancialSettlements" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
         <li>@Html.ActionLink("Fluxo de Caixa", "Index", "FlowCash", new { Area = "Financeiro" }, (controllerValue == "FlowCash" ? (new { @class = "active" }) : (new { @class = "" })))</li>
     </ul>
-
 </li>
+
+<li class="@(areaValue == "Compra" ? "open" : "")">
+    <a class="parent">
+        <i class="fa fa-shield fa-fw"></i>
+        <span>Compra</span>
+    </a>
+    <ul class="@(areaValue == "Compra" ? "collapse in" : "")">
+        @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.RequisicaoCompraVisualization)))
+        {
+<li>@Html.ActionLink("Requisição de Compra", "Index", "RequisicaoCompra", new { Area = "Compra" }, (controllerValue == "RequisicaoCompra" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
+        @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.PedidoCompraVisualization)))
+        {
+<li>@Html.ActionLink("Pedido de Compra", "Index", "PedidoCompra", new { Area = "Compra" }, (controllerValue == "PedidoCompra" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
+        @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.LimiteAprovacaoCompraVisualization)))
+        {
+<li>@Html.ActionLink("Limite de Aprovação", "Index", "LimiteAprovacaoCompra", new { Area = "Compra" }, (controllerValue == "LimiteAprovacaoCompra" ? (new { @class = "active" }) : (new { @class = "" })))</li>}
+
+
+
+    </ul>
+</li>
+
+
+<li>
+    <a class="parent">
+        <i class="fa fa-file fa-fw"></i>
+        <span>Estoque</span>
+    </a>
+    <ul>
+        @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.CadastroProdutoVisualization)))
+        {
+<li>@Html.ActionLink("Cadastro de Produto", "Index", "Estoque", new { Area = "Estoque" }, (controllerValue == "CadastroProduto" ? (new { @class = "active" }) : (new { @class = "" })))</li>
+}
+        @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.InventarioProdutoVisualization)))
+        {
+
+<li>@Html.ActionLink("Inventário", "Index", "Estoque", new { Area = "Estoque" }, (controllerValue == "InventarioProduto" ? (new { @class = "active" }) : (new { @class = "" })))</li>
+}
+        @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.LocalizadorProdutoVisualization)))
+        {
+<li>@Html.ActionLink("Localização do Produto", "Index", "Estoque", new { Area = "Estoque" }, (controllerValue == "LocalizadorProduto" ? (new { @class = "active" }) : (new { @class = "" })))</li>
+}
+    </ul>
+</li>
+
+
+
+
 
 
 
 <li>
     <a class="parent">
         <i class="fa fa-file fa-fw"></i>
-        <span>Relatório</span>
+        <span>Relatórios</span>
     </a>
     <ul>
         @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.ValorLiquidoMotoristaVisualizar)))
         {
-    <li>@Html.ActionLink("Valor Líquido por Motorista", "LiquidoMotorista", "Relatorio", new { Area = "Relatorio" }, (controllerValue == "Relatorio" ? (new { @class = "active" }) : (new { @class = "" })))</li>
+<li>@Html.ActionLink("Valor Líquido por Motorista", "LiquidoMotorista", "Relatorio", new { Area = "Relatorio" }, (controllerValue == "Relatorio" ? (new { @class = "active" }) : (new { @class = "" })))</li>
 }
-
         @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.ValorLiquidoFrotaVisualizar)))
         {
 
-    <li>@Html.ActionLink("Valor Líquido por Frota", "LiquidoFrota", "Relatorio", new { Area = "Relatorio" }, (controllerValue == "LiquidoFrota" ? (new { @class = "active" }) : (new { @class = "" })))</li>
+<li>@Html.ActionLink("Valor Líquido por Frota", "LiquidoFrota", "Relatorio", new { Area = "Relatorio" }, (controllerValue == "LiquidoFrota" ? (new { @class = "active" }) : (new { @class = "" })))</li>
 }
-
         @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.ValorLiquidoFrotaVisualizar)))
         {
-    <li>@Html.ActionLink("Consumo Combustível", "ConsumoVeiculo", "Relatorio", new { Area = "Relatorio" }, (controllerValue == "ConsumoVeiculo" ? (new { @class = "active" }) : (new { @class = "" })))</li>
+<li>@Html.ActionLink("Consumo Combustível", "ConsumoVeiculo", "Relatorio", new { Area = "Relatorio" }, (controllerValue == "ConsumoVeiculo" ? (new { @class = "active" }) : (new { @class = "" })))</li>
 }
-
         @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.ValorLiquidoFrotaVisualizar)))
         {
-    <li>@Html.ActionLink("Despesas em Viagem", "DespesasViagem", "Relatorio", new { Area = "Relatorio" }, (controllerValue == "DespesasViagem" ? (new { @class = "active" }) : (new { @class = "" })))</li>
+<li>@Html.ActionLink("Despesas em Viagem", "DespesasViagem", "Relatorio", new { Area = "Relatorio" }, (controllerValue == "DespesasViagem" ? (new { @class = "active" }) : (new { @class = "" })))</li>
 }
-
-
-
         @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.ValorLiquidoFrotaVisualizar)))
         {
-    <li>@Html.ActionLink("Centro de Custo", "CentroCusto", "Relatorio", new { Area = "Relatorio" }, (controllerValue == "CentroCusto" ? (new { @class = "active" }) : (new { @class = "" })))</li>
+<li>@Html.ActionLink("Centro de Custo", "CentroCusto", "Relatorio", new { Area = "Relatorio" }, (controllerValue == "CentroCusto" ? (new { @class = "active" }) : (new { @class = "" })))</li>
 }
-
-
         @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.ValorLiquidoFrotaVisualizar)))
         {
-    <li>@Html.ActionLink("Fornecedores", "Fornecedores", "Relatorio", new { Area = "Relatorio" }, (controllerValue == "Fornecedores" ? (new { @class = "active" }) : (new { @class = "" })))</li>
+<li>@Html.ActionLink("Fornecedores", "Fornecedores", "Relatorio", new { Area = "Relatorio" }, (controllerValue == "Fornecedores" ? (new { @class = "active" }) : (new { @class = "" })))</li>
 }
-
-
     </ul>
 </li>
 

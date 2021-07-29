@@ -13,6 +13,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Areas\Compra\_ViewImports.cshtml" />
+    <Content Remove="Areas\Compra\_ViewStart.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="CrystalReports.ReportAppServer.Controllers" Version="13.0.4000" />
     <PackageReference Include="FluentValidation" Version="10.0.4" />
@@ -41,6 +46,10 @@
   <ItemGroup>
     <Folder Include="Areas\Cadastro\Data\" />
     <Folder Include="Areas\Cadastro\Models\" />
+    <Folder Include="Areas\Estoque\Controllers\" />
+    <Folder Include="Areas\Estoque\Views\CadastroProduto\" />
+    <Folder Include="Areas\Estoque\Views\InventarioProduto\" />
+    <Folder Include="Areas\Estoque\Views\LocalizadorProduto\" />
     <Folder Include="Areas\Financeiro\Models\" />
     <Folder Include="Areas\Portal\Models\" />
     <Folder Include="Areas\Portal\Scripts\" />

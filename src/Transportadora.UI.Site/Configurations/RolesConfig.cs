@@ -112,6 +112,37 @@ namespace Transportadora.UI.Site.Configurations
         public const string ViagensRegiao = "Func_0_Action_6";
         public const string UltimasViagens = "Func_0_Action_7";
 
+        //Compras
+        public const string RequisicaoCompraVisualization = "Func_26_Action_1";
+        public const string RequisicaoCompraAdd = "Func_26_Action_2";
+        public const string RequisicaoCompraRemove = "Func_26_Action_3";
+        public const string RequisicaoCompraEdit = "Func_26_Action_4";
+
+        public const string PedidoCompraVisualization = "Func_27_Action_1";
+        public const string PedidoCompraAdd = "Func_27_Action_2";
+        public const string PedidoCompraRemove = "Func_27_Action_3";
+        public const string PedidoCompraEdit = "Func_27_Action_4";
+
+        public const string LimiteAprovacaoCompraVisualization = "Func_28_Action_1";
+        public const string LimiteAprovacaoComraAdd = "Func_28_Action_2";
+        public const string LimiteAprovacaoCompraRemove = "Func_28_Action_3";
+        public const string LimiteAprovacaoCompraEdit = "Func_28_Action_4";
+
+        //Estoque
+        public const string CadastroProdutoVisualization = "Func_29_Action_1";
+        public const string CadastroProdutoAdd = "Func_29_Action_2";
+        public const string CadastroProdutoRemove = "Func_29_Action_3";
+        public const string CadastroProdutoEdit = "Func_29_Action_4";
+
+        public const string InventarioProdutoVisualization = "Func_30_Action_1";
+        public const string InventarioProdutoAdd = "Func_30_Action_2";
+        public const string InventarioProdutoRemove = "Func_30_Action_3";
+        public const string InventarioProdutoEdit = "Func_30_Action_4";
+
+        public const string LocalizadorProdutoVisualization = "Func_31_Action_1";
+        public const string LocalizadorProdutoAdd = "Func_31_Action_2";
+        public const string LocalizadorProdutoRemove = "Func_31_Action_3";
+        public const string LocalizadorProdutoEdit = "Func_31_Action_4";
 
     }
 }

@@ -15,12 +15,12 @@ using Transportadora.UI.Site.ViewModels;
 namespace Transportadora.UI.Site.Areas.Financeiro.Controllers
 {
     [Area("Financeiro")]
-    public class BanksController : Controller
+    public class BannksController : Controller
     {
         private readonly IBankRepository _BankRepository;
         private readonly IBankAccountRepository _bankAccountRepository;
         private readonly IMapper _mapper;
-        public BanksController(IBankRepository BankRepository,
+        public BannksController(IBankRepository BankRepository,
                                IBankAccountRepository bankAccountRepository,
 
                                 IMapper mapper)

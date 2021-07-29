@@ -282,7 +282,7 @@
                         <div id="dvExcelAcertos">
                         </div>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-12" style="margin-top:20px;">
                         <label id="lblconsist_acertos" class="control-label"></label>
                     </div>
 
@@ -2859,6 +2859,10 @@
             headerCell.innerHTML = "PERFORMANCE";
             row.appendChild(headerCell);
 
+            headerCell = document.createElement("TH");
+            headerCell.innerHTML = "CLIENTE";
+            row.appendChild(headerCell);
+
             var aaa = [];
             var lok = "";
 
@@ -2990,6 +2994,16 @@
                     return;
                 }
 
+                cell = row.insertCell(-1);
+                cell.innerHTML = remover_acentos(excelRows[i].CLIENTE);
+                if (excelRows[i].CLIENTE === undefined) {
+                    alert("Erro ao processar planilha: Verifique o arquivo de importação CLIENTE ");
+
+                    $("#loading").fadeOut('fast');
+                    lok = "N";
+                    return;
+                }
+
                 aaa.push(
                     [
                         remover_acentos(excelRows[i].MOTORISTA),
@@ -2997,13 +3011,14 @@
                         remover_acentos(excelRows[i].CARRETA),
                         remover_acentos(excelRows[i].VIAGEM),
                         excelRows[i].DTVIAGEM,
-                        remover_acentos(excelRows[i].ORIGEM),
+                        excelRows[i].ORIGEM,
                         remover_acentos(excelRows[i].UF),
-                        remover_acentos(excelRows[i].DESTINO),
+                        excelRows[i].DESTINO,
                         remover_acentos(excelRows[i].UFDESTINO),
                         excelRows[i].FRETE.replace('.','').replace(',','.'),
                         excelRows[i].ADIANTAMENTO.replace('.', '').replace(',', '.'),
-                        excelRows[i].PERFORMANCE.replace('.', '').replace(',', '.')
+                        excelRows[i].PERFORMANCE.replace('.', '').replace(',', '.'),
+                        remover_acentos(excelRows[i].CLIENTE)
                     ]);
 
 
@@ -3011,13 +3026,10 @@
                         $("#loading").fadeOut('fast');
                         return;
                     }
-
                     var dvExcelAcertos = document.getElementById("dvExcelAcertos");
                     dvExcelAcertos.innerHTML = "";
                     dvExcelAcertos.appendChild(table);
-
                     aaa_itens = [];
-
             }
 
             $.ajax({
@@ -3033,13 +3045,10 @@
                 error: function (xxhr, ajaxOptions, thrownError) {
                     $("#loading").fadeOut('fast');
 
-                    alert(xxhr.responseText);
+                    //alert(xxhr.responseText);
                     document.getElementById("lblconsist_acertos").innerHTML = xxhr.responseText;
                 }
             });
-
-            $("#loading").fadeOut('fast');
-
         }
         catch (err) {
             $("#loading").fadeOut('fast');

@@ -39,6 +39,8 @@ namespace Transportadora.UI.Site.Areas.Cadastro.Controllers
         private readonly IDocumentTypeRepository _documentTypeRepository;
         private readonly IExpenseFinancialSettlementRepository _expenseFinancialSettlementRepository;
         private readonly IFinancialSettlementRepository _financialSettlementRepository;
+        private readonly IParameterRepository _parameterRepository;
+        private readonly IInvoiceRepository _InvoiceRepository;
         private readonly IMapper _mapper;
         public ImportacoesController(IResponsibilityRepository responsibilityRepository,
                                 ICompanyRepository companyRepository,
@@ -59,6 +61,8 @@ namespace Transportadora.UI.Site.Areas.Cadastro.Controllers
                                 ICostcenterRepository costcenterRepository,
                                 IDocumentTypeRepository documentTypeRepository,
                                 IExpenseFinancialSettlementRepository expenseFinancialSettlementRepository,
+                                IParameterRepository parameterRepository,
+                                IInvoiceRepository invoiceRepository,
                                 IFinancialSettlementRepository financialSettlementRepository,
 
                                 IMapper mapper)
@@ -82,6 +86,8 @@ namespace Transportadora.UI.Site.Areas.Cadastro.Controllers
             _paymentFormRepository = paymentFormRepository;
             _documentTypeRepository = documentTypeRepository;
             _expenseFinancialSettlementRepository = expenseFinancialSettlementRepository;
+            _parameterRepository = parameterRepository;
+            _InvoiceRepository = invoiceRepository;
             _financialSettlementRepository = financialSettlementRepository;
             _mapper = mapper;
         }
@@ -1017,6 +1023,9 @@ namespace Transportadora.UI.Site.Areas.Cadastro.Controllers
 
                     var vvalor_pag = dados[9];
 
+                    var ddata = dados[4];
+                    var ddata_pag = dados[8];
+                    vvalor_pag = dados[9];
 
                     //ICollection<ExpensePayment> exp = new List<ExpensePayment>()
                     //{
@@ -1024,27 +1033,33 @@ namespace Transportadora.UI.Site.Areas.Cadastro.Controllers
                     //    //new ExpensePayment {DueDateExpensePayment = Convert.ToDateTime(ddata_pag)}
                     //};
 
+                    //var dd = new List<ExpensePayment>()
+                    //{
+                    //    new ExpensePayment() {AmountExpensePayment = Convert.ToDecimal( vvalor_pag), StatusExpensePayment = Status.opened }
+                    //};
 
-
-                    var dd = new List<ExpensePayment>()
+                    ExpensePaymentViewModel expensePayment = new ExpensePaymentViewModel()
                     {
-                        new ExpensePayment() {AmountExpensePayment = Convert.ToDecimal( vvalor_pag), StatusExpensePayment = Status.opened }
+                        AmountExpensePayment = Convert.ToDecimal(vvalor_pag),
+                        Valor_Pago = Convert.ToDecimal(vvalor_pag),
+                        ConcludedDate = Convert.ToDateTime(ddata_pag),
+                        DueDateExpensePayment = Convert.ToDateTime(ddata_pag),
+                        StatusExpensePayment = StatusViewModel.closed
                     };
 
                     ExpenseViewModel eexpense = new ExpenseViewModel();
 
-
-                    foreach (var itemc in eexpense.ExpensePayment)
-                    {
-                        itemc.AmountExpensePayment = Convert.ToDecimal(vvalor_pag);
-                        itemc.StatusExpensePayment = StatusViewModel.opened;
-                    }
+                    //foreach (var itemc in eexpense.ExpensePayment)
+                    //{
+                    //    itemc.AmountExpensePayment = Convert.ToDecimal(vvalor_pag);
+                    //    itemc.StatusExpensePayment = StatusViewModel.opened;
+                    //}
 
                     eexpense.Company_Id = companyId;
                     eexpense.Date = DateTime.Now;
                     eexpense.status = StatusViewModel.opened;
 
-                    //var expense = _mapper.Map<Expense>(eexpense);
+                    var expense = _mapper.Map<Expense>(eexpense);
 
 
                     // Verifico se a despesa já foi inserida.
@@ -1088,10 +1103,8 @@ namespace Transportadora.UI.Site.Areas.Cadastro.Controllers
 
                     eexpense.DocumentNumber = Convert.ToInt32(dados[3]);
 
-                    var ddata = dados[4];
-                    var ddata_pag = dados[8];
-                    vvalor_pag = dados[9];
 
+                    decimal Valor_Juros = Convert.ToDecimal(dados[10]);
                     var vjuros = Convert.ToDecimal(dados[10]);
 
                     eexpense.Date = Convert.ToDateTime(ddata);
@@ -1105,6 +1118,7 @@ namespace Transportadora.UI.Site.Areas.Cadastro.Controllers
                         eexpense.PaidAmount = Convert.ToDecimal(vvalor_pag);
 
                     }
+
 
 
                     //forma de pagamento será boleto
@@ -1237,15 +1251,18 @@ namespace Transportadora.UI.Site.Areas.Cadastro.Controllers
         {
             string ocorrencia = string.Empty;
             string retorno_oco = string.Empty;
+            string reg_importados = string.Empty;
+            string nome_emp = string.Empty;
 
             try
             {
-
 
                 IdentityManager identityManager = new IdentityManager(User);
                 var companyId = Guid.Parse(identityManager.CompanyID);
                 int importados = 0;
                 int duplicados = 0;
+                Guid forne_id = default(Guid);
+
                 FinancialSettlementViewModel ace = new FinancialSettlementViewModel();
 
                 //*** Validação do tipo de veiculo já cadastrado no sistema.
@@ -1260,95 +1277,79 @@ namespace Transportadora.UI.Site.Areas.Cadastro.Controllers
                 //*** Validação da cidades cadastrado no sistema.
                 var cidades = await _cityRepository.GetAll();
 
-                Guid tipo_vei_id = default(Guid);
-                Guid frota_id = default(Guid);
+                //*** pego todos os fornecedores cadastrado no sistema.
+                var fornece = await _supplierRepository.GetAll();
+
+                //*** Validação da clientes cadastrado no sistema.
+                var clientes = await _customerRepository.GetAll();
+
+                //*** Pego o nome da empresa
+                var eemp = await _companyRepository.GetAll();
+                var nnome_emp = eemp.Where(w => w.Id == companyId).FirstOrDefault();
+                nome_emp = nnome_emp.RazaoSocial;
+
                 Guid moto_id = default(Guid);
-                int state_id = 0;
-                int cidade_id = 0;
 
                 lvei.ToList();
                 moto.ToList();
                 uf.ToList();
                 cidades.ToList();
+                clientes.ToList();
 
                 foreach (var item in sAcertoList)
                 {
                     var acerto = _mapper.Map<FinancialSettlement>(ace);
                     var lace = await _financialSettlementRepository.GetAll();
-
                     var dados = item.Split(',');
 
+                    //clientes
+                    int ncli = 0;
 
-                    ////uf de origem
-                    //string uuf = dados[6];
-                    //int nuf = 0;
-
-                    //foreach (var item_uf in uf)
-                    //{
-                    //    nuf = nuf + 1;
-                    //    if (item_uf.Uf == uuf)
-                    //    {
-                    //        acerto.CityOrigin.State.Id = item_uf.Id;
-                    //        nuf = 0;
-                    //        break;
-                    //    }                            
-                    //}
-                    //if (nuf > 0)
-                    //    ocorrencia = ocorrencia + " Estado de Orgigem não cadastrado para o acerto da viagem numero " + dados[3];
-
-
-                    //cidades de origem
-                    var nncidade = dados[5];
-                    int ncidade = 0;
-
-                    foreach (var itemc in cidades)
+                    foreach (var itemcli in clientes)
                     {
-                        ncidade = ncidade + 1;
-                        if (itemc.Name.ToUpper().Contains(nncidade.ToUpper()))
+                        ncli = ncli + 1;
+
+                        string nnome = dados[12].ToUpper();
+                        string nnome_item = itemcli.Name.ToUpper();
+
+                        if (nnome_item.Contains(nnome))
                         {
-                            acerto.CityOrigin_Id = itemc.Id;
-                            ncidade = 0;
+                            acerto.Customer_Id = itemcli.Id;
+                            ace.Customer_Id = itemcli.Id;
+
+                            ncli = 0;
                             break;
                         }
                     }
-                    if (ncidade > 0)
-                        ocorrencia =  "<br>" + ocorrencia  + " Cidade Origem não cadastrado para o acerto da viagem numero " + dados[3] + "<br>" + Environment.NewLine;
+                    if (ncli > 0)
+                        ocorrencia = "<br>" + ocorrencia + "Cliente não cadastrado para o acerto da viagem numero " + dados[3] + "<br>" + Environment.NewLine;
 
-                    //uf de destino
-                    //string uufd = dados[8];
-                    //int nufd = 0;
+                    //cidades de origem
+                    var nncidade = dados[5].ToLower();
 
-                    //foreach (var item_uf in uf)
-                    //{
-                    //    nufd = nufd + 1;
-                    //    if (item_uf.Uf == uufd)
-                    //    {
-                    //        acerto.DestinationCity.State.Id = item_uf.Id;
-                    //        nufd = 0;
-                    //        break;
-                    //    }
-                    //}
-                    //if (nufd > 0)
-                    //    ocorrencia = ocorrencia + " Estado de Destino não cadastrado para o acerto da viagem numero " + dados[3];
+                    var cidade = cidades.Where(w =>  EF.Functions.Like(w.Name, "%" + nncidade + "%")).ToList();
+
+                    if (cidade.Count == 0)
+                        ocorrencia = ocorrencia + "Cidade Origem não cadastrado para o acerto da viagem numero " + dados[3] + "<br>" + Environment.NewLine;
+                    else 
+                    {
+                        acerto.CityOrigin_Id = cidade.FirstOrDefault().Id;
+                        ace.CityOrigin_Id = cidade.FirstOrDefault().Id;
+                    }
 
 
                     //cidades de destino
                     var nncidaded = dados[7];
-                    int ncidaded = 0;
 
-                    foreach (var itemcd in cidades)
+                    var cidade_destino = cidades.Where(w => EF.Functions.Like(w.Name, "%" + nncidaded + "%")).ToList();
+
+                    if (cidade_destino.Count == 0)
+                        ocorrencia = ocorrencia + "Cidade Destino não cadastrado para o acerto da viagem numero " + dados[3] + "<br>" + Environment.NewLine;
+                    else
                     {
-                        ncidade = ncidade + 1;
-                        if (itemcd.Name.ToUpper().Contains(nncidaded.ToUpper()))
-                        {
-                            acerto.DestinationCity_Id = itemcd.Id;
-                            ncidaded = 0;
-                            break;
-                        }
+                        acerto.DestinationCity_Id = cidade_destino.FirstOrDefault().Id;
+                        ace.DestinationCity_Id = cidade_destino.FirstOrDefault().Id;
                     }
-                    if (ncidaded > 0)
-                        ocorrencia = ocorrencia + " Cidade Destino não cadastrado para o acerto da viagem numero " + dados[3] + "<br>" + Environment.NewLine;
-
 
                     string placa = dados[1];
                     placa = placa.ToUpper();
@@ -1362,13 +1363,16 @@ namespace Transportadora.UI.Site.Areas.Cadastro.Controllers
                         {
                             acerto.Vehicle_Id = item_vei.Id;
                             acerto.Fleet_Id = item_vei.Fleet_Id;
+
+                            ace.Vehicle_Id = item_vei.Id;
+                            ace.Fleet_Id = item_vei.Fleet_Id;
+
                             nvei = 0;
                             break;
                         }
                     }
                     if (nvei > 0)
                         ocorrencia = ocorrencia + "Veículo não cadastrado para o acerto da viagem numero " + dados[3] + "<br>" + Environment.NewLine;
-
 
                     //motorista
                     int nmoto = 0;
@@ -1380,6 +1384,8 @@ namespace Transportadora.UI.Site.Areas.Cadastro.Controllers
                         {
                             moto_id = item_moto.Id;
                             acerto.Employee_Id = item_moto.Id;
+                            ace.Employee_Id = item_moto.Id;
+
                             nmoto = 0;
                             break;
                         }
@@ -1396,7 +1402,7 @@ namespace Transportadora.UI.Site.Areas.Cadastro.Controllers
                         {
                             encontrei = "S";
                             duplicados = duplicados + 1;
-                            ocorrencia = ocorrencia + "Acerto viagem N.º " + dados[3] + " já foi incluido. ";
+                            ocorrencia = ocorrencia + "<b>" +"Acerto viagem N.º " + dados[3] + " já foi incluído. " + "</b>" + "<br>" ;
                         }
                     }
 
@@ -1404,32 +1410,84 @@ namespace Transportadora.UI.Site.Areas.Cadastro.Controllers
                     {
                         var data_viagem = Convert.ToDateTime(dados[4]);
                         acerto.TravelDate = data_viagem;
+                        ace.TravelDate = data_viagem;
 
                         decimal frete = Convert.ToDecimal(dados[9].Replace('.', ','));
 
                         acerto.TotalShipping = frete;
+                        ace.TotalShipping = frete;
 
                         decimal adianta = Convert.ToDecimal(dados[10].Replace('.', ','));
                         acerto.Advance = adianta;
+                        ace.Advance = adianta;
 
                         decimal perfor = Convert.ToDecimal(dados[11].Replace('.', ','));
 
                         decimal percent = Math.Round((adianta / frete) * 100, 2);
                         acerto.TravelPercAdiantamento = percent;
+                        ace.TravelPercAdiantamento = percent;
 
                         decimal percviagem = Math.Round((perfor / frete) * 100, 2);
                         acerto.TravelPercentage = percviagem;
+                        ace.TravelPercentage = percviagem;
 
                         acerto.KmInitial = 0;
-                        acerto.FinalKm = 0;
+                        ace.KmInitial = 0;
 
+                        acerto.FinalKm = 0;
+                        ace.FinalKm = 0;
 
                         acerto.Date = DateTime.Now;
+                        ace.Date = DateTime.Now;
+                        acerto.Company_Id = companyId;
+                        ace.Company_Id = companyId;
+                        acerto.Code = dados[3];
+                        ace.Code = dados[3];
+                        acerto.Description = "Inserido atraves da planilha de acertos";
+                        ace.Description = "Inserido atraves da planilha de acertos";
+
+
+                        // inserindo no contas a pagar a performance do motorista.
+                        ///pegando o fornecedor no qual o motorista faz parte, 
+                        ///nesse caso a empresa cadastrada como fornecedor  
+
+                        var fornecedor  = fornece.Where(w => EF.Functions.Like(w.Name, "%" + nome_emp + "%")).ToList();
+                        if (fornecedor.Count > 0)
+                        {
+                            foreach (var itemf in fornecedor)
+                            {
+                                forne_id = itemf.Id;
+                            }
+                        }
+                        else
+                        {
+                            ocorrencia = ocorrencia + "<br>" + "EMPRESA NÃO CADASTRADA COMO FORNECEDOR "+ nome_emp  + "<br>";
+                        }
+
+
+
 
                         if (ocorrencia == string.Empty)
                         {
+
+                            //foreach (var item_despesa in acerto.ExpenseFinancialSettlements)
+                            //{
+                            //    item_despesa.Amount = perfor;
+                            //    item_despesa.Arquivo = "Performance do Motorista";
+                            //    item_despesa.Valor_Total = perfor;
+                            //    item_despesa.Employee_Id = acerto.Employee_Id;
+                            //    item_despesa.Supplier_Id = forne_id;
+                            //    item_despesa.ExpenseDate = data_viagem;
+                            //}
+
                             await _financialSettlementRepository.Add(acerto);
+
+                            await GerarReceita(ace);
+                            await GerarDespesa(ace, forne_id);
+
+
                             importados = importados + 1;
+                            reg_importados = reg_importados +"<br>"+"Quantidade de registro importado " + importados + "<br>"+  "Acerto importado viagem n.º " + acerto.Code + "<br>";
                         }
                     }
                 }
@@ -1439,13 +1497,13 @@ namespace Transportadora.UI.Site.Areas.Cadastro.Controllers
                     TempData["cls"] = "success";
                     TempData["message"] = "PLANILHA DE ACERTO IMPORTADA !!";
                     ocorrencia = "PLANILHA DE ACERTO IMPORTADA !!" + Environment.NewLine + " ** Nenhuma ocorrência encontrada! *** ";
-                    retorno_oco = ocorrencia;
+                    retorno_oco = ocorrencia + reg_importados ;
                 }
                 else
                 {
                     TempData["cls"] = "warning";
                     TempData["message"] = "VERIFIQUE AS INCONSISTENCIAS ENCONTRADAS!!" + Environment.NewLine + ocorrencia;
-                    retorno_oco = "VERIFIQUE AS INCONSISTENCIAS ENCONTRADAS!!" + Environment.NewLine + ocorrencia;
+                    retorno_oco = "VERIFIQUE AS INCONSISTENCIAS ENCONTRADAS!!" + Environment.NewLine + ocorrencia + reg_importados;
 
                 }
 
@@ -1601,6 +1659,115 @@ namespace Transportadora.UI.Site.Areas.Cadastro.Controllers
             return Content(retorno_oco);
         }
 
+        private async Task GerarReceita(FinancialSettlementViewModel financialSettlement)
+        {
+            IdentityManager identityManager = new IdentityManager(User);
+            var companyId = Guid.Parse(identityManager.CompanyID);
+            var parameter = await _parameterRepository.GetByCompanyId(companyId);
+            var parameterViewModel = _mapper.Map<IEnumerable<ParameterViewModel>>(parameter).FirstOrDefault();
+
+            if (parameterViewModel != null && financialSettlement != null)
+            {
+                InvoicePaymentViewModel advance = new InvoicePaymentViewModel()
+                {
+                    AmountInvoicePayment = financialSettlement.Advance,
+                    ConcludedDate = DateTime.Now,
+                    DueDateInvoicePayment = DateTime.Now,
+                    StatusInvoicePayment = StatusViewModel.closed
+                };
+
+                InvoicePaymentViewModel incoming = new InvoicePaymentViewModel()
+                {
+                    AmountInvoicePayment = financialSettlement.TotalShipping - financialSettlement.Advance,
+                    ConcludedDate = DateTime.Now.AddDays(15),
+                    DueDateInvoicePayment = DateTime.Now.AddDays(15),
+                    StatusInvoicePayment = StatusViewModel.opened
+                };
+
+                List<InvoicePaymentViewModel> invoicePaymentsViewModels = new List<InvoicePaymentViewModel>
+                {
+                    advance,
+                    incoming
+                };
+
+                InvoiceViewModel InvoiceViewModel = new InvoiceViewModel()
+                {
+                    Id = new Guid(),
+                    Description = financialSettlement.Code,
+                    Observation = financialSettlement.Code,
+                    Amount = financialSettlement.TotalShipping,
+                    Date = financialSettlement.TravelDate,
+                    DueDate = financialSettlement.TravelDate,
+                    CostCenter_Id = parameterViewModel.Id_CostCenter,
+                    BankAccount_Id = parameterViewModel.Id_BankAccount,
+                    DocumentType_Id = parameterViewModel.Id_DocumentType,
+                    PaymentForm_Id = parameterViewModel.Id_PaymentForm,
+                    //DocumentNumber =Convert.ToInt32(financialSettlement.Code),
+                    Customer_Id = financialSettlement.Customer_Id,
+                    PaidAmount = financialSettlement.Advance,
+                    InvoicePayments = invoicePaymentsViewModels,
+                    Company_Id = companyId
+                };
+
+                var Invoice = _mapper.Map<Invoice>(InvoiceViewModel);
+
+                await _InvoiceRepository.Add(Invoice);
+            }
+        }
+
+        private async Task GerarDespesa(FinancialSettlementViewModel financialSettlement, Guid pSupplier_Id)
+        {
+            IdentityManager identityManager = new IdentityManager(User);
+            var companyId = Guid.Parse(identityManager.CompanyID);
+            var parameter = await _parameterRepository.GetByCompanyId(companyId);
+            var parameterViewModel = _mapper.Map<IEnumerable<ParameterViewModel>>(parameter).FirstOrDefault();
+
+            string Cdesc = string.Empty;
+            string Cdesc2 = string.Empty;
+
+            if (parameterViewModel != null && financialSettlement != null ) //&& financialSettlement.ExpenseFinancialSettlements != null)
+            {
+
+                ExpensePaymentViewModel expensePayment = new ExpensePaymentViewModel()
+                {
+                    AmountExpensePayment = financialSettlement.Commission,
+                    Valor_Pago = financialSettlement.Commission,
+                    ConcludedDate = financialSettlement.TravelDate,
+                    DueDateExpensePayment = financialSettlement.TravelDate,
+                    StatusExpensePayment = StatusViewModel.closed
+                };
+
+                List<ExpensePaymentViewModel> expensesPaymentsViewModels = new List<ExpensePaymentViewModel>
+                    {
+                        expensePayment
+                    };
+                ExpenseViewModel expenseViewModel = new ExpenseViewModel()
+                {
+                    Id = new Guid(),
+                    Description = "Performance do Motorista" + " - " + financialSettlement.Code,
+                    Observation = financialSettlement.Code,
+                    Amount = financialSettlement.Commission,
+                    Date = financialSettlement.TravelDate,
+                    DueDate = financialSettlement.TravelDate,
+                    CostCenter_Id = parameterViewModel.Id_CostCenter,
+                    BankAccount_Id = parameterViewModel.Id_BankAccount,
+                    DocumentType_Id = parameterViewModel.Id_DocumentType,
+                    PaymentForm_Id = parameterViewModel.Id_PaymentForm,
+                    //DocumentNumber =Convert.ToInt32(financialSettlement.Code),
+                    Supplier_Id = pSupplier_Id,
+                    PaidAmount = financialSettlement.Advance,
+                    Vehicle_Id = financialSettlement.Vehicle_Id,
+                    ExpensePayment = expensesPaymentsViewModels,
+                    Company_Id = companyId,                    
+                    Id_Acerto = financialSettlement.Id
+                };
+
+                var expense = _mapper.Map<Expense>(expenseViewModel);
+
+                await _ExpenseRepository.Add(expense);
+            }
+
+        }
 
     }
 }

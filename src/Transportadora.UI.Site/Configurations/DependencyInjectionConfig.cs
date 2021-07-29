@@ -35,7 +35,10 @@ namespace Transportadora.UI.Site.Configurations
             services.AddScoped<IBankAccountRepository, BankAccountRepository>();
             services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
 
-            
+            services.AddScoped<IRequisicaoCompraRepository, RequisicaoCompraRepository>();
+            services.AddScoped<IProdutoRepository, ProdutoRepository>();
+
+
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ISupplierRepository, SupplierRepository>();
             services.AddScoped<ICostcenterRepository, CostCenterRepository>();

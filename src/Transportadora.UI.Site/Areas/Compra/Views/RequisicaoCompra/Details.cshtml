@@ -1,0 +1,35 @@
+﻿@model Transportadora.UI.Site.ViewModels.RequisicaoCompraViewModel
+
+@{
+    ViewData["Title"] = "Detalhamento Requisição de Compra";
+}
+
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                <div class="pull-right">
+                    <a asp-action="Index" data-toggle="tooltip" title="Voltar Para lista" class="btn btn-primary"><i class="fa fa-arrow-left "></i> Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Visualizar Requisição</h3>
+            </div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Data_Requisicao)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Observacao)
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+

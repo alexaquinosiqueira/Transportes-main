@@ -1,0 +1,280 @@
+﻿@model Transportadora.UI.Site.ViewModels.RequisicaoCompraViewModel
+@using Transportadora.UI.Site.ViewModels
+
+@{ ViewData["Title"] = "Nova Requisição"; }
+
+<style>
+    #valores .valores {
+        margin: 0px;
+        text-transform: uppercase;
+    }
+
+        #valores .valores .numeros {
+            padding: 10px 26px;
+            background-color: var(--cor-gray2);
+        }
+
+            #valores .valores .numeros div {
+                margin-bottom: 10px;
+            }
+
+            #valores .valores .numeros h4 {
+                display: inline;
+            }
+
+            #valores .valores .numeros span {
+                float: right;
+            }
+
+        #valores .valores .total {
+            padding: 40px 20px 0px;
+            background-color: var(--cor-gray3);
+            text-align: end;
+        }
+</style>
+
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                <div class="pull-right">
+                    <a asp-action="Index" data-toggle="tooltip" title="Voltar Para lista" class="btn btn-primary"><i class="fa fa-arrow-left "></i> Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Nova Requisição Compra</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-action="Create">
+                    @if (TempData.ContainsKey("message"))
+                {
+                    <div class="alert alert-@TempData["cls"]">
+                        <i class="fa fa-exclamation-circle"></i><small> @TempData["Message"]</small>
+                        <button type="button" class="close" data-dismiss="alert">
+                            ×
+                        </button>
+                    </div>
+                    TempData.Remove("message");
+                    TempData.Remove("cls");
+                }
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="form-group col-md-4 col-sm-4">
+                            <label class="control-label">Número Requisição</label>
+                            <input asp-for="Code" class="form-control" readonly />
+                            <span asp-validation-for="Code" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-md-4 col-sm-4">
+                            <label class="control-label">Data</label>
+                            <input type="text" asp-for="Data_Requisicao" class="form-control dates" readonly />
+                            <span asp-validation-for="Data_Requisicao" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-md-4 col-sm-4">
+                            <label class="control-label">Prioridade</label><b style="color:red"> *</b>
+
+                            <select required name="Prioridade" id="Prioridade" class="form-control">
+                                <option></option>
+                                <option value="0">Média</option>
+                                <option value="1">Urgente</option>
+                                <option value="2">Normal</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-4 col-sm-4">
+                            <label class="control-label">Solicitado Por</label>
+                            <input type="text" asp-for="Solicitante" id="Solicitado_Por" name="solicitado_Por" class="form-control" readonly />
+                            <span asp-validation-for="Solicitante" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-4 col-sm-4">
+                            <label class="control-label">Tipo de Compra</label>
+                            <select required name="Tipo_Requisicao" id="Tipo_Requisicao" class="form-control">
+                                <option></option>
+                                <option value="0">Peças</option>
+                                <option value="1">Manutenção</option>
+                                <option value="2">Serviço</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4 col-sm-4">
+                            <label class="control-label">Solicitação Para (Destino)</label>
+                            <select required name="Solicitado_Para" id="Solicitado_Para" class="form-control">
+                                <option></option>
+                                @foreach (var vehicle in (ViewData["Vehicle"] as List<VehicleViewModel>))
+                                {
+                            <option value="@vehicle.Id">@vehicle.VehicleLicensePlate  - @vehicle.Description </option>
+}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-4 col-sm-4">
+                            <label class="control-label">Centro de Custo</label><b style="color:red"> *</b>
+                            <select required name="CostCenter_Id" id="CostCenter_Id" class="form-control">
+                                <option></option>
+                                @foreach (var CostCenter in (ViewData["CostCenter"] as List<CostCenterViewModel>))
+                                        {
+                                <option value="@CostCenter.Id">@CostCenter.Description </option>
+}
+                            </select>
+                            <span asp-validation-for="CostCenter_Id" class="text-danger"></span>
+
+                        </div>
+
+                        <div class="form-group col-md-8 col-sm-8">
+                            <label class="control-label">Observação</label><b style="color:red"> *</b>
+                            @Html.TextAreaFor(m => m.Observacao, new { @class = "form-control" })
+                            <span asp-validation-for="Observacao" class="text-danger"></span>
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Informações Sobre o Produto Requisitado</div>
+                        <div class="panel-body">
+
+                            <div class="row">
+                                <div class="form-group col-md-4 col-sm-4">
+                                    <label class="control-label">Produto</label><b style="color:red"> *</b>
+                                    <select name="produto" id="produto" class="form-control">
+                                        <option></option>
+                                        @foreach (var produto in (ViewData["Produto"] as List<ProdutoViewModel>))
+                                                {
+                                        <option value="@produto.Id">@produto.Description </option>
+}
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-2 col-sm-2">
+                                    <label class="control-label">Quantidade</label><b style="color:red"> *</b>
+                                    <input name="Quantidade" id="Quantidade" maxlength="4" class="form-control" type="number" />
+                                </div>
+                                <div class="form-group col-md-2 col-sm-2">
+                                    <label class="control-label">Valor R$</label><b style="color:red"> *</b>
+                                    <input name="Valor_Unitario" id="Valor_Unitario" maxlength="6" class="form-control" onkeyup="formatarMoeda(this);" />
+                                </div>
+                                <div class="form-group col-md-2 col-sm-2">
+                                    <label class="control-label">Total R$</label><b style="color:red"> *</b>
+                                    <input name="Valor_Total" id="Valor_Total" readonly class="form-control" onkeyup="formatarMoeda(this);" />
+                                </div>
+
+                                <div style="text-align:right" class="form-group col-md-2 col-sm-2">
+                                    <a id="btnadd" href="javascript:void(0)" style="margin: 0 16px 16px 0; margin-top:16px; margin-right:0px;" @*onclick="AtualizaDados()"*@ title="Adicionar " class="btn btn-danger"><i class="fa fa-plus"></i> Adicionar</a>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-12 col-sm-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-hover" id="TData">
+                                            <thead>
+                                                <tr>
+                                                    <th>Produto</th>
+                                                    <th>Data</th>
+                                                    <th>Fornecedor (Ultima Compra) </th>
+                                                    <th>Quantidade</th>
+                                                    <th>Valor Unit.</th>
+                                                    <th>Valor Total</th>
+                                                    <th>Ação</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pull-right">
+                        <button type="reset" data-toggle="tooltip" title="Limpar Formulário" class="btn btn-warning">
+                            <i class="fa fa-eraser "></i> Limpar
+                        </button>
+                        <button type="submit" data-toggle="tooltip" title="Salvar" class="btn btn-primary">
+                            <i class="fa fa-save"></i> Salvar
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script type="text/javascript">
+
+    class RequisicaoCompra {
+        constructor() {
+            this.NumeroRequisicao = 0;
+            this.DataRequisicao = "";
+            this.Prioridade = 0;
+            this.SolicitadoPor = "";
+            this.TipoCompra = 0;
+            this.SolicitacaoPara = "";
+            this.CentroCusto = "";
+            this.Filial = "";
+            Observacao = "";
+            this.Itens_Requisicao = [];
+        }
+    }
+    class Itens_Requisicao {
+        constructor() {
+            this.id = 0;
+            this.produto = 0;
+            this.data = 0;
+            this.fornecedor = 0;
+            this.Quantidade = 0;
+            this.Valor = 0;
+            this.Valor_Total = 0;
+        }
+    }
+
+    $(document).ready(function () {
+
+        $('.DataRequisicao').datetimepicker({
+            minView: 2,
+            pickTime: false,
+            language: 'br',
+            format: 'DD/MM/YYYY'
+        });
+
+        $('.dates').datetimepicker({
+            pickTime: false,
+            format: 'DD/MM/YYYY'
+        });
+
+        $("#produto").select2({
+            text: ' ',
+            placeholder: 'Selecione o Produto'
+        })
+        $("#tipocompra").select2({
+            text: ' ',
+            placeholder: 'Selecione tipo da Compra'
+        })
+        $("#centrocusto").select2({
+            text: ' ',
+            placeholder: 'Selecione o Centro de Custo'
+        })
+        $("#solicitante_para").select2({
+            text: ' ',
+            placeholder: 'Selecione o Ssolicitante'
+        })
+        $("#Prioridade").select2({
+            text: ' ',
+            placeholder: 'Selecione a Prioridade'
+        })
+    });
+</script>

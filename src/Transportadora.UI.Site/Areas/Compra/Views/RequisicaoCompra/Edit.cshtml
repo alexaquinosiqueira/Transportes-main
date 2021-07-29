@@ -1,0 +1,156 @@
+﻿@model Transportadora.UI.Site.ViewModels.RequisicaoCompraViewModel
+@using Transportadora.UI.Site.ViewModels
+
+@{ ViewData["Title"] = "Edição Requisição de Compras"; }
+<style>
+    #valores .valores {
+        margin: 0px;
+        text-transform: uppercase;
+    }
+    #valores .valores .numeros {
+            padding: 10px 26px;
+            background-color: var(--cor-gray2);
+        }
+    #valores .valores .numeros div {
+                margin-bottom: 10px;
+            }
+    #valores .valores .numeros h4 {
+                display: inline;
+            }
+    #valores .valores .numeros span {
+                float: right;
+            }
+    #valores .valores .total {
+            padding: 40px 20px 0px;
+            background-color: var(--cor-gray3);
+            text-align: end;
+        }
+</style>
+
+<div class="container-fluid">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel-body">
+            <div class="row">
+                <div class="pull-right">
+                    <a asp-action="Index" data-toggle="tooltip" title="Voltar Para lista" class="btn btn-primary"><i class="fa fa-arrow-left "></i> Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Editar Requisição Compra</h3>
+            </div>
+            <div class="panel-body">
+                <form asp-action="Edit">
+
+                    <div class="row">
+                        <div class="form-group col-md-4 col-sm-4">
+                            <label class="control-label">Número Requisição</label>
+                            <input asp-for="Code" class="form-control" readonly />
+                            <span asp-validation-for="Code" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-md-4 col-sm-4">
+                            <label class="control-label">Data</label>
+                            <input type="text" asp-for="Data_Requisicao" class="form-control dates" readonly />
+                            <span asp-validation-for="Data_Requisicao" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-md-4 col-sm-4">
+                            <label class="control-label">Prioridade</label><b style="color:red"> *</b>
+                            <input type="hidden" asp-for="Prioridade" name="ppriori" id="ppriori" class="form-control" />
+                            <select required name="Prioridade" id="Prioridade" class="form-control">
+                                <option></option>
+                                <option value="0">Média</option>
+                                <option value="1">Urgente</option>
+                                <option value="2">Normal</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-4 col-sm-4">
+                            <label class="control-label">Solicitado Por</label>
+                            <input type="text" asp-for="Solicitante" id="Solicitado_Por" name="solicitado_Por" class="form-control" readonly />
+                            <span asp-validation-for="Solicitante" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-4 col-sm-4">
+                            <label class="control-label">Tipo de Compra</label>
+                            <input type="hidden" asp-for="Tipo_Requisicao" name="ttipo_requisicao" id="ttipo_requisicao" class="form-control" />
+                            <select required name="Tipo_Requisicao" id="Tipo_Requisicao" class="form-control">
+                                <option></option>
+                                <option value="0">Peças</option>
+                                <option value="1">Manutenção</option>
+                                <option value="2">Serviço</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4 col-sm-4">
+                            <label class="control-label">Solicitação Para (Destino)</label>
+                            <select required name="Solicitado_Para" id="Solicitado_Para" class="form-control">
+                                <option></option>
+                                @if (ViewData["Vehicles"] != null)
+                                {
+
+                                @foreach (var vehicle in (ViewData["Vehicles"] as List<VehicleViewModel>))
+                                    {
+
+                                        if (vehicle.Id == Model.Solicitado_Para)
+                                        {
+                                <option value="@vehicle.Id" selected>@vehicle.VehicleLicensePlate</option>
+                                        }
+                                        else
+                                        {
+                                <option value="@vehicle.Id">@vehicle.VehicleLicensePlate</option>
+                                        }
+
+
+                                    }}
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="pull-right">
+                        <button type="reset" data-toggle="tooltip" title="Limpar Formulário" class="btn btn-warning">
+                            <i class="fa fa-eraser "></i> Limpar
+                        </button>
+                        <button type="submit" data-toggle="tooltip" title="Atualizar" class="btn btn-primary">
+                            <i class="fa fa-save"></i> Atualizar
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('select').select2();
+        $('.dates').datetimepicker({
+            pickTime: false,
+            format: 'DD/MM/YYYY'
+        });
+    });
+
+    // Prioridade
+    var cpriori = document.getElementById('ppriori').value;
+    $("#Prioridade").select2({
+        text: cpriori
+    })
+    this.$("#Prioridade").select2("data", { id: cpriori, text: "teste" });
+
+    // Tipo de Requisicao
+    var ctiporequi = document.getElementById('ttipo_requisicao').value;
+    $("#Tipo_Requisicao").select2({
+        text: ctiporequi
+    })
+    this.$("#Tipo_Requisicao").select2("data", { id: ctiporequi, text: "teste" });
+
+</script>

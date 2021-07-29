@@ -45,11 +45,10 @@ namespace Transportadora.Data.Context
         public DbSet<InsuranceCompany> InsuranceCompanies { get; set; }
         public DbSet<InsuranceSituation> InsuranceSituations { get; set; }
         public DbSet<Insurance> Insurances { get; set; }
-
         public DbSet<Bank> Banks { get; set; }
-        public DbSet<BankAccount> BankAccounts { get; set; }
+        public DbSet<RequisicaoCompra> RequisicaoCompra { get; set; }
+        public DbSet<ItensRequisicaoCompra> ItensRequisicaoCompra { get; set; }
         public DbSet<PaymentMethod> PaymentMethods { get; set; }
-
         public DbSet<Customer> Customer { get; set; }
         public DbSet<Supplier> Supplier { get; set; }
         public DbSet<CostCenter> Costcenter { get; set; }
@@ -153,6 +152,10 @@ namespace Transportadora.Data.Context
                     return "ENDERECO";
                 case "Transportadora.Business.Models.Bank":
                     return "BANCO";
+                case "Transportadora.Business.Models.RequisicaoCompra":
+                    return "REQUISICAOCOMPRA";
+                case "Transportadora.Business.Models.Estoque":
+                    return "ESTOQUE";
                 case "Transportadora.Business.Models.BankAccount":
                     return "CONTABANCO";
                 case "Transportadora.Business.Models.City":

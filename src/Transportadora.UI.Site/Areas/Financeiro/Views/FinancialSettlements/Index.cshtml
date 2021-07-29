@@ -86,9 +86,9 @@
                             {
                                 foreach (var item in Model)
                                 {
-                            @if(item.Incoming < 0)
-                            {
-                            <tr style="color:red">
+                        @if (item.Description == "Inserido atraves da planilha de acertos")
+                        {
+                            <tr style="color:darkorange">
                                 <td>
                                     @Html.DisplayFor(modelItem => item.TravelDate)
                                 </td>
@@ -121,89 +121,138 @@
                                 </td>
                                 <td>
                                     @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoAcertosEditar)))
-                                            {
-                                    <a asp-action="Edit" asp-route-id="@item.Id">
-                                        <i class="fa fa-pencil"></i>
-                                    </a>
-                                            }
+                                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">
+                            <i class="fa fa-pencil"></i>
+                        </a>}
                                     @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoAcertosListagem)))
-                                            {
-                                    <a asp-action="Details" asp-route-id="@item.Id">
-                                        <i class="fa fa-search"></i>
-                                    </a>
-                                            }
+                                    {
+                        <a asp-action="Details" asp-route-id="@item.Id">
+                            <i class="fa fa-search"></i>
+                        </a>}
                                     @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoAcertosRemover)))
-                                            {
-                                    <a asp-action="Delete" asp-route-id="@item.Id" data-confirm="Deseja remover o item?">
-                                        <i class="fa fa-trash-o"></i>
-                                    </a>
-                                            }
+                                    {
+                        <a asp-action="Delete" asp-route-id="@item.Id" data-confirm="Deseja remover o item?">
+                            <i class="fa fa-trash-o"></i>
+                        </a>}
 
                                 </td>
                             </tr>
 
-                            }
-                            else
+
+
+                                                }
+                                                else
+                                                {
+
+                            @if (item.Incoming < 0)
                             {
+                        <tr style="color:red">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TravelDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Code)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Fleet.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Vehicle.Brand)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Vehicle.VehicleLicensePlate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Employee.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CityOrigin.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DestinationCity.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TotalShipping)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Incoming)
+                            </td>
+                            <td>
+                                @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoAcertosEditar)))
+                                {
+                        <a asp-action="Edit" asp-route-id="@item.Id">
+                            <i class="fa fa-pencil"></i>
+                        </a>}
+                                @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoAcertosListagem)))
+                                {
+                        <a asp-action="Details" asp-route-id="@item.Id">
+                            <i class="fa fa-search"></i>
+                        </a>}
+                                @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoAcertosRemover)))
+                                {
+                        <a asp-action="Delete" asp-route-id="@item.Id" data-confirm="Deseja remover o item?">
+                            <i class="fa fa-trash-o"></i>
+                        </a>}
 
-                            <tr style="color:blue">
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.TravelDate)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Code)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Fleet.Description)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Vehicle.Brand)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Vehicle.VehicleLicensePlate)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Employee.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CityOrigin.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.DestinationCity.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.TotalShipping)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Incoming)
-                                </td>
-                                <td>
-                                    @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoAcertosEditar)))
-                                            {
-                                    <a asp-action="Edit" asp-route-id="@item.Id">
-                                        <i class="fa fa-pencil"></i>
-                                    </a>
-                                            }
-                                    @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoAcertosListagem)))
-                                            {
-                                    <a asp-action="Details" asp-route-id="@item.Id">
-                                        <i class="fa fa-search"></i>
-                                    </a>
-                                            }
-                                    @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoAcertosRemover)))
-                                            {
-                                    <a asp-action="Delete" asp-route-id="@item.Id" data-confirm="Deseja remover o item?">
-                                        <i class="fa fa-trash-o"></i>
-                                    </a>
-                                            }
+                            </td>
+                        </tr> }
+                                                else
+                                                {
 
-                                </td>
-                            </tr>
+                        <tr style="color:blue">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TravelDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Code)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Fleet.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Vehicle.Brand)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Vehicle.VehicleLicensePlate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Employee.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CityOrigin.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DestinationCity.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TotalShipping)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Incoming)
+                            </td>
+                            <td>
+                                @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoAcertosEditar)))
+                                {
+                        <a asp-action="Edit" asp-route-id="@item.Id">
+                            <i class="fa fa-pencil"></i>
+                        </a>}
+                                @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoAcertosListagem)))
+                                {
+                        <a asp-action="Details" asp-route-id="@item.Id">
+                            <i class="fa fa-search"></i>
+                        </a>}
+                                @if (User.Claims.Any(x => x.Value.Contains(RolesConfig.GestaoAcertosRemover)))
+                                {
+                        <a asp-action="Delete" asp-route-id="@item.Id" data-confirm="Deseja remover o item?">
+                            <i class="fa fa-trash-o"></i>
+                        </a>}
 
-                            }
+                            </td>
+                        </tr>}}
 
-                                }
-                            }
+                    }
+                }
                         </tbody>
                     </table>
                 </div>
